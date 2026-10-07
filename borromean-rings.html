@@ -12,18 +12,16 @@
 html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
 body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .page { height: 100vh; height: 100dvh; display: flex; flex-direction: column; max-width: 1120px; margin: 0 auto; }
-.visualization { flex: 0 0 clamp(340px, 62vh, 620px); flex-basis: clamp(340px, 62dvh, 620px); min-height: 0; padding: 10px 20px 8px; }
+.visualization { flex: 0 0 clamp(320px, 52vh, 520px); flex-basis: clamp(320px, 52dvh, 520px); min-height: 0; padding: 10px 20px 8px; }
 #codex-visualization { display: block; width: 100%; height: 100% !important; max-height: 100% !important; margin: 0; border: 0; }
-.reading { display: flex; flex: 1 1 0; flex-direction: column; min-height: 0; border-top: 1px solid var(--line); }
-.reading-bar { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex: 0 0 auto; padding: 12px 32px; background: var(--paper); }
-.reading-bar h2 { margin: 0; font-size: 16px; font-weight: 650; }
-.reading-bar span { font-size: 12px; color: var(--quiet); }
-.reading-scroll { flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; scrollbar-gutter: stable; scroll-padding-top: 20px; }
+.reading { position: relative; display: flex; flex: 1 1 0; flex-direction: column; min-height: 0; border-top: 1px solid var(--line); }
+.reading-scroll { width: 100%; flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; scrollbar-gutter: stable; scroll-padding-top: 16px; }
 .reading-scroll:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: -3px; }
-.article { max-width: 54rem; padding: 10px 32px 48px; margin: 0 auto; font-size: 16px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
-.article h1 { margin: 0 0 14px; font-size: clamp(22px, 2.4vw, 28px); font-weight: 650; line-height: 1.45; letter-spacing: -.035em; }
+.article { width: 100%; max-width: 54rem; padding: 14px 20px 48px; margin: 0; font-size: 17px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+.article h1 { margin: 0 0 14px; font-size: clamp(22px, 2.2vw, 26px); font-weight: 650; line-height: 1.45; letter-spacing: -.035em; }
 .article h2 { margin: 32px 0 10px; font-size: 19px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; }
-.article p { margin: 0 0 16px; }
+.article p { margin: 0 0 20px; }
+.article .reading-kicker { margin: 0 0 6px; font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--quiet); }
 .article .intro { color: var(--quiet); }
 .article a { color: light-dark(#21669e, #88c6f5); text-underline-offset: 3px; }
 .article sup { font-size: .75em; }
@@ -33,26 +31,26 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
 .article .sources .note { color: var(--quiet); }
 @media (max-width: 580px) {
   .visualization { padding: 10px 8px 6px; }
-  .reading-bar { padding: 10px 20px; }
-  .reading-bar span { font-size: 11px; }
-  .article { padding: 6px 20px 36px; font-size: 15px; line-height: 1.85; }
+  .article { padding: 12px 16px 36px; font-size: 16px; line-height: 1.85; }
+  .article h1 { font-size: 22px; }
   .article h2 { font-size: 18px; }
   .article .experiment { padding: 12px 14px 1px; }
 }
 @media (max-height: 500px) {
   .visualization { flex-basis: 68vh; flex-basis: 68dvh; }
-  .reading-bar { padding-top: 7px; padding-bottom: 7px; }
 }
 
 .page { position: fixed; inset: 0; width: 100%; overflow: hidden; }
 .article { position: relative; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
 .register-table { margin: 20px 0; }
-.register-table table { width: 100%; border-collapse: collapse; font-size: 15px; line-height: 1.75; }
+.register-table table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.75; }
 .register-table th, .register-table td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
 .register-table thead { color: var(--quiet); font-size: 13px; }
 .register-table tbody th { width: 22%; white-space: nowrap; font-weight: 600; }
-@media (max-width: 580px) { .register-table table { font-size: 13px; } .register-table th, .register-table td { padding: 10px 8px; } }
+@media (max-width: 580px) { .register-table table { font-size: 14px; } .register-table th, .register-table td { padding: 10px 8px; } }
+.article h1, .article h2 { text-wrap: balance; }
+@media (max-width: 359px) { .article { padding-left: 12px; padding-right: 12px; } .article h1 { font-size: 20px; } }
 </style>
 </head>
 <body>
@@ -2559,12 +2557,9 @@ html, body { height: 100%; overflow: hidden; }
 "></iframe>
 </section>
 <section class="reading" aria-labelledby="reading-label">
-  <header class="reading-bar">
-    <h2 id="reading-label">읽을 자료</h2>
-    <span>위의 고리를 조작하며 아래 글을 스크롤하세요</span>
-  </header>
   <div class="reading-scroll" id="reading-scroll" tabindex="0" role="region" aria-label="라캉과 보로메오 고리 · 독립 스크롤">
     <article class="article" aria-labelledby="article-title">
+      <p class="reading-kicker" id="reading-label">읽을 자료</p>
       <h1 id="article-title">세 고리가 함께 묶일 때 — 라캉의 보로메오 고리</h1>
       <p class="intro">라캉은 보로메오 고리를 통해 실재, 상징, 상상이 어떻게 구별되면서도 함께 유지되는지 탐구했다. 이 글은 고리의 수학적 성질에서 출발해 후기 세미나의 결속과 생톰 논의로 이어진다.</p>
 
