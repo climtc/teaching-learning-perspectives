@@ -29,9 +29,18 @@
 
 ‘가르침과 배움을 동일하게 놓을 수 있는가’라는 문제의 바탕은 [1]에, ‘원을 구로 바꾸어 차원을 더하자’는 직접적인 벤다이어그램 설명은 [2]에 있다. 저장소 개요와 페이지의 읽을 글은 두 책의 해당 논의를 바탕으로 새로 작성한 해설이다. 원문을 그대로 전재하거나 원본 원고 파일을 공개하지 않는다.
 
+## 보로메오 고리와 라캉
+
+[보로메오 고리 시각화와 읽을 자료](https://climtc.github.io/teaching-learning-perspectives/borromean-rings.html)
+
+상단에서 세 타원형 고리를 회전하고 하나를 제거한 뒤 남은 둘을 분리할 수 있다. 하단의 읽을 글은 라캉의 실재·상징·상상, 매듭을 글쓰기로 다루는 문제, 세미나 XXIII의 생톰과 결속의 교정을 설명한다. 읽기 영역은 시각화와 독립적으로 스크롤된다. A=실재 R, B=상징 S, C=상상 I라는 대응과 색상은 이 페이지의 설명을 위한 선택이다. 고리 제거는 수학적 연결 조건을 살피는 조작이며 정신분석적 진단을 뜻하지 않는다.
+
+원전은 세미나 XX *Encore*의 1973년 5월 15일 강의, 세미나 XXII *R.S.I.*의 1974년 12월 10일과 17일 강의, 세미나 XXIII *Le sinthome*의 1975년 12월 9일과 1976년 2월 17일 강의다. 페이지의 문헌란에 공개 프랑스어 전사본의 PDF 쪽수와 링크를 제공하며, 전사본·연구용 번역·정식 출판본을 구분한다. 개념 설명에는 Adrian Johnston의 [Stanford Encyclopedia of Philosophy 해설](https://plato.stanford.edu/entries/lacan/)을, 수학적 성질에는 Eric W. Weisstein의 [MathWorld 설명](https://mathworld.wolfram.com/BorromeanRings.html)을 참고했다.
+
 ## 구성과 게시
 
 - `index.html`: 시각화와 독립적으로 스크롤되는 읽기 영역을 함께 제공하는 정적 페이지.
+- `borromean-rings.html`: 보로메오 고리의 시각화와 라캉에 관한 읽을 자료.
 - `.nojekyll`: GitHub Pages에서 파일을 그대로 제공하기 위한 설정.
 - `README.md`: 저장소 개요, 사용 방법, 책 출처.
 
