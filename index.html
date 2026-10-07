@@ -5,17 +5,56 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>teaching-learning-perspectives.html</title>
-<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+<title>가르치다와 배우다 — 누구의 시선인가</title>
+<style>
+:root { color-scheme: light dark; --paper: light-dark(#fff, #181818); --ink: light-dark(#23262b, #f1f1f1); --quiet: light-dark(#616772, #aab0ba); --line: light-dark(#dce1e7, #3a3e45); background: var(--paper); color: var(--ink); }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+.page { height: 100vh; height: 100dvh; display: flex; flex-direction: column; max-width: 1120px; margin: 0 auto; }
+.visualization { flex: 0 0 clamp(340px, 62vh, 620px); flex-basis: clamp(340px, 62dvh, 620px); min-height: 0; padding: 10px 20px 8px; }
+#codex-visualization { display: block; width: 100%; height: 100% !important; max-height: 100% !important; margin: 0; border: 0; }
+.reading { display: flex; flex: 1 1 0; flex-direction: column; min-height: 0; border-top: 1px solid var(--line); }
+.reading-bar { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex: 0 0 auto; padding: 12px 32px; background: var(--paper); }
+.reading-bar h2 { margin: 0; font-size: 16px; font-weight: 650; }
+.reading-bar span { font-size: 12px; color: var(--quiet); }
+.reading-scroll { flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; scrollbar-gutter: stable; scroll-padding-top: 20px; }
+.reading-scroll:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: -3px; }
+.article { max-width: 54rem; padding: 10px 32px 48px; margin: 0 auto; font-size: 16px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+.article h1 { margin: 0 0 14px; font-size: clamp(22px, 2.4vw, 28px); font-weight: 650; line-height: 1.45; letter-spacing: -.035em; }
+.article h2 { margin: 32px 0 10px; font-size: 19px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; }
+.article p { margin: 0 0 16px; }
+.article .intro { color: var(--quiet); }
+.article a { color: light-dark(#21669e, #88c6f5); text-underline-offset: 3px; }
+.article sup { font-size: .75em; }
+.article .experiment { padding: 16px 20px 1px; margin: 20px 0; border-left: 3px solid light-dark(#438dc3, #78b7e7); background: light-dark(#f4f7fa, #23272d); }
+.article .sources { margin-top: 28px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.8; }
+.article .sources h2 { margin-top: 18px; font-size: 17px; }
+.article .sources .note { color: var(--quiet); }
+@media (max-width: 580px) {
+  .visualization { padding: 10px 8px 6px; }
+  .reading-bar { padding: 10px 20px; }
+  .reading-bar span { font-size: 11px; }
+  .article { padding: 6px 20px 36px; font-size: 15px; line-height: 1.85; }
+  .article h2 { font-size: 18px; }
+  .article .experiment { padding: 12px 14px 1px; }
+}
+@media (max-height: 500px) {
+  .visualization { flex-basis: 68vh; flex-basis: 68dvh; }
+  .reading-bar { padding-top: 7px; padding-bottom: 7px; }
+}
+</style>
 </head>
 <body>
-<iframe id="codex-visualization" sandbox="allow-scripts" scrolling="no" referrerpolicy="no-referrer" title="teaching-learning-perspectives.html" data-srcdoc="&lt;!doctype html&gt;
+<main class="page">
+<section class="visualization" aria-label="가르침과 배움의 관계 시각화">
+<iframe id="codex-visualization" sandbox="allow-scripts" scrolling="no" referrerpolicy="no-referrer" title="가르침과 배움의 관계 · 3차원 시각화" data-srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;ko-KR&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
-&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
 &lt;title&gt;teaching-learning-perspectives.html&lt;/title&gt;
 &lt;/head&gt;
 &lt;body&gt;
@@ -422,7 +461,7 @@
   --radius-2xl: calc(var(--radius) * 1.6);
   --radius-full: 9999px;
   --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
-  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E&quot;);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
 
   /* Legacy aliases; not part of the current agent contract. */
   --viz-bg: transparent;
@@ -936,7 +975,7 @@ a.btn {
   left: 50%;
   display: flex;
   width: max-content;
-  /* Leave room for the host's design-controls launcher at the trailing edge. */
+  /* Leave room for the host&#x27;s design-controls launcher at the trailing edge. */
   max-width: calc(100% - 96px);
   align-items: center;
   gap: 0;
@@ -1541,7 +1580,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;script&gt;
 (() =&gt; {
   // Host colors are defaults; later authored styles can give the same names
-  // their own meaning (for example, --muted as a chart's label color).
+  // their own meaning (for example, --muted as a chart&#x27;s label color).
   const hostStyles = document.getElementById(&quot;codex-visualization-host-theme&quot;);
   const hostStyle = hostStyles.sheet.cssRules[0].style;
   // Typography, geometry and interaction cursors still follow the host.
@@ -1582,7 +1621,7 @@ html&gt;body{padding:0}&lt;/style&gt;
     const sandboxDocument = globalThis.frameElement?.ownerDocument;
     if (sandboxDocument != null &amp;&amp; globals?.visualizationTheme != null) {
       let colorSchemeMeta = sandboxDocument.querySelector(
-        'meta[name=&quot;color-scheme&quot;]',
+        &#x27;meta[name=&quot;color-scheme&quot;]&#x27;,
       );
       if (colorSchemeMeta == null) {
         colorSchemeMeta = sandboxDocument.createElement(&quot;meta&quot;);
@@ -1680,22 +1719,22 @@ html&gt;body{padding:0}&lt;/style&gt;
   &lt;div id=&quot;tl-detail&quot; class=&quot;tl-detail&quot; aria-live=&quot;polite&quot;&gt;학생의 시선 · 예시 / 두 구는 떨어져 있음&lt;/div&gt;
   &lt;script&gt;
     (() =&gt; {
-      const root=document.getElementById('teaching-learning-perspectives-v1');
-      const world=root.querySelector('#tl-world'), projection=root.querySelector('#tl-projection');
-      const wc=world.getContext('2d'), pc=projection.getContext('2d');
-      const owner=root.querySelector('#tl-owner'), angle=root.querySelector('#tl-angle'), distance=root.querySelector('#tl-distance');
-      const overview=root.querySelector('#tl-overview');
-      const angleValue=root.querySelector('#tl-angle-value'), distanceValue=root.querySelector('#tl-distance-value');
-      const volumeValue=root.querySelector('#tl-volume'), areaValue=root.querySelector('#tl-area'), detail=root.querySelector('#tl-detail');
-      const modelId='teaching-learning-perspectives-v1';
-      let state={owner:'student', angle:0, distance:2.7, overview:'space', yaw:.55, pitch:.52};
+      const root=document.getElementById(&#x27;teaching-learning-perspectives-v1&#x27;);
+      const world=root.querySelector(&#x27;#tl-world&#x27;), projection=root.querySelector(&#x27;#tl-projection&#x27;);
+      const wc=world.getContext(&#x27;2d&#x27;), pc=projection.getContext(&#x27;2d&#x27;);
+      const owner=root.querySelector(&#x27;#tl-owner&#x27;), angle=root.querySelector(&#x27;#tl-angle&#x27;), distance=root.querySelector(&#x27;#tl-distance&#x27;);
+      const overview=root.querySelector(&#x27;#tl-overview&#x27;);
+      const angleValue=root.querySelector(&#x27;#tl-angle-value&#x27;), distanceValue=root.querySelector(&#x27;#tl-distance-value&#x27;);
+      const volumeValue=root.querySelector(&#x27;#tl-volume&#x27;), areaValue=root.querySelector(&#x27;#tl-area&#x27;), detail=root.querySelector(&#x27;#tl-detail&#x27;);
+      const modelId=&#x27;teaching-learning-perspectives-v1&#x27;;
+      let state={owner:&#x27;student&#x27;, angle:0, distance:2.7, overview:&#x27;space&#x27;, yaw:.55, pitch:.52};
       let theme={series:[], fg:[], bg:[], border:[]}, pending=false, drag=null;
       let worldSize=[0,0], projectionSize=[0,0];
       const rgb=(c,alpha=1)=&gt;`rgba(${c[0]},${c[1]},${c[2]},${alpha})`;
       const blend=(a,b,t)=&gt;a.map((x,i)=&gt;Math.round(x*(1-t)+b[i]*t));
       const radians=x=&gt;x*Math.PI/180;
       const clamp=(x,lo,hi)=&gt;Math.max(lo,Math.min(hi,x));
-      const labels={student:'학생의 시선 · 예시',teacher:'교사의 시선 · 예시',custom:'내가 선택한 시선'};
+      const labels={student:&#x27;학생의 시선 · 예시&#x27;,teacher:&#x27;교사의 시선 · 예시&#x27;,custom:&#x27;내가 선택한 시선&#x27;};
 
       function measures() {
         const d=state.distance, projected=d*Math.abs(Math.cos(radians(state.angle)));
@@ -1706,15 +1745,15 @@ html&gt;body{padding:0}&lt;/style&gt;
       }
 
       function themeColors() {
-        const probe=document.createElement('span');root.appendChild(probe);
-        const tiny=document.createElement('canvas');tiny.width=tiny.height=1;
-        const tc=tiny.getContext('2d',{willReadFrequently:true});
+        const probe=document.createElement(&#x27;span&#x27;);root.appendChild(probe);
+        const tiny=document.createElement(&#x27;canvas&#x27;);tiny.width=tiny.height=1;
+        const tc=tiny.getContext(&#x27;2d&#x27;,{willReadFrequently:true});
         const resolve=token=&gt;{
           probe.style.color=`var(${token})`;
           tc.clearRect(0,0,1,1);tc.fillStyle=getComputedStyle(probe).color;tc.fillRect(0,0,1,1);
           return [...tc.getImageData(0,0,1,1).data].slice(0,3);
         };
-        theme={series:[1,2,3].map(i=&gt;resolve(`--viz-series-${i}`)),fg:resolve('--foreground'),bg:resolve('--background'),border:resolve('--border')};
+        theme={series:[1,2,3].map(i=&gt;resolve(`--viz-series-${i}`)),fg:resolve(&#x27;--foreground&#x27;),bg:resolve(&#x27;--background&#x27;),border:resolve(&#x27;--border&#x27;)};
         probe.remove();schedule();
       }
 
@@ -1729,7 +1768,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,...size);
         const style=getComputedStyle(root);
         ctx.font=`${style.fontSize} ${style.fontFamily}`;
-        ctx.textAlign='center';ctx.textBaseline='middle';ctx.lineJoin='round';
+        ctx.textAlign=&#x27;center&#x27;;ctx.textBaseline=&#x27;middle&#x27;;ctx.lineJoin=&#x27;round&#x27;;
       }
 
       function path(ctx,points) {
@@ -1808,13 +1847,13 @@ html&gt;body{padding:0}&lt;/style&gt;
         }
         // Direct labels remain readable even when centers coincide in the overview.
         const left=project([-state.distance/2,1.4,0]),right=project([state.distance/2,1.4,0]);
-        const textHalf=wc.measureText('가르치다').width/2;
+        const textHalf=wc.measureText(&#x27;가르치다&#x27;).width/2;
         const leftX=clamp(Math.min(left[0],w/2-textHalf-7),textHalf+5,w-textHalf-5);
         const rightX=clamp(Math.max(right[0],w/2+textHalf+7),textHalf+5,w-textHalf-5);
-        wc.fillStyle=rgb(theme.fg);wc.fillText('가르치다',leftX,clamp(left[1],14,h-14));wc.fillText('배우다',rightX,clamp(right[1],14,h-14));
+        wc.fillStyle=rgb(theme.fg);wc.fillText(&#x27;가르치다&#x27;,leftX,clamp(left[1],14,h-14));wc.fillText(&#x27;배우다&#x27;,rightX,clamp(right[1],14,h-14));
         wc.fillStyle=rgb(theme.fg);wc.beginPath();wc.arc(observer[0],observer[1],5,0,2*Math.PI);wc.fill();
-        const eyeX=clamp(observer[0],wc.measureText('시선의 방향').width/2+5,w-wc.measureText('시선의 방향').width/2-5);
-        wc.fillText('시선의 방향',eyeX,clamp(observer[1]+19,14,h-14));
+        const eyeX=clamp(observer[0],wc.measureText(&#x27;시선의 방향&#x27;).width/2+5,w-wc.measureText(&#x27;시선의 방향&#x27;).width/2-5);
+        wc.fillText(&#x27;시선의 방향&#x27;,eyeX,clamp(observer[1]+19,14,h-14));
       }
 
       function drawProjection() {
@@ -1830,9 +1869,9 @@ html&gt;body{padding:0}&lt;/style&gt;
         centers.forEach((x,i)=&gt;{
           pc.strokeStyle=rgb(theme.fg,.45);pc.lineWidth=1;
           path(pc,[[x+(i?1:-1)*r*.58,cy+r*.82],[labelsX[i],labelY-13]]);pc.stroke();
-          pc.fillStyle=rgb(theme.fg);pc.fillText(i?'배우다':'가르치다',labelsX[i],labelY);
+          pc.fillStyle=rgb(theme.fg);pc.fillText(i?&#x27;배우다&#x27;:&#x27;가르치다&#x27;,labelsX[i],labelY);
         });
-        projection.setAttribute('aria-label',`선택한 시선 ${state.angle}도에서 투영의 교집합 면적은 ${(values.area*100).toFixed(1)}퍼센트`);
+        projection.setAttribute(&#x27;aria-label&#x27;,`선택한 시선 ${state.angle}도에서 투영의 교집합 면적은 ${(values.area*100).toFixed(1)}퍼센트`);
       }
 
       function render(){pending=false;drawWorld();drawProjection();}
@@ -1841,13 +1880,13 @@ html&gt;body{padding:0}&lt;/style&gt;
         owner.value=state.owner;angle.value=state.angle;distance.value=state.distance;overview.value=state.overview;
         angleValue.textContent=`${state.angle}°`;distanceValue.textContent=state.distance.toFixed(2);
         const v=measures();volumeValue.textContent=`${(v.volume*100).toFixed(1)}%`;areaValue.textContent=`${(v.area*100).toFixed(1)}%`;
-        const relation=state.distance===0?'두 구가 일치함':state.distance&lt;2?'두 구가 실제로 겹침':state.distance===2?'두 구가 한 점에서 접함':'두 구는 떨어져 있음';
+        const relation=state.distance===0?&#x27;두 구가 일치함&#x27;:state.distance&lt;2?&#x27;두 구가 실제로 겹침&#x27;:state.distance===2?&#x27;두 구가 한 점에서 접함&#x27;:&#x27;두 구는 떨어져 있음&#x27;;
         detail.textContent=`${labels[state.owner]} / ${relation}`;
-        world.setAttribute('aria-label',`두 구의 중심 간 거리 ${state.distance.toFixed(2)}반지름, 실제 교집합 부피 ${(v.volume*100).toFixed(1)}퍼센트`);
+        world.setAttribute(&#x27;aria-label&#x27;,`두 구의 중심 간 거리 ${state.distance.toFixed(2)}반지름, 실제 교집합 부피 ${(v.volume*100).toFixed(1)}퍼센트`);
         schedule();
       }
       function save(){
-        if(typeof window.openai?.setWidgetState!=='function')return;
+        if(typeof window.openai?.setWidgetState!==&#x27;function&#x27;)return;
         window.openai.setWidgetState({modelContent:{visualization:modelId,owner:state.owner,angle:state.angle,distance:state.distance,overview:state.overview,projectionAreaPercent:measures().area*100,intersectionVolumePercent:measures().volume*100},privateContent:{yaw:state.yaw,pitch:state.pitch}}).catch(()=&gt;{});
       }
       function restore(saved){
@@ -1855,32 +1894,32 @@ html&gt;body{padding:0}&lt;/style&gt;
         if(Object.hasOwn(labels,m.owner))state.owner=m.owner;
         if(Number.isFinite(m.angle))state.angle=Math.round(clamp(m.angle,0,90));
         if(Number.isFinite(m.distance))state.distance=clamp(m.distance,0,4);
-        if(['space','front','side','top','free'].includes(m.overview))state.overview=m.overview;
+        if([&#x27;space&#x27;,&#x27;front&#x27;,&#x27;side&#x27;,&#x27;top&#x27;,&#x27;free&#x27;].includes(m.overview))state.overview=m.overview;
         if(Number.isFinite(p?.yaw))state.yaw=p.yaw;
         if(Number.isFinite(p?.pitch))state.pitch=clamp(p.pitch,-Math.PI/2,Math.PI/2);
         sync();
       }
-      owner.addEventListener('change',()=&gt;{
+      owner.addEventListener(&#x27;change&#x27;,()=&gt;{
         state.owner=owner.value;
-        if(state.owner==='student')state.angle=0;
-        if(state.owner==='teacher')state.angle=80;
+        if(state.owner===&#x27;student&#x27;)state.angle=0;
+        if(state.owner===&#x27;teacher&#x27;)state.angle=80;
         sync();save();
       });
-      angle.addEventListener('input',()=&gt;{state.angle=Number(angle.value);state.owner='custom';sync();});angle.addEventListener('change',save);
-      distance.addEventListener('input',()=&gt;{state.distance=Number(distance.value);sync();});distance.addEventListener('change',save);
-      overview.addEventListener('change',()=&gt;{
+      angle.addEventListener(&#x27;input&#x27;,()=&gt;{state.angle=Number(angle.value);state.owner=&#x27;custom&#x27;;sync();});angle.addEventListener(&#x27;change&#x27;,save);
+      distance.addEventListener(&#x27;input&#x27;,()=&gt;{state.distance=Number(distance.value);sync();});distance.addEventListener(&#x27;change&#x27;,save);
+      overview.addEventListener(&#x27;change&#x27;,()=&gt;{
         state.overview=overview.value;
         const presets={space:[.55,.52],front:[0,0],side:[Math.PI/2,0],top:[0,Math.PI/2]};
         if(presets[state.overview])[state.yaw,state.pitch]=presets[state.overview];
         sync();save();
       });
-      world.addEventListener('pointerdown',e=&gt;{if(e.button!==0)return;drag={id:e.pointerId,x:e.clientX,y:e.clientY};world.setPointerCapture(e.pointerId);});
-      world.addEventListener('pointermove',e=&gt;{if(!drag||drag.id!==e.pointerId)return;state.yaw+=(e.clientX-drag.x)*.008;state.pitch=clamp(state.pitch+(e.clientY-drag.y)*.008,-Math.PI/2,Math.PI/2);drag.x=e.clientX;drag.y=e.clientY;state.overview='free';overview.value='free';schedule();});
-      const end=e=&gt;{if(drag?.id===e.pointerId){drag=null;save();}};world.addEventListener('pointerup',end);world.addEventListener('pointercancel',end);
+      world.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{if(e.button!==0)return;drag={id:e.pointerId,x:e.clientX,y:e.clientY};world.setPointerCapture(e.pointerId);});
+      world.addEventListener(&#x27;pointermove&#x27;,e=&gt;{if(!drag||drag.id!==e.pointerId)return;state.yaw+=(e.clientX-drag.x)*.008;state.pitch=clamp(state.pitch+(e.clientY-drag.y)*.008,-Math.PI/2,Math.PI/2);drag.x=e.clientX;drag.y=e.clientY;state.overview=&#x27;free&#x27;;overview.value=&#x27;free&#x27;;schedule();});
+      const end=e=&gt;{if(drag?.id===e.pointerId){drag=null;save();}};world.addEventListener(&#x27;pointerup&#x27;,end);world.addEventListener(&#x27;pointercancel&#x27;,end);
       // Mouse-event fallback also supports browser input bridges without PointerEvents.
-      world.addEventListener('mousedown',e=&gt;{if(e.button===0&amp;&amp;!drag)drag={id:'mouse',x:e.clientX,y:e.clientY};});
-      window.addEventListener('mousemove',e=&gt;{if(drag?.id!=='mouse')return;state.yaw+=(e.clientX-drag.x)*.008;state.pitch=clamp(state.pitch+(e.clientY-drag.y)*.008,-Math.PI/2,Math.PI/2);drag.x=e.clientX;drag.y=e.clientY;state.overview='free';overview.value='free';schedule();});
-      window.addEventListener('mouseup',()=&gt;{if(drag?.id==='mouse'){drag=null;save();}});
+      world.addEventListener(&#x27;mousedown&#x27;,e=&gt;{if(e.button===0&amp;&amp;!drag)drag={id:&#x27;mouse&#x27;,x:e.clientX,y:e.clientY};});
+      window.addEventListener(&#x27;mousemove&#x27;,e=&gt;{if(drag?.id!==&#x27;mouse&#x27;)return;state.yaw+=(e.clientX-drag.x)*.008;state.pitch=clamp(state.pitch+(e.clientY-drag.y)*.008,-Math.PI/2,Math.PI/2);drag.x=e.clientX;drag.y=e.clientY;state.overview=&#x27;free&#x27;;overview.value=&#x27;free&#x27;;schedule();});
+      window.addEventListener(&#x27;mouseup&#x27;,()=&gt;{if(drag?.id===&#x27;mouse&#x27;){drag=null;save();}});
       [world,projection].forEach((canvas,index)=&gt;{
         new ResizeObserver(()=&gt;{
           const rect=canvas.parentElement.getBoundingClientRect(),size=[rect.width,rect.height],dpr=Math.min(window.devicePixelRatio||1,2);
@@ -1888,9 +1927,9 @@ html&gt;body{padding:0}&lt;/style&gt;
           canvas.width=Math.round(size[0]*dpr);canvas.height=Math.round(size[1]*dpr);schedule();
         }).observe(canvas.parentElement);
       });
-      new MutationObserver(themeColors).observe(document.documentElement,{attributes:true,attributeFilter:['style','class','data-theme','data-color-scheme']});
-      matchMedia('(prefers-color-scheme: dark)').addEventListener('change',themeColors);
-      window.addEventListener('openai:set_globals',e=&gt;{if(e.detail?.globals?.widgetState)restore(e.detail.globals.widgetState);themeColors();});
+      new MutationObserver(themeColors).observe(document.documentElement,{attributes:true,attributeFilter:[&#x27;style&#x27;,&#x27;class&#x27;,&#x27;data-theme&#x27;,&#x27;data-color-scheme&#x27;]});
+      matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).addEventListener(&#x27;change&#x27;,themeColors);
+      window.addEventListener(&#x27;openai:set_globals&#x27;,e=&gt;{if(e.detail?.globals?.widgetState)restore(e.detail.globals.widgetState);themeColors();});
       themeColors();sync();restore(window.openai?.widgetState);
     })();
   &lt;/script&gt;
@@ -2207,11 +2246,11 @@ html&gt;body{padding:0}&lt;/style&gt;
 &lt;/script&gt;
 &lt;script id=&quot;codex-visualization-tabs&quot;&gt;
 (() =&gt; {
-  const selector = '.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]';
-  const disabled = ':disabled,[aria-disabled=&quot;true&quot;]';
+  const selector = &#x27;.nav[role=&quot;tablist&quot;] [role=&quot;tab&quot;]&#x27;;
+  const disabled = &#x27;:disabled,[aria-disabled=&quot;true&quot;]&#x27;;
   const selectTab = (selected) =&gt; {
     const panelId = selected.getAttribute(&quot;aria-controls&quot;);
-    for (const tab of selected.closest('[role=&quot;tablist&quot;]').querySelectorAll('[role=&quot;tab&quot;]')) {
+    for (const tab of selected.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;)) {
       const active = tab === selected;
       tab.classList.toggle(&quot;active&quot;, active);
       tab.setAttribute(&quot;aria-selected&quot;, String(active));
@@ -2235,7 +2274,7 @@ html&gt;body{padding:0}&lt;/style&gt;
       return;
     }
     const tabs = Array.from(
-      tab.closest('[role=&quot;tablist&quot;]').querySelectorAll('[role=&quot;tab&quot;]'),
+      tab.closest(&#x27;[role=&quot;tablist&quot;]&#x27;).querySelectorAll(&#x27;[role=&quot;tab&quot;]&#x27;),
     ).filter((candidate) =&gt; !candidate.matches(disabled));
     const current = tabs.indexOf(tab);
     let next;
@@ -2255,11 +2294,11 @@ html&gt;body{padding:0}&lt;/style&gt;
     selectTab(tabs[next]);
   };
 
-  for (const list of document.querySelectorAll('.nav[role=&quot;tablist&quot;]')) {
+  for (const list of document.querySelectorAll(&#x27;.nav[role=&quot;tablist&quot;]&#x27;)) {
     const selected =
-      list.querySelector('[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]') ??
-      list.querySelector('[role=&quot;tab&quot;].active') ??
-      list.querySelector('[role=&quot;tab&quot;]');
+      list.querySelector(&#x27;[role=&quot;tab&quot;][aria-selected=&quot;true&quot;]&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;].active&#x27;) ??
+      list.querySelector(&#x27;[role=&quot;tab&quot;]&#x27;);
     if (selected != null) {
       selectTab(selected);
     }
@@ -2296,7 +2335,7 @@ html&gt;body{padding:0}&lt;/style&gt;
 
       const controls = document.createElement(&quot;div&quot;);
       controls.className = &quot;viz-carousel-controls&quot;;
-      // Portable copy of the settings dropdown's legacy glyph; no 14px icon-package preset matches it.
+      // Portable copy of the settings dropdown&#x27;s legacy glyph; no 14px icon-package preset matches it.
       // https://github.com/openai/openai/blob/master/codex/codex-apps/webview/src/icons/chevron.svg
       controls.innerHTML = `
       &lt;button type=&quot;button&quot; class=&quot;viz-carousel-previous cursor-interaction&quot;&gt;&lt;i data-lucide=&quot;chevron-left&quot; aria-hidden=&quot;true&quot;&gt;&lt;/i&gt;&lt;/button&gt;
@@ -2484,9 +2523,98 @@ html&gt;body{padding:0}&lt;/style&gt;
 })();
 &lt;/script&gt;
 
+
+&lt;style id=&quot;reading-layout&quot;&gt;
+html, body { height: 100%; overflow: hidden; }
+#teaching-learning-perspectives-v1 { box-sizing: border-box; display: flex; flex-direction: column; height: 100vh; height: 100dvh; padding: 4px 0; gap: 8px; }
+#teaching-learning-perspectives-v1 .tl-title { flex: 0 0 auto; padding-right: 72px; }
+#teaching-learning-perspectives-v1 .tl-legend { flex: 0 0 auto; margin-bottom: 0; gap: 18px; }
+#teaching-learning-perspectives-v1 .tl-scenes { flex: 1 1 0; min-height: 60px; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; }
+#teaching-learning-perspectives-v1 .tl-panel { display: flex; flex-direction: column; min-height: 0; gap: 2px; }
+#teaching-learning-perspectives-v1 .tl-panel-top { flex: 0 0 auto; min-height: 30px; }
+#teaching-learning-perspectives-v1 .tl-field { flex: 1 1 0; height: auto; min-height: 0; }
+#teaching-learning-perspectives-v1 .tl-measure { flex: 0 0 auto; gap: 2px 8px; }
+#teaching-learning-perspectives-v1 .tl-controls { flex: 0 0 auto; display: grid; grid-template-columns: 1fr 1fr 1.25fr; align-items: end; gap: 8px 20px; margin-top: 2px; }
+#teaching-learning-perspectives-v1 .tl-controls &gt; .form-label { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+#teaching-learning-perspectives-v1 .tl-angle, #teaching-learning-perspectives-v1 .tl-distance { margin-top: 0; min-width: 0; }
+#teaching-learning-perspectives-v1 .tl-detail { flex: 0 0 auto; margin-top: 0; min-height: 0; font-size: 12px; }
+@media (max-width: 580px) {
+  #teaching-learning-perspectives-v1 { gap: 6px; font-size: 12px; }
+  #teaching-learning-perspectives-v1 .tl-title { font-size: 17px; padding-right: 64px; }
+  #teaching-learning-perspectives-v1 .tl-legend { gap: 12px; }
+  #teaching-learning-perspectives-v1 .tl-swatch { width: 13px; }
+  #teaching-learning-perspectives-v1 .tl-scenes { gap: 12px; }
+  #teaching-learning-perspectives-v1 .tl-panel-top { align-items: flex-start; flex-direction: column; justify-content: flex-end; min-height: 52px; gap: 3px; }
+  #teaching-learning-perspectives-v1 .tl-view-slot { width: 100%; }
+  #teaching-learning-perspectives-v1 .tl-measure { font-size: 11px; align-items: flex-start; }
+  #teaching-learning-perspectives-v1 .tl-measure output { margin-left: auto; }
+  #teaching-learning-perspectives-v1 .tl-controls { grid-template-columns: 1fr 1fr; gap: 4px 12px; }
+  #teaching-learning-perspectives-v1 .tl-controls &gt; .form-label { grid-column: 1 / -1; }
+  #teaching-learning-perspectives-v1 .tl-range-label { gap: 4px; align-items: flex-start; }
+  #teaching-learning-perspectives-v1 .tl-range-label .form-label { max-width: calc(100% - 38px); }
+  #teaching-learning-perspectives-v1 .tl-detail { font-size: 11px; }
+}
+@media (max-height: 310px) and (min-width: 581px) {
+  #teaching-learning-perspectives-v1 { display: grid; grid-template-columns: minmax(0, 1fr) 200px; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: 3px 16px; font-size: 12px; }
+  #teaching-learning-perspectives-v1 .tl-title { font-size: 16px; }
+  #teaching-learning-perspectives-v1 .tl-title, #teaching-learning-perspectives-v1 .tl-legend, #teaching-learning-perspectives-v1 .tl-detail { grid-column: 1 / -1; }
+  #teaching-learning-perspectives-v1 .tl-scenes { grid-column: 1; grid-row: 3; gap: 14px; }
+  #teaching-learning-perspectives-v1 .tl-panel-top { min-height: 28px; }
+  #teaching-learning-perspectives-v1 .tl-legend { font-size: 11px; }
+  #teaching-learning-perspectives-v1 .tl-measure { font-size: 10px; }
+  #teaching-learning-perspectives-v1 .tl-controls { grid-column: 2; grid-row: 3; display: flex; flex-direction: column; justify-content: center; align-items: stretch; gap: 4px; margin-top: 0; }
+  #teaching-learning-perspectives-v1 .tl-controls &gt; .form-label { flex: 0 0 auto; }
+  #teaching-learning-perspectives-v1 .tl-detail { font-size: 10px; }
+}
+&lt;/style&gt;
 &lt;/body&gt;
 &lt;/html&gt;
 "></iframe>
+
+</section>
+<section class="reading" aria-labelledby="reading-label">
+  <header class="reading-bar">
+    <h2 id="reading-label">읽을 자료</h2>
+    <span>시각화를 보며 아래 글을 스크롤하세요</span>
+  </header>
+  <div class="reading-scroll" id="reading-scroll" tabindex="0" role="region" aria-label="읽을 자료 본문 · 독립 스크롤">
+    <article class="article" aria-labelledby="article-title">
+      <h1 id="article-title">가르침과 배움 사이에, 우리가 그리는 기호</h1>
+      <p class="intro">임완철의 『읽는다는 것의 미래』와 『가르치는 인공지능은 가능한가?』를 바탕으로, 관계를 표현하는 기호와 그 기호를 바라보는 시선을 생각해 보는 글.</p>
+
+      <h2>가르친 것과 배운 것은 같은 것일까</h2>
+      <p>수업을 마친 뒤 우리는 “무엇을 가르쳤는가”와 “무엇을 배웠는가”를 묻는다. 두 질문에 같은 답이 나오리라고 기대하기도 한다. 그러나 교사가 의도한 내용과 학생에게 일어난 변화는 서로 다른 자리에서 생긴다. 교사는 학생의 배움을 직접 들여다볼 수 없고, 학생 또한 교사의 의도나 다른 학생의 배움을 온전히 알기 어렵다. 답안과 질문, 말과 행동은 그 관계를 살피는 단서가 되지만, 그 단서가 배움의 과정 전체를 보여 주지는 않는다.</p>
+      <p>『읽는다는 것의 미래』는 이 문제를 단어와 수업, 학습이라는 장치에 관한 물음으로 다룬다. 가르침에서 의도한 ‘무엇’과 배움에서 일어난 ‘무엇’을 같은 것으로 놓을 수 있는가? ‘가르치다’의 결과로 ‘배우다’를 배치하는 익숙한 생각은 무엇을 드러내고 무엇을 가리는가? 이것은 가르침의 가치를 부정하는 결론이 아니라, 가르침과 배움의 관계를 어떤 근거와 표현으로 이해하고 있는지 돌아보게 하는 질문이다.<sup><a href="#source-1" aria-label="책 출처 1">[1]</a></sup></p>
+
+      <h2>생각은 기호를 통해 모양을 얻는다</h2>
+      <p>생각을 설명하려면 단어를 쓰고, 종이에 도형을 그리거나 화면에 그림을 띄워야 한다. 이때 표현의 형식도 생각에 관여한다. 시간에 따라 달라지는 가르침과 배움을 ‘가르치다’와 ‘배우다’라는 말로 붙잡으면 비교하고 논의하기는 쉬워진다. 동시에 그 말은 변화하는 과정을 고정된 대상으로 다루게 할 수 있다. 책의 「단어: 변화를 시공간에 고정시키는 장치」는 이러한 문제를 짚는다.<sup><a href="#source-1" aria-label="책 출처 1">[1]</a></sup></p>
+      <p>벤다이어그램도 생각을 다룰 수 있게 해 주는 기호다. 두 영역을 원으로 그리면 교집합과 합집합, 차이를 한눈에 비교할 수 있다. 다만 그 원을 교육의 실제 과정에 대응시키려면, 무엇을 각각의 영역에 포함할 것인지 먼저 정해야 한다. 그림에서 겹친 부분을 찾았다는 것만으로 “가르친 만큼 배웠다”거나 “배움은 가르침의 결과다”라는 결론이 따라오지는 않는다.</p>
+
+      <h2>원에 차원을 하나 더한다면</h2>
+      <p>『가르치는 인공지능은 가능한가?』의 「차원을 높여 생각하는 방법」에는 이 벤다이어그램을 다시 생각하게 하는 제안이 나온다. 두 원을 3차원 공간의 두 구로 상상해 보자. 혹은 서로 다른 평면 위의 원으로 생각해 보자. 그러면 한 방향에서는 겹쳐 보이고, 다른 방향에서는 떨어져 보이는 관계를 탐구할 수 있다. 도형을 그리는 데서 한 걸음 더 나아가, 그 도형이 관계를 어떤 방식으로 보여 주는지를 질문하게 되는 것이다.<sup><a href="#source-2" aria-label="책 출처 2">[2]</a></sup></p>
+      <p>상단의 시각화는 이 제안 가운데 두 구의 모형을 구현한다. 왼쪽은 공간의 배치이고, 오른쪽은 선택한 시선에서 얻은 평행투영이다. 공간에서 서로 떨어진 두 구도 어떤 시선에서는 겹친 원으로 보일 수 있다. 이때 달라진 것은 구의 배치가 아니라 그 배치를 평면에 옮겨 보여 주는 방식이다. 집합의 실제 교집합이 시선만으로 생기거나 사라지는 것은 아니다.</p>
+
+      <h2>두 가지 조작을 비교해 보기</h2>
+      <div class="experiment">
+        <p><strong>거리를 고정하고 시선을 바꿔 보자.</strong> 초기 거리 2.70은 반지름의 2배보다 크므로 두 구는 떨어져 있다. 학생과 교사의 시선 예시를 번갈아 선택하면 오른쪽 투영의 겹침은 달라져도 왼쪽의 실제 교집합 부피는 0%로 유지된다. 학생과 교사라는 이름은 강연의 상황을 설명하는 예시이며, 모든 학생과 교사가 반드시 그 방향에서 본다는 뜻은 아니다.</p>
+        <p><strong>이번에는 두 구의 거리를 바꿔 보자.</strong> 중심 간 거리를 2보다 작게 만들면 공간에서 두 구가 실제로 겹친다. 이것은 시선의 변화와 달리 모형의 배치 자체를 바꾼 결과다. 왼쪽 배치 그림을 드래그해 회전하는 조작과, 오른쪽 투영을 정하는 ‘시선의 방향’ 조작도 구분해 살펴보자.</p>
+      </div>
+      <p>부피 비율의 분모는 구 하나의 부피이고, 투영 면적 비율의 분모는 원 하나의 면적이다. 두 값은 서로 다른 기하학적 양을 나타낸다. 이 모형은 같은 반지름의 두 구를 사용하며, 표시되는 비율은 학습률이나 수업 효과, 통계적 상관계수 또는 인과관계의 추정치가 아니다. 교육의 관계를 탐구하려면 이 모형이 드러내는 차이를 실제 사례와 대조하고, 도형에 담기지 않는 과정도 함께 물어야 한다.</p>
+
+      <h2>표현하는 장치를 바꾸는 일</h2>
+      <p>종이의 도형을 화면으로 옮기는 데서 변화가 끝나지는 않는다. 시선을 바꾸고 배치를 조작하며 두 결과를 함께 볼 수 있다면, 익숙한 기호가 감추었던 조건을 생각의 대상으로 삼을 수 있다. 『가르치는 인공지능은 가능한가?』가 이 사례에서 찾는 교육적 가능성도 여기에 있다.<sup><a href="#source-2" aria-label="책 출처 2">[2]</a></sup> 이 페이지에서 해 볼 일은 하나의 관점을 정답으로 고르는 것이 아니라, 어떤 표현과 시선이 어떤 관계를 보이게 하는지 묻는 것이다.</p>
+
+      <footer class="sources" aria-labelledby="sources-title">
+        <h2 id="sources-title">책 출처와 확인한 범위</h2>
+        <p id="source-1"><strong>[1] 임완철, 『읽는다는 것의 미래: 책이 생각하게 되면 우리는 무엇을 읽어야 할까?』</strong>, 지식노마드, 2019. ISBN 979-11-87481-52-2. 제2장 「교육 문제를 다룰 때 작동하는 우리 생각의 기초들」의 단어(54–57쪽), 수업(58–62쪽), 학습(63–65쪽) 논의. <a href="https://www.yes24.com/product/goods/69288352" target="_blank" rel="noopener noreferrer">도서 정보</a></p>
+        <p id="source-2"><strong>[2] 임완철, 『가르치는 인공지능은 가능한가?: 장치의 교육학을 위한 시론』</strong>, 새물결, 2020. ISBN 978-89-5559-427-0. 제7장 「교육장치의 디지털전환」 중 「16. 5. 차원을 높여 생각하는 방법」. 확인한 최종 원고의 표기 쪽수 181–184쪽, 두 구와 시선에 관한 핵심 설명 182–183쪽. <strong>이 쪽수는 출간본의 쪽수가 아니다.</strong> <a href="https://m.yes24.com/Goods/Detail/94158747" target="_blank" rel="noopener noreferrer">도서 정보</a></p>
+        <p class="note">가르침과 배움의 동일성에 대한 문제는 [1]을, 차원을 더하는 벤다이어그램의 구체적인 제안은 [2]를 근거로 삼았다. 이 글은 두 책의 논의를 바탕으로 시각화에 맞게 새로 작성한 해설이며, 원문의 전재가 아니다.</p>
+        <p><a href="https://www.youtube.com/watch?v=cvE8M0FkCFc" target="_blank" rel="noopener noreferrer">관련 강연 보기</a> · <a href="https://github.com/climtc/teaching-learning-perspectives" target="_blank" rel="noopener noreferrer">GitHub 저장소</a></p>
+      </footer>
+    </article>
+  </div>
+</section>
+</main>
 <script>(() => {
   const frame = document.getElementById("codex-visualization");
   if (!(frame instanceof HTMLIFrameElement)) {
