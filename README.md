@@ -49,3 +49,24 @@
 - `README.md`: 저장소 개요, 사용 방법, 책 출처.
 
 시각화는 `sandbox="allow-scripts"`인 iframe 안에서 실행된다. 기존 페이지와 iframe의 Content Security Policy를 보존했다. `main` 브랜치의 루트를 GitHub Pages로 게시한다.
+
+
+## 라캉의 위상학 사례 모음
+
+[사례 모음 시작하기](https://climtc.github.io/teaching-learning-perspectives/lacan-atlas.html)
+
+세미나 IX에서 XXIII까지의 토러스, 뫼비우스의 띠, 끈의 고리, 세잎매듭, 생톰을 새 페이지로 구현했다. 각 페이지는 원문 도식과 회전·조건 변경이 가능한 모형을 상단에 배치하고, 고정된 읽기 제목 아래의 본문만 독립적으로 스크롤한다.
+
+- [토러스 — 두 종류의 순환](https://climtc.github.io/teaching-learning-perspectives/torus.html) — 세미나 IX, 1962년 3월 7일, STAFERLA PDF 110쪽.
+- [뫼비우스의 띠 — 표면과 방향](https://climtc.github.io/teaching-learning-perspectives/mobius-strip.html) — 세미나 IX, 1962년 5월 23일, STAFERLA PDF 202쪽.
+- [끈의 고리 — 닫힘과 절단](https://climtc.github.io/teaching-learning-perspectives/rings-and-cuts.html) — 세미나 XX, 1973년 5월 15일, STAFERLA PDF 139쪽.
+- [세잎매듭 — 한 줄과 교차](https://climtc.github.io/teaching-learning-perspectives/trefoil-knot.html) — 세미나 XXIII, 1976년 2월 10일, STAFERLA PDF 64쪽.
+- [생톰 — 오류와 교정의 자리](https://climtc.github.io/teaching-learning-perspectives/sinthome.html) — 세미나 XXIII, 1976년 2월 17일, STAFERLA PDF 72쪽.
+
+[선정과 구현 계획](LACAN_ATLAS_PLAN.md) · [출처와 원본 해시](lacan-atlas-sources.json)
+
+캡처는 STAFERLA 작업 전사본의 편집 도식이며 라캉 자필 원고로 표시하지 않는다. Hopf 링크는 비교용 수학 사례이며, 생톰 모형은 교정의 자리라는 질문을 다루는 재구성이다. 전체 도식과의 위상적 동등성을 증명했다고 주장하지 않는다.
+
+토러스와 뫼비우스의 띠 자체는 2차원 표면이다. 3차원 좌표와 상호작용은 독자가 확인할 수 있는 시점과 조건을 늘린다. 평면 도식 자체의 수학적 표현 능력과 구별하여 설명한다.
+
+책과의 연결: 임완철, 『읽는다는 것의 미래』(2019), 제2장 「교육 문제를 다룰 때 작동하는 우리 생각의 기초들」; 『가르치는 인공지능은 가능한가?』(2020), 제7장 중 「16. 5. 차원을 높여 생각하는 방법」. 이번 글은 연구용 해설이며 책의 단원 전체를 전재한 것이 아니다. 다른 텍스트와의 비교는 이번 구현 범위에 포함하지 않았다.
