@@ -13,5 +13,19 @@ function state(orbit,fraction){const a=orbit.states,u=Math.max(0,Math.min(1,frac
 }
 function stableTriangular(mu){return 27*mu*(1-mu)<1;}
 function distance(a,b){return Math.hypot(...a.slice(0,3).map((x,i)=>x-b[i]));}
-return{potential,gradient,dynamics,jacobi,rotate,inertialState,state,stableTriangular,distance};
+// Unequal UTC samples, geometric Earth-centred states (km, km/s).
+function ephemeris(rows,time){
+ if(time<rows[0][0]-.001||time>rows.at(-1)[0]+.001)return null;
+ time=Math.max(rows[0][0],Math.min(rows.at(-1)[0],time));let lo=0,hi=rows.length-1;
+ while(hi-lo>1){const mid=(lo+hi)>>1;if(rows[mid][0]<=time)lo=mid;else hi=mid;}
+ const p=rows[lo],q=rows[hi],h=q[0]-p[0],u=(time-p[0])/h,u2=u*u,u3=u2*u,out=[];
+ for(let j=1;j<=3;j++)out.push((2*u3-3*u2+1)*p[j]+(u3-2*u2+u)*h*p[j+3]+(-2*u3+3*u2)*q[j]+(u3-u2)*h*q[j+3]);
+ for(let j=1;j<=3;j++)out.push(((6*u2-6*u)*p[j]+(3*u2-4*u+1)*h*p[j+3]+(-6*u2+6*u)*q[j]+(3*u2-2*u)*h*q[j+3])/h);
+ return out;
+}
+const dot=(a,b)=>a.slice(0,3).reduce((v,x,i)=>v+x*b[i],0),cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],unit=a=>{const n=Math.hypot(...a);return a.map(x=>x/n);};
+function sunBasis(sun){const x=unit(sun.slice(0,3).map(v=>-v)),z=unit(cross(sun.slice(0,3),sun.slice(3,6))),y=cross(z,x);return[x,y,z];}
+function missionPosition(earthRelative,sun,frame){return frame==='inertial'?earthRelative.slice(0,3).map((x,i)=>x-sun[i]):sunBasis(sun).map(axis=>dot(earthRelative,axis));}
+function missionTime(window,fraction){return window.start+Math.max(0,Math.min(1,fraction))*(window.end-window.start);}
+return{potential,gradient,dynamics,jacobi,rotate,inertialState,state,stableTriangular,distance,ephemeris,sunBasis,missionPosition,missionTime};
 });

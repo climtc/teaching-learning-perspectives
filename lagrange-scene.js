@@ -8,8 +8,59 @@ const line=(s,pts,color,width=1,alpha=1)=>s.items.push({kind:'line',points:pts,c
 function point(s,p,color,r=4,label=''){s.items.push({kind:'point',points:[p],color,r,alpha:1});if(label)s.labels.push({p,text:label,color});}
 function circle(r,n=180){return Array.from({length:n+1},(_,i)=>[r*Math.cos(2*pi*i/n),r*Math.sin(2*pi*i/n),0]);}
 function axes(s,names){const e=s.bound*.55;for(let i=0;i<3;i++){const a=s.center.slice(),b=s.center.slice();a[i]-=e;b[i]+=e;line(s,[a,b],dark()?'#64778f':'#95aac2',.7,.6);s.labels.push({p:b,text:names[i],color:dark()?'#c8d9ec':'#3c5670'});}}
+const missions=window.LagrangeMissions.missions,pink='#e589c8',utc=t=>new Date(t*1000).toISOString().replace('T',' ').slice(0,19)+' UTC';
+let missionOptionsKey='',missionCache=null;
+function missionUI(){
+ const key=$('trajectory').value,active=key!=='ideal';$('mission-controls').hidden=!active;$('ideal-controls').hidden=active;
+ $('view').querySelector('[value="approach"]').disabled=!active;
+ $('frame').querySelector('[value="rotating"]').textContent=active?'태양–지구 방향 회전계':'두 천체와 도는 회전계';
+ $('frame').querySelector('[value="inertial"]').textContent=active?'태양 중심 · 고정된 황도 방향':'질량중심 관성계';
+ $('view').querySelector('[value="local"]').textContent=active?'지구 주변 · 같은 길이 척도':'선택점 주변';
+ $('progress').parentElement.firstChild.textContent=active?'선택 구간 시간 ':'모형 시간 · 한 주기 ';
+ if(!active){if($('view').value==='approach')$('view').value='local';return;}
+ $('frame').querySelector('[value="inertial"]').disabled=false;$('view').querySelector('[value="global"]').disabled=false;$('view').querySelector('[value="local"]').disabled=false;
+ const m=missions[key];if(missionOptionsKey!==key){missionOptionsKey=key;$('mission-window').replaceChildren(...m.windows.map(w=>{const o=document.createElement('option');o.value=w.id;o.textContent=w.label;return o;}));
+  $('mission-events').replaceChildren(...m.events.map(event=>{const b=document.createElement('button');b.textContent=event.label;b.type='button';b.addEventListener('click',()=>{
+   const w=m.windows.find(w=>w.id===(event.time>=m.separation?'capsule':event.label.includes('L1 진입')?'halo':event.label.includes('귀환')||event.label.includes('지구 접근')||event.label.includes('7월')?'return':event.label.includes('L2 진입')?'halo':'outbound'))||m.windows.at(-1);
+   $('mission-window').value=w.id;$('view').value=['capsule','entry'].includes(w.id)?'approach':'local';$('progress').value=Math.max(0,Math.min(1,(event.time-w.start)/(w.end-w.start)));zoom=1;pause();schedule();
+  });return b;}));
+ }
+ const w=m.windows.find(w=>w.id===$('mission-window').value),t=M.missionTime(w,Number($('progress').value));
+ $('mission-period').textContent=utc(w.start)+' → '+utc(w.end)+'. '+m.quality+'.';
+ [...$('mission-events').children].forEach((b,i)=>b.setAttribute('aria-pressed',String(Math.abs(t-m.events[i].time)<Math.max(1,(w.end-w.start)*.0005))));
+ if($('player-description'))$('player-description').textContent='실제 경과 시간 · '+((w.end-w.start)<86400?((w.end-w.start)/3600).toFixed(2)+'시간':((w.end-w.start)/86400).toFixed(1)+'일')+' 압축';
+}
+function missionPhase(key,m,t){if(key==='webb')return t<m.windows.find(w=>w.id==='halo').start?{label:'지구에서 L2로 접근',color:green}:{label:'L2 주변 운동',color:orange};if(t>=m.separation)return{label:'본체 통과 · 분리 캡슐 접근',color:purple};if(t>=m.windows.find(w=>w.id==='return').start)return{label:'L1에서 L2 부근을 거쳐 귀환',color:purple};if(t>=m.windows.find(w=>w.id==='halo').start)return{label:'L1 주변 체류',color:orange};return{label:'발사 뒤 L1로 접근',color:green};}
+function missionTrail(rows,m,w,frame){
+ const a=rows.filter(row=>row[0]>=w.start&&row[0]<=w.end),lo=Math.max(w.start,rows[0][0]),hi=Math.min(w.end,rows.at(-1)[0]);if(hi<lo)return[];
+ const step=Math.max(1,Math.ceil(a.length/900)),times=[lo,...a.filter((_,i)=>i%step===0).map(row=>row[0]),hi];
+ return [...new Set(times)].sort((a,b)=>a-b).map(t=>({t,p:M.missionPosition(M.ephemeris(rows,t),M.ephemeris(m.sun,t),frame)}));
+}
+function missionScene(){
+ missionUI();const key=$('trajectory').value,m=missions[key],w=m.windows.find(w=>w.id===$('mission-window').value),frame=$('frame').value,t=M.missionTime(w,Number($('progress').value)),sun=M.ephemeris(m.sun,t),bus=M.ephemeris(m.states,t),cap=m.capsule?M.ephemeris(m.capsule,t):null,phase=missionPhase(key,m,t),Q=q=>M.missionPosition(q,sun,frame),earth=Q([0,0,0]),global=$('view').value==='global',approach=$('view').value==='approach';
+ const b=global?1.65e8:approach?(w.id==='entry'?18000:90000):2.35e6,center=global?(frame==='inertial'?[0,0,0]:Q(sun)):earth,s=base(b,center),sunP=Q(sun),current=Q(bus);
+ axes(s,frame==='inertial'?['X','Y','Z']:['x · 태양 반대','y','z']);
+ const cacheKey=key+':'+w.id+':'+frame;if(!missionCache||missionCache.key!==cacheKey)missionCache={key:cacheKey,bus:missionTrail(m.states,m,w,frame),capsule:m.capsule?missionTrail(m.capsule,m,w,frame):[],earth:missionTrail(m.sun.map(a=>[a[0],0,0,0,0,0,0]),m,w,frame)};
+ function trail(a,capsule=false){let previous=null;for(const row of a){if(previous){const col=capsule?pink:missionPhase(key,m,row.t).color;line(s,[previous.p,row.p],col,1.2,.27);if(previous.t<t){const next=row.t<=t?row.p:(capsule?Q(cap):current);if(next)line(s,[previous.p,next],col,2.4,.95);}}previous=row;}}
+ if(global&&frame==='inertial')line(s,missionCache.earth.map(a=>a.p),blue,1,.35);
+ trail(missionCache.bus);trail(missionCache.capsule,true);
+ if(approach){const r=6378;for(let k=0;k<3;k++)line(s,circle(r,90).map(p=>{if(k===1)return[earth[0]+p[0],earth[1],earth[2]+p[1]];if(k===2)return[earth[0],earth[1]+p[0],earth[2]+p[1]];return p.map((v,i)=>v+earth[i]);}),blue,1.7,.9);point(s,earth,blue,2,'지구 · 기준 구 R 6,378 km');}else point(s,earth,blue,6,'지구');
+ if(global)point(s,sunP,orange,9,'태양');
+ const dist=Math.hypot(...sun.slice(0,3)),basis=M.sunBasis(sun),S=D['sun-earth'];
+ for(const i of[0,1]){const rel=S.points[i].map((a,j)=>(a-(j===0?1-S.mass_ratio:0))*dist);const p=frame==='rotating'?rel:rel.map((_,j)=>earth[j]+rel.reduce((sum,v,k)=>sum+v*basis[k][j],0));if(M.distance(p,center)<b*1.8)point(s,p,purple,4,'L'+(i+1)+' · 근사');}
+ point(s,current,phase.color,5,key==='webb'?'웹':'본체');if(cap){s.labels.at(-1).dy=-18;point(s,Q(cap),pink,5,'캡슐');s.labels.at(-1).dy=18;}
+ const measure=cap||bus,q=cap?Q(cap):current,z=M.missionPosition(measure,sun,'rotating')[2];
+ if(!global&&!approach){line(s,missionCache.bus.map(a=>[a.p[0],a.p[1],earth[2]]),blue,1,.15);line(s,[q,[q[0],q[1],earth[2]]],blue,1,.5);}
+ s.head=[`${m.name} · ${phase.label}`,utc(t)];
+ $('metrics').textContent=`${cap?'캡슐':'우주선'}의 지구 중심 거리 ${num(Math.hypot(...measure.slice(0,3)))} km · 지구 상대 속력 ${Math.hypot(...measure.slice(3,6)).toFixed(3)} km/s · 회전계 공간 z ${num(z)} km. ${cap?'본체의 지구 중심 거리 '+num(Math.hypot(...bus.slice(0,3)))+' km. ':''} 반폭 ${num(b)} km · x·y·z 같은 척도.`;
+ const span=(w.end-w.start)/86400;
+ $('readout').textContent=`${frame==='rotating'?'날짜별 태양–지구 방향에 맞춘 회전 좌표':'태양 중심, 고정된 J2000 황도 방향'+(global?'':' · 시야 중심은 현재 지구')}. 초록 출발 · 주황 체류 · 보라 귀환/본체 · 분홍 분리 캡슐. 옅은 선은 선택 구간 전체, 진한 선은 현재까지. ${cap?'캡슐은 대기 진입까지의 항법 예측이며 착륙 궤적은 아님. ':''}${w.id==='outbound'?m.coverage_note+' ':''}${approach?'지구 기준 구만 실제 길이 비례.':'점의 표시 크기는 기호 크기.'} L1·L2는 이상 모형의 근사 기준.`;
+ missionProjection(s);return s;
+}
+function missionProjection(s){const{ctx:c,w,h}=setup(map),sc=Math.min(w-30,h-48)/(2*s.bound),P=p=>[w/2+(p[0]-s.center[0])*sc,(h+20)/2-(p[1]-s.center[1])*sc];c.font='10px system-ui';c.fillStyle=dark()?'#c5d6eb':'#3e5874';c.fillText('동일 경로의 x–y 투영 · 공간 z 생략',6,14);c.save();c.beginPath();c.rect(5,22,w-10,h-40);c.clip();for(const a of s.items){if(a.kind==='face')continue;c.globalAlpha=a.alpha;c.strokeStyle=a.color;c.fillStyle=a.color;c.lineWidth=a.width||1;c.beginPath();if(a.kind==='point'){c.arc(...P(a.points[0]),Math.min(a.r,4),0,2*pi);c.fill();}else{a.points.forEach((p,i)=>i?c.lineTo(...P(p)):c.moveTo(...P(p)));c.stroke();}}c.restore();c.globalAlpha=1;c.fillStyle=dark()?'#c5d6eb':'#3e5874';c.fillText('가로·세로 같은 척도 · 반폭 '+num(s.bound)+' km',6,h-8);}
+
 function controls(){const potential=$('mode').value==='potential';if(potential){$('frame').value='rotating';$('view').value='local';}if($('frame').value==='inertial')$('view').value='global';$('frame').querySelector('[value="inertial"]').disabled=potential;$('view').querySelector('[value="global"]').disabled=potential;$('view').querySelector('[value="local"]').disabled=$('frame').value==='inertial';}
-function scene(){controls();const key=$('system').value,S=D[key],mu=S.mass_ratio,li=Number($('point').value),L=S.points[li-1],orbit=S.orbits[String(li)],f=Number($('progress').value),T=orbit?orbit.period:2*pi,t=f*T,potential=$('mode').value==='potential',inertial=$('frame').value==='inertial',local=$('view').value==='local',Q=p=>inertial?M.rotate(p,t):p;
+function scene(){missionUI();if($('trajectory').value!=='ideal')return missionScene();if($('player-description'))$('player-description').textContent='시간 전개 · 이상 CR3BP 궤도';controls();const key=$('system').value,S=D[key],mu=S.mass_ratio,li=Number($('point').value),L=S.points[li-1],orbit=S.orbits[String(li)],f=Number($('progress').value),T=orbit?orbit.period:2*pi,t=f*T,potential=$('mode').value==='potential',inertial=$('frame').value==='inertial',local=$('view').value==='local',Q=p=>inertial?M.rotate(p,t):p;
  const bounds=key==='sun-earth'?[.007,.007,.18,.2,.2]:[.12,.14,.22,.24,.24],surfaceBounds=key==='sun-earth'?[.006,.006,.16,.2,.2]:[.12,.14,.2,.2,.2];
  const b=local?(potential?surfaceBounds[li-1]:bounds[li-1]):1.4,center=local?L:[0,0,0],s=base(b,center),primary=key==='sun-earth'?'태양':'지구',secondary=key==='sun-earth'?'지구':'달';
  let q=null,current=null,trail=[];if(orbit){q=M.state(orbit,f);current=inertial?M.rotate(q,t):q.slice(0,3);trail=orbit.states.filter((_,i)=>i%3===0).map(a=>inertial?M.rotate(a.slice(1,4),a[0]):a.slice(1,4));}
@@ -39,11 +90,11 @@ function projection(scene,S,li,t,orbit,q,inertial,potential){const{ctx:c,w,h}=se
 function render(s){const{ctx:c,w,h}=setup(cv),sc=Math.min(w-38,h-102)/(2*s.bound)*zoom,project=p=>{const v=p.map((a,i)=>a-s.center[i]),xx=Math.cos(yaw)*v[0]-Math.sin(yaw)*v[1],yy=Math.sin(yaw)*v[0]+Math.cos(yaw)*v[1],zz=Math.cos(pitch)*v[2]-Math.sin(pitch)*yy,depth=Math.sin(pitch)*v[2]+Math.cos(pitch)*yy;return[w/2+xx*sc,h*.54-zz*sc,depth];};
  const primitives=[];for(const item of s.items){if(item.kind==='line'){for(let i=0;i<item.points.length-1;i++)primitives.push({...item,projected:[project(item.points[i]),project(item.points[i+1])]});}else primitives.push({...item,projected:item.points.map(project)});}for(const p of primitives)p.depth=p.projected.reduce((a,q)=>a+q[2],0)/p.projected.length;primitives.sort((a,b)=>b.depth-a.depth);c.save();c.beginPath();c.rect(0,53,w,h-75);c.clip();
  for(const p of primitives){c.globalAlpha=p.alpha;c.strokeStyle=p.color;c.fillStyle=p.color;c.lineWidth=p.width||.5;c.beginPath();if(p.kind==='point'){c.arc(p.projected[0][0],p.projected[0][1],p.r,0,2*pi);c.fill();}else{p.projected.forEach((q,i)=>i?c.lineTo(q[0],q[1]):c.moveTo(q[0],q[1]));if(p.kind==='face'){c.closePath();c.fill();}else c.stroke();}}
- c.globalAlpha=1;for(const{p,text,color}of s.labels){const q=project(p);if(q[0]<0||q[0]>w||q[1]<55||q[1]>h-20)continue;c.font='bold 11px system-ui';c.fillStyle=color;c.fillText(text,q[0]+6,q[1]-6);}c.restore();c.fillStyle=dark()?'#dfebfb':'#29425f';c.font='bold 11px system-ui';s.head.forEach((text,i)=>c.fillText(text,8,18+17*i));c.font='10px system-ui';c.fillText(`드래그/방향키 회전 · +− 배율 ${zoom.toFixed(2)}×`,8,h-8);$('zoom-info').textContent=zoom.toFixed(2)+'×';$('progress-value').textContent=(Number($('progress').value)*100).toFixed(1)+'%';
+ c.globalAlpha=1;for(const{p,text,color,dx,dy}of s.labels){const q=project(p);if(q[0]<0||q[0]>w||q[1]<55||q[1]>h-20)continue;c.font='bold 11px system-ui';c.fillStyle=color;c.fillText(text,q[0]+(dx??6),q[1]+(dy??-6));}c.restore();c.fillStyle=dark()?'#dfebfb':'#29425f';c.font='bold 11px system-ui';s.head.forEach((text,i)=>c.fillText(text,8,18+17*i));c.font='10px system-ui';c.fillText(`드래그/방향키 회전 · +− 배율 ${zoom.toFixed(2)}×`,8,h-8);$('zoom-info').textContent=zoom.toFixed(2)+'×';$('progress-value').textContent=(Number($('progress').value)*100).toFixed(1)+'%';
 }
 function schedule(){if(!request)request=requestAnimationFrame(()=>{request=0;render(scene());});}function pause(){$('progress').dispatchEvent(new Event('input',{bubbles:true}));}
-for(const el of document.querySelectorAll('.controls input,.controls select'))el.addEventListener('input',()=>{if(['system','point'].includes(el.id)){$('progress').value=0;if($('mode').value==='space'&&$('frame').value==='rotating')$('view').value=Number($('point').value)<=2?'local':'global';pause();}schedule();});
-$('reset').addEventListener('click',()=>{$('system').value='sun-earth';$('point').value='2';$('view').value='local';$('mode').value='space';$('frame').value='rotating';$('progress').value=0;yaw=.5;pitch=.65;zoom=1;pause();schedule();});
+for(const el of document.querySelectorAll('.controls input,.controls select'))el.addEventListener('input',()=>{if(['trajectory','mission-window'].includes(el.id)){missionUI();$('progress').value=0;$('view').value=['capsule','entry'].includes($('mission-window').value)?'approach':'local';zoom=1;pause();}if(['system','point'].includes(el.id)){$('progress').value=0;if($('mode').value==='space'&&$('frame').value==='rotating')$('view').value=Number($('point').value)<=2?'local':'global';pause();}schedule();});
+$('reset').addEventListener('click',()=>{$('trajectory').value='webb';missionOptionsKey='';missionUI();$('system').value='sun-earth';$('point').value='2';$('view').value='local';$('mode').value='space';$('frame').value='rotating';$('progress').value=0;yaw=.5;pitch=.65;zoom=1;pause();schedule();});
 $('front').addEventListener('click',()=>{yaw=0;pitch=-pi/2;pause();schedule();});$('oblique').addEventListener('click',()=>{yaw=.5;pitch=.65;pause();schedule();});
 cv.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);pause();});cv.addEventListener('pointerup',()=>drag=null);cv.addEventListener('pointercancel',()=>drag=null);cv.addEventListener('pointermove',e=>{if(!drag)return;yaw+=(e.clientX-drag[0])*.009;pitch=Math.max(-1.57,Math.min(1.57,pitch+(e.clientY-drag[1])*.009));drag=[e.clientX,e.clientY];schedule();});cv.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.35,Math.min(4,zoom*Math.exp(-e.deltaY*.001)));pause();schedule();},{passive:false});
 cv.addEventListener('keydown',e=>{if(!['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(e.key))return;e.preventDefault();if(e.key==='ArrowLeft')yaw-=.1;if(e.key==='ArrowRight')yaw+=.1;if(e.key==='ArrowUp')pitch=Math.min(1.57,pitch+.1);if(e.key==='ArrowDown')pitch=Math.max(-1.57,pitch-.1);if(e.key==='+')zoom=Math.min(4,zoom*1.2);if(e.key==='-')zoom=Math.max(.35,zoom/1.2);pause();schedule();});
