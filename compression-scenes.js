@@ -10,7 +10,19 @@ function draw(){
  const dpr=Math.min(2,devicePixelRatio||1);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
  const C=colors();ctx.font='11px system-ui';
  const raw=([x,y,z])=>{const a=x*Math.cos(yaw)-y*Math.sin(yaw),b=x*Math.sin(yaw)+y*Math.cos(yaw);return [a,z*Math.cos(pitch)-b*Math.sin(pitch),b*Math.cos(pitch)+z*Math.sin(pitch)];};
- const bounds=[];for(const x of [-2.5,2.5])for(const y of [-1.7,1.7])for(const z of (kind==='singularity-frontiers'?[-2.8,3.6]:[-1.9,2.4]))bounds.push(raw([x,y,z]));
+ let zLow=-1.9,zHigh=2.4;
+ if(kind==='singularity-frontiers'){
+  const d=+$('domain').value,r=+$('resource').value,s=+$('speed').value,scenario=$('scenario').value,mode=$('mode').value;
+  for(let i=0;i<=40;i++){
+   const dd=mode==='projection'?d:i/40;
+   if(mode==='surface'){
+    for(const rr of [-2,2]){const root=M.crossing(dd,rr,s,scenario);if(root!==null){const z=root*.32-1.7;zLow=Math.min(zLow,z-.2);zHigh=Math.max(zHigh,z+.2);}}
+   }else{
+    for(const t of [0,10])for(const key of ['ai','human']){const z=M.frontier(t,dd,r,s,scenario)[key]*.8;zLow=Math.min(zLow,z-.2);zHigh=Math.max(zHigh,z+.2);}
+   }
+  }
+ }
+ const bounds=[];for(const x of [-2.5,2.5])for(const y of [-1.7,1.7])for(const z of [zLow,zHigh])bounds.push(raw([x,y,z]));
  const minX=Math.min(...bounds.map(p=>p[0])),maxX=Math.max(...bounds.map(p=>p[0])),minY=Math.min(...bounds.map(p=>p[1])),maxY=Math.max(...bounds.map(p=>p[1]));
  const scale=Math.min((w-65)/(maxX-minX),(h-36)/(maxY-minY))*zoom;
  const P=p=>{const q=raw(p);return [w/2+(q[0]-(minX+maxX)/2)*scale,h/2-(q[1]-(minY+maxY)/2)*scale,q[2]];};
