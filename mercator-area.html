@@ -1,0 +1,414 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>메르카토르 지도 — 면적을 읽는 기준 — 차원 압축과 펼침 실험</title><style>
+:root { color-scheme: light dark; --paper: light-dark(#fff, #181818); --ink: light-dark(#23262b, #f1f1f1); --quiet: light-dark(#616772, #aab0ba); --line: light-dark(#dce1e7, #3a3e45); background: var(--paper); color: var(--ink); }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+a { color: light-dark(#21669e, #88c6f5); text-underline-offset: 3px; }
+.page { position: fixed; inset: 0; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; overflow: clip; display: flex; flex-direction: column; max-width: 1120px; margin: 0 auto; }
+.visualization { display: flex; flex-direction: column; flex: 0 0 clamp(390px, 49dvh, 510px); min-height: 0; padding: 12px 20px 10px; gap: 10px; }
+.comparison-heading { flex: 0 0 auto; }
+.comparison-heading h1 { margin: 0; font-size: 20px; font-weight: 650; letter-spacing: -.03em; line-height: 1.4; }
+.comparison-heading p { margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: var(--quiet); }
+.comparison-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.35fr); gap: 22px; flex: 1 1 0; min-height: 0; }
+.paper-panel, .digital-panel { min-width: 0; min-height: 0; }
+.panel-label { margin: 0 0 6px; font-size: 12px; line-height: 1.5; font-weight: 600; color: var(--quiet); }
+.paper-panel { display: flex; flex-direction: column; }
+.paper-panel figure { display: flex; flex-direction: column; margin: 0; flex: 1 1 0; min-height: 0; }
+.paper-diagrams { display: block; width: 100%; min-height: 0; flex: 1 1 0; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.paper-panel figcaption { margin-top: 8px; font-size: 13px; line-height: 1.65; }
+.paper-panel figcaption span { display: block; color: var(--quiet); font-size: 12px; }
+.paper-panel button { align-self: flex-start; margin-top: 8px; }
+button { font: inherit; color: var(--ink); background: light-dark(#f3f6f9, #282d33); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font-size: 12px; line-height: 1.5; cursor: pointer; }
+button:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: 2px; }
+.digital-panel { display: flex; flex-direction: column; }
+#codex-visualization { display: block; width: 100%; flex: 1 1 0; min-height: 0; height: 100% !important; max-height: 100% !important; margin: 0; border: 0; }
+.reading { display: flex; flex: 1 1 0; flex-direction: column; min-height: 0; border-top: 1px solid var(--line); }
+.reading-heading { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 0; padding: 10px 20px 9px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.reading-heading .reading-kicker { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--quiet); }
+.reading-heading h2 { margin: 0; font-size: 19px; line-height: 1.4; letter-spacing: -.025em; font-weight: 650; }
+.reading-scroll { width: 100%; flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; scrollbar-gutter: stable; scroll-padding-top: 16px; }
+.reading-scroll:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: -3px; }
+.article { width: 100%; max-width: 54rem; padding: 16px 20px 48px; margin: 0; font-size: 17px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+.article h2 { margin: 28px 0 10px; font-size: 20px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; text-wrap: balance; }
+.article h3 { margin: 28px 0 10px; font-size: 19px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; text-wrap: balance; }
+.article p { margin: 0 0 20px; }
+.article .intro { color: var(--quiet); }
+.article sup { font-size: .75em; }
+.article .experiment { padding: 16px 20px 1px; margin: 20px 0; border-left: 3px solid light-dark(#438dc3, #78b7e7); background: light-dark(#f4f7fa, #23272d); }
+.article .sources { margin-top: 28px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.8; }
+.article .sources h2 { margin-top: 18px; font-size: 17px; }
+.article .sources .note { color: var(--quiet); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+.register-table { margin: 20px 0; }
+.register-table table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.75; }
+.register-table th, .register-table td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.register-table thead { color: var(--quiet); font-size: 13px; }
+.register-table tbody th { width: 22%; white-space: nowrap; font-weight: 600; }
+.source-page-dialog { width: min(800px, 95vw); max-height: 92dvh; margin: auto; padding: 0; overflow: auto; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 10px; }
+.source-page-dialog::backdrop { background: #000b; }
+.dialog-heading { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.dialog-heading h2 { margin: 0; font-size: 16px; line-height: 1.5; }
+.source-page-dialog img { display: block; width: 100%; height: auto; background: #fff; }
+.source-page-dialog .source-caption { margin: 0; padding: 12px 16px; font-size: 13px; line-height: 1.7; }
+@media (max-width: 680px) {
+  .visualization { padding: 8px 12px; gap: 8px; flex-basis: clamp(430px, 60dvh, 540px); }
+  .comparison-heading h1 { font-size: 17px; }
+  .comparison-heading p { display: none; }
+  .comparison-grid { display: flex; flex-direction: column; gap: 8px; }
+  .paper-panel { display: grid; grid-template-columns: 100px minmax(0, 1fr); grid-template-rows: auto auto; gap: 3px 10px; flex: 0 0 auto; }
+  .paper-panel .panel-label { grid-column: 2; grid-row: 1; margin: 0; font-size: 11px; }
+  .paper-panel figure { display: contents; }
+  .paper-diagrams { grid-column: 1; grid-row: 1 / 4; width: 100%; height: 64px; padding: 3px; }
+  .paper-panel figcaption { grid-column: 2; grid-row: 2; margin: 0; font-size: 11px; line-height: 1.4; }
+  .paper-panel figcaption span { display: none; }
+  .paper-panel button { grid-column: 2; grid-row: 3; justify-self: start; margin: 0; padding: 2px 6px; font-size: 11px; }
+  .digital-panel { flex: 1 1 0; }
+  .digital-panel > .panel-label { display: none; }
+  .reading-heading { padding: 8px 16px; gap: 4px 8px; }
+  .reading-heading h2 { font-size: 17px; }
+  .article { padding: 12px 16px 36px; font-size: 16px; line-height: 1.85; }
+  .article h2 { font-size: 19px; }
+  .article h3 { font-size: 18px; }
+  .article .experiment { padding: 12px 14px 1px; }
+  .register-table table { font-size: 14px; }
+  .register-table th, .register-table td { padding: 10px 8px; }
+}
+@media (max-height: 500px) and (min-width: 681px) {
+  .visualization { flex-basis: 320px; padding-top: 6px; gap: 6px; }
+  .comparison-heading h1 { font-size: 16px; }
+  .comparison-heading p { display: none; }
+  .paper-panel figcaption span { display: none; }
+  .reading-heading { padding-top: 6px; padding-bottom: 6px; }
+  .reading-heading h2 { font-size: 16px; }
+}
+@media (pointer: coarse) and (max-width: 680px) {
+  .visualization { flex-basis: clamp(480px, 60dvh, 540px); }
+}
+@media (pointer: coarse) and (max-height: 500px) and (min-width: 681px) {
+  .comparison-heading, .digital-panel > .panel-label { display: none; }
+}
+@media (max-width: 359px) {
+  .reading-heading, .article { padding-left: 12px; padding-right: 12px; }
+  .reading-heading h2 { font-size: 15px; }
+}
+
+.atlas-nav { display:flex; align-items:center; flex-wrap:wrap; gap:4px 12px; font-size:12px; line-height:1.5; margin-bottom:6px; }
+.atlas-nav a { text-decoration:none; }
+.atlas-nav a:hover { text-decoration:underline; }
+.article li { margin-bottom:8px; }
+.article .next { display:flex; flex-wrap:wrap; gap:12px; margin:24px 0; }
+@media(max-width:680px){.atlas-nav{margin-bottom:4px;font-size:11px;gap:4px 9px}.visualization{flex-basis:clamp(450px,62dvh,560px)}}
+@media(pointer:coarse) and (max-width:680px){.visualization{flex-basis:clamp(480px,62dvh,560px)}}
+@media(max-height:500px) and (min-width:681px){.atlas-nav a:not(:first-child){display:none}.atlas-nav{margin:0;font-size:11px}.visualization{flex-basis:310px}.comparison-heading p{display:none}}
+</style><style id="model-expansion-v1">/* In-place expansion: the iframe is never moved or reloaded. */
+.model-view-toolbar { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
+.model-view-toolbar span { font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-view-toolbar button { flex-shrink:0; font:inherit; font-size:12px; padding:4px 9px; border:1px solid var(--line, #888); border-radius:6px; color:var(--ink, CanvasText); background:var(--paper, Canvas); cursor:pointer; }
+.model-focus-guard { display:none; }
+body.model-expanded .page::before { content:''; position:fixed; inset:0; background:#0009; z-index:9998; }
+.is-model-expanded { position:fixed !important; inset:12px !important; z-index:9999 !important; width:auto !important; max-width:none !important; height:calc(100dvh - 24px) !important; min-height:0 !important; max-height:none !important; margin:0 !important; padding:12px !important; display:flex !important; flex-direction:column !important; flex-basis:auto !important; gap:0 !important; border:1px solid var(--line, #888); border-radius:10px; background:var(--paper, Canvas); box-shadow:0 10px 50px #0005; }
+.is-model-expanded > :not(#codex-visualization):not(.model-view-toolbar):not(.model-focus-guard) { display:none !important; }
+.is-model-expanded #codex-visualization { flex:1 1 0 !important; width:100% !important; height:100% !important; min-height:0 !important; max-height:none !important; }
+.is-model-expanded .model-view-toolbar { margin-bottom:8px; }
+.is-model-expanded .model-view-toolbar span { font-size:14px; color:var(--ink, CanvasText); }
+.is-model-expanded .model-focus-guard { display:block; width:0; height:0; overflow:hidden; }
+@media(max-width:680px) { .is-model-expanded { inset:4px !important; height:calc(100dvh - 8px) !important; padding:8px !important; } .model-view-toolbar span { font-size:11px; } }
+
+.digital-panel > .panel-label[hidden] { display:none !important; }
+@media(max-width:680px) {
+  .visualization { overflow-y:auto; overscroll-behavior-y:contain; }
+}
+</style></head><body><main class="page"><section class="visualization" aria-labelledby="comparison-title"><header class="comparison-heading"><nav class="atlas-nav" aria-label="사례 탐색"><a href="geometry-lab.html">← 전체 사례</a><a href="singularity-frontiers.html">임계 경계</a><a href="moving-observer.html">관찰 좌표</a><a href="simpson-layers.html">집단과 합계</a><a href="mercator-area.html">지도 면적</a></nav><h1 id="comparison-title">메르카토르 지도 — 면적을 읽는 기준</h1><p>같은 면적의 구면 영역을 서로 다른 평면 투영과 비교합니다.</p></header><div class="comparison-grid"><section class="paper-panel" aria-labelledby="paper-label"><h2 class="panel-label" id="paper-label">01 · 평면에 고정한 관계</h2><figure><img class="paper-diagrams" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgNjQwIDQyMCI+PHJlY3Qgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0MjAiIGZpbGw9IiNlZGYzZmEiLz48ZyBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzI2MzY0ZCI+PHRleHQgeD0iMzIiIHk9IjQwIiBmb250LXNpemU9IjIzIj7qsJnsnYAg6rWs66m0IOuptOyggSwg64uk66W4IOyngOuPhCDrqbTsoIE8L3RleHQ+PHBhdGggZD0iTTEwMCAzMTBINTYwIiBzdHJva2U9IiM1MzZiODMiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjE1NSIgeT0iMzAzLjQ5ODY0NTMyNTI5NCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYuNTAxMzU0Njc0NzA2MDA2IiBmaWxsPSIjNzdiYWZmIi8+PHRleHQgeD0iMTYxIiB5PSIzNDUiIGZvbnQtc2l6ZT0iMjAiPjDCsDwvdGV4dD48cmVjdCB4PSIzMDUiIHk9IjI5Ni45NzI3OTgyMzc2NyIgd2lkdGg9IjYwIiBoZWlnaHQ9IjEzLjAyNzIwMTc2MjMyOTk4NyIgZmlsbD0iIzc3YmFmZiIvPjx0ZXh0IHg9IjMxMSIgeT0iMzQ1IiBmb250LXNpemU9IjIwIj40NcKwPC90ZXh0PjxyZWN0IHg9IjQ1NSIgeT0iMjUwLjk4MzQwMDY0OTAyODYiIHdpZHRoPSI2MCIgaGVpZ2h0PSI1OS4wMTY1OTkzNTA5NzE0MSIgZmlsbD0iIzc3YmFmZiIvPjx0ZXh0IHg9IjQ2MSIgeT0iMzQ1IiBmb250LXNpemU9IjIwIj43MMKwPC90ZXh0Pjx0ZXh0IHg9IjM1IiB5PSIzODYiIGZvbnQtc2l6ZT0iMTciPuuplOultOy5tO2GoOultCDtiKzsmIEgwrcg7ISk66qF7JqpIOyEuCDsmIHsl63snZgg7Iuk7KCcIOuptOyggeydgCDqsJnri6QuPC90ZXh0PjwvZz48L3N2Zz4=" alt="구면에서 같은 면적을 가진 세 영역의 메르카토르 지도 면적"><figcaption>구면에서 같은 면적을 가진 세 영역의 메르카토르 지도 면적</figcaption></figure><button type="button" id="open-source-page" aria-haspopup="dialog" aria-controls="source-page">평면 도식 크게 보기</button></section><section class="digital-panel" aria-labelledby="digital-label"><h2 class="panel-label" id="digital-label">02 · 생략한 조건을 펼치는 모형</h2><iframe id="codex-visualization" sandbox="allow-scripts" scrolling="no" referrerpolicy="no-referrer" title="메르카토르 지도 — 면적을 읽는 기준 조작 모형" data-srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;ko&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;&lt;style&gt;*{box-sizing:border-box}:root{color-scheme:light dark;--ink:light-dark(#263247,#e6edf6);--muted:light-dark(#64758a,#a1adbe);--line:light-dark(#d2dbe6,#46515e);--bg:light-dark(#fff,#181c21)}html,body{height:100%;margin:0;overflow:hidden;background:var(--bg);color:var(--ink);font:12px/1.5 system-ui}.widget{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 192px;grid-template-rows:minmax(0,1fr) auto;gap:8px 10px}.stage{min-height:0;min-width:0;position:relative}#model{height:100%;width:100%;display:block;touch-action:none;cursor:grab}#plane{display:block;width:100%;height:142px;border:1px solid var(--line);border-radius:7px}.controls{overflow:auto;padding:3px 4px;display:flex;flex-direction:column;gap:6px;min-height:0}label{display:block}label span{float:right;color:var(--muted)}input[type=range]{width:100%;accent-color:#77baff}select,button{width:100%;color:var(--ink);background:light-dark(#f4f7fb,#2d343e);font:inherit;border:1px solid var(--line);border-radius:5px;min-height:30px;padding:3px}button{cursor:pointer}#readout{grid-column:1/-1;margin:0;padding:5px 3px;border-top:1px solid var(--line);color:var(--muted);min-height:38px;font-size:11px}.mini-title{margin:0;color:var(--muted)}:focus-visible{outline:2px solid #75baff;outline-offset:1px}@media(max-width:440px){.widget{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(70px,1fr) 90px auto;gap:6px}.controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start;font-size:11px;gap:5px 10px}.controls #projection-options,.mini-title,#plane{grid-column:1/-1}.controls #projection-options{display:block}.controls #projection-options[hidden]{display:none}#plane{height:110px}#readout{font-size:10px;line-height:1.4}}&lt;/style&gt;&lt;/head&gt;&lt;body data-case=&quot;mercator-area&quot;&gt;&lt;div class=&quot;widget&quot;&gt;&lt;div class=&quot;stage&quot;&gt;&lt;canvas id=&quot;model&quot; tabindex=&quot;0&quot; aria-label=&quot;메르카토르 지도 — 면적을 읽는 기준 입체 모형&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;div class=&quot;controls&quot; id=&quot;controls&quot;&gt;&lt;label for=&quot;projection&quot;&gt;평면 투영&lt;select id=&quot;projection&quot;&gt;&lt;option value=&quot;mercator&quot;&gt;메르카토르 · 국소 각도 보존&lt;/option&gt;&lt;option value=&quot;equalarea&quot;&gt;원통 등적 · 면적 보존&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label for=&quot;latitude&quot;&gt;선택 영역의 위도&lt;span id=&quot;latitude-value&quot;&gt;60&lt;/span&gt;&lt;input id=&quot;latitude&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;72&quot; step=&quot;1&quot; value=&quot;60&quot;&gt;&lt;/label&gt;&lt;label&gt;&lt;input id=&quot;comparison&quot; type=&quot;checkbox&quot; checked&gt;0°·45°·70° 영역도 표시&lt;/label&gt;&lt;p class=&quot;mini-title&quot;&gt;현재 투영의 평면 지도&lt;/p&gt;&lt;canvas id=&quot;plane&quot; aria-label=&quot;선택한 조건의 평면 비교&quot;&gt;&lt;/canvas&gt;&lt;button id=&quot;reset&quot;&gt;초기화&lt;/button&gt;&lt;/div&gt;&lt;p id=&quot;readout&quot;&gt;&lt;/p&gt;&lt;/div&gt;&lt;script&gt;(function(root){
+&#x27;use strict&#x27;;
+const TAU=2*Math.PI;
+function frontierBase(d){return 2.5+5.5*d+.6*Math.sin(TAU*d);}
+function frontierRate(d){return .22+.04*Math.cos(TAU*d);}
+function frontier(t,d,resource=0,speed=1,scenario=&#x27;growth&#x27;){
+ const human=.035*t+.1*d;
+ const gap=scenario===&#x27;bounded&#x27;?-1/(1+.25*t):frontierRate(d)*(speed*t-frontierBase(d))+.22*resource;
+ return {human,ai:human+gap,gap};
+}
+function crossing(d,resource=0,speed=1,scenario=&#x27;growth&#x27;){
+ return scenario===&#x27;bounded&#x27;?null:(frontierBase(d)-.22*resource/frontierRate(d))/speed;
+}
+function aggregate(mix){
+ const weights={A:.5-.4*mix,B:.5+.4*mix};
+ const rates={A:[.9,.3],B:[.8,.2]};
+ const overall={A:weights.A*rates.A[0]+(1-weights.A)*rates.A[1],B:weights.B*rates.B[0]+(1-weights.B)*rates.B[1]};
+ return {weights,rates,overall};
+}
+function moving(t,follow,reference=&#x27;lab&#x27;){
+ const target=.45*t+.045*t*t,observer=follow*target;
+ const origin=reference===&#x27;observer&#x27;?observer:0;
+ return {target,observer,landmark:0,shownTarget:target-origin,shownObserver:observer-origin,shownLandmark:-origin};
+}
+function mapY(lat,projection=&#x27;mercator&#x27;){return projection===&#x27;equalarea&#x27;?Math.sin(lat):Math.log(Math.tan(Math.PI/4+lat/2));}
+function patch(centerDegrees,halfSin=.025,width=.45){
+ const s=Math.sin(centerDegrees*Math.PI/180),south=Math.asin(s-halfSin),north=Math.asin(s+halfSin);
+ return {south,north,width,sphericalArea:width*2*halfSin,mercatorArea:width*(mapY(north)-mapY(south)),equalArea:width*(Math.sin(north)-Math.sin(south)),localFactor:1/(1-s*s)};
+}
+function globe(lon,lat){return [Math.cos(lat)*Math.cos(lon),Math.cos(lat)*Math.sin(lon),Math.sin(lat)];}
+const api={frontierBase,frontierRate,frontier,crossing,aggregate,moving,mapY,patch,globe};
+root.CompressionModels=api;if(typeof module!==&#x27;undefined&#x27;)module.exports=api;
+})(typeof window===&#x27;undefined&#x27;?globalThis:window);
+&lt;/script&gt;&lt;script&gt;(() =&gt; {
+&#x27;use strict&#x27;;
+const M=CompressionModels,$=id=&gt;document.getElementById(id),canvas=$(&#x27;model&#x27;),ctx=canvas.getContext(&#x27;2d&#x27;),kind=document.body.dataset.case;
+let yaw=.9,pitch=.53,zoom=1,drag=null,pending=false;
+const controls=$(&#x27;controls&#x27;),defaults={};
+function colors(){return matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).matches?{ink:&#x27;#e5edf7&#x27;,muted:&#x27;#a1b1c7&#x27;,grid:&#x27;#8096ad55&#x27;,blue:&#x27;#7dc4ff&#x27;,green:&#x27;#81d6ac&#x27;,orange:&#x27;#ffc18b&#x27;,bg:&#x27;#191d23&#x27;}:{ink:&#x27;#24354b&#x27;,muted:&#x27;#60768e&#x27;,grid:&#x27;#58759355&#x27;,blue:&#x27;#237dbe&#x27;,green:&#x27;#178d68&#x27;,orange:&#x27;#c8731e&#x27;,bg:&#x27;#ffffff&#x27;};}
+function schedule(){if(!pending){pending=true;requestAnimationFrame(draw);}}
+function draw(){
+ pending=false;let w=canvas.clientWidth,h=canvas.clientHeight;if(w&lt;2||h&lt;2)return;
+ const dpr=Math.min(2,devicePixelRatio||1);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+ const C=colors();ctx.font=&#x27;11px system-ui&#x27;;
+ const raw=([x,y,z])=&gt;{const a=x*Math.cos(yaw)-y*Math.sin(yaw),b=x*Math.sin(yaw)+y*Math.cos(yaw);return [a,z*Math.cos(pitch)-b*Math.sin(pitch),b*Math.cos(pitch)+z*Math.sin(pitch)];};
+ const bounds=[];for(const x of [-2.5,2.5])for(const y of [-1.7,1.7])for(const z of (kind===&#x27;singularity-frontiers&#x27;?[-2.8,3.6]:[-1.9,2.4]))bounds.push(raw([x,y,z]));
+ const minX=Math.min(...bounds.map(p=&gt;p[0])),maxX=Math.max(...bounds.map(p=&gt;p[0])),minY=Math.min(...bounds.map(p=&gt;p[1])),maxY=Math.max(...bounds.map(p=&gt;p[1]));
+ const scale=Math.min((w-65)/(maxX-minX),(h-36)/(maxY-minY))*zoom;
+ const P=p=&gt;{const q=raw(p);return [w/2+(q[0]-(minX+maxX)/2)*scale,h/2-(q[1]-(minY+maxY)/2)*scale,q[2]];};
+ function path(ps){ctx.beginPath();ps.forEach((p,i)=&gt;{const q=P(p);i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);});}
+ function line(ps,color,width=1,dash=[]){path(ps);ctx.strokeStyle=color;ctx.lineWidth=width;ctx.setLineDash(dash);ctx.stroke();ctx.setLineDash([]);}
+ function text(p,t,color=C.ink){const q=P(p);ctx.fillStyle=color;ctx.fillText(t,q[0]+5,q[1]-4);}
+ function point(p,color,r=4){const q=P(p);ctx.beginPath();ctx.arc(q[0],q[1],r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();}
+ function faces(list){list.sort((a,b)=&gt;b.ps.reduce((s,p)=&gt;s+P(p)[2],0)/b.ps.length-a.ps.reduce((s,p)=&gt;s+P(p)[2],0)/a.ps.length);for(const f of list){path(f.ps);ctx.closePath();ctx.fillStyle=f.color;ctx.fill();if(f.stroke){ctx.strokeStyle=f.stroke;ctx.lineWidth=.5;ctx.stroke();}}}
+ function axes(x,y,z){const o=[-2.5,-1.6,-1.7];line([o,[2.5,-1.6,-1.7]],C.grid);line([o,[-2.5,1.7,-1.7]],C.grid);line([o,[-2.5,-1.6,2.2]],C.grid);text([2.3,-1.6,-1.7],x);text([-2.5,1.6,-1.7],y);text([-2.5,-1.6,2.2],z);}
+ function inset(){const c=$(&#x27;plane&#x27;),g=c.getContext(&#x27;2d&#x27;),iw=c.clientWidth,ih=c.clientHeight;c.width=Math.round(iw*dpr);c.height=Math.round(ih*dpr);g.setTransform(dpr,0,0,dpr,0,0);g.clearRect(0,0,iw,ih);g.font=&#x27;10px system-ui&#x27;;return {g,w:iw,h:ih};}
+ if(kind===&#x27;singularity-frontiers&#x27;){
+  const t=+$(&#x27;time&#x27;).value,d=+$(&#x27;domain&#x27;).value,r=+$(&#x27;resource&#x27;).value,speed=+$(&#x27;speed&#x27;).value,scenario=$(&#x27;scenario&#x27;).value,mode=$(&#x27;mode&#x27;).value;
+  $(&#x27;projection-options&#x27;).hidden=mode!==&#x27;projection&#x27;;
+  const at=M.frontier(t,d,r,speed,scenario),cross=M.crossing(d,r,speed,scenario),Z=q=&gt;q*.8;
+  const pos=(t,d,q)=&gt;[t*.5-2.5,d*3-1.5,Z(q)];
+  if(mode===&#x27;projection&#x27;){
+   const depth=+$(&#x27;depth&#x27;).value,plane=-1.7;
+   const projected=(t,q)=&gt;[t*.5-2.5,plane,Z(q)];
+   const hidden=(t,q,key)=&gt;[t*.5-2.5,key===&#x27;ai&#x27;?depth/2:-depth/2,Z(q)];
+   for(const key of [&#x27;human&#x27;,&#x27;ai&#x27;]){
+    const ps=Array.from({length:81},(_,i)=&gt;{const tt=i/8;return hidden(tt,M.frontier(tt,d,r,speed,scenario)[key],key);});
+    line(ps,key===&#x27;ai&#x27;?C.blue:C.green,2.5);
+    line(Array.from({length:81},(_,i)=&gt;projected(i/8,M.frontier(i/8,d,r,speed,scenario)[key])),C.grid,1.3,[4,3]);
+   }
+   if(cross!==null&amp;&amp;cross&gt;=0&amp;&amp;cross&lt;=10){
+    const q=M.frontier(cross,d,r,speed,scenario).human,pa=hidden(cross,q,&#x27;ai&#x27;),ph=hidden(cross,q,&#x27;human&#x27;),shadow=projected(cross,q);
+    point(pa,C.blue,6);point(ph,C.green,6);point(shadow,C.orange,5);line([pa,shadow],C.blue,1,[4,3]);line([ph,shadow],C.green,1,[4,3]);line([pa,ph],C.orange,2);
+    text(shadow,&#x27;깊이를 지운 교점&#x27;,C.orange);
+   }
+   axes(&#x27;가정 시간 t&#x27;,&#x27;둘째 능력 성분&#x27;,&#x27;첫째 로그 성능&#x27;);
+   point(hidden(t,at.ai,&#x27;ai&#x27;),C.blue,4);point(hidden(t,at.human,&#x27;human&#x27;),C.green,4);
+  }else if(mode===&#x27;surface&#x27;){
+   const list=[];for(let i=0;i&lt;24;i++)for(let j=0;j&lt;18;j++){
+    const ps=[[i/24,j/18*4-2],[(i+1)/24,j/18*4-2],[(i+1)/24,(j+1)/18*4-2],[i/24,(j+1)/18*4-2]].map(([d,r])=&gt;[d*5-2.5,r*.75,(M.crossing(d,r,speed,scenario)??0)*.32-1.7]);
+    if(scenario===&#x27;growth&#x27;)list.push({ps,color:M.crossing((i+.5)/24,(j+.5)/18*4-2,speed,scenario)&lt;=t?&#x27;#7ed6a34a&#x27;:&#x27;#78baff30&#x27;,stroke:C.grid});
+   }faces(list);axes(&#x27;과제 조건 d&#x27;,&#x27;자원 r&#x27;,&#x27;임계 통과 t*&#x27;);
+   const probe=[d*5-2.5,r*.75,t*.32-1.7];point(probe,C.orange,5);text(probe,&#x27;현재 조건&#x27;);
+   if(cross!==null){const threshold=[d*5-2.5,r*.75,cross*.32-1.7];line([probe,threshold],C.orange,1.7,[4,3]);point(threshold,C.green,5);}
+   if(scenario===&#x27;bounded&#x27;)text([0,0,0],&#x27;A &lt; H : 경계가 없음&#x27;,C.orange);
+  }else{
+   if(mode===&#x27;curve&#x27;){
+    const list=[];for(let i=0;i&lt;22;i++)for(let j=0;j&lt;12;j++)for(const key of [&#x27;ai&#x27;,&#x27;human&#x27;]){
+     const ps=[[i/22*10,j/12],[(i+1)/22*10,j/12],[(i+1)/22*10,(j+1)/12],[i/22*10,(j+1)/12]].map(([t,d])=&gt;pos(t,d,M.frontier(t,d,r,speed,scenario)[key]));list.push({ps,color:key===&#x27;ai&#x27;?&#x27;#78baff20&#x27;:&#x27;#7ed6a320&#x27;});
+    }faces(list);
+    if(scenario===&#x27;growth&#x27;){
+     const boundary=Array.from({length:81},(_,i)=&gt;{const d=i/80,t=M.crossing(d,r,speed,scenario);return pos(t,d,M.frontier(t,d,r,speed,scenario).human);});line(boundary,C.orange,3);
+    }
+   }
+   for(let j=0;j&lt;5;j++){
+    const dd=j/4;for(const key of [&#x27;human&#x27;,&#x27;ai&#x27;])line(Array.from({length:81},(_,i)=&gt;pos(i/8,dd,M.frontier(i/8,dd,r,speed,scenario)[key])),key===&#x27;ai&#x27;?C.blue:C.green,key===&#x27;ai&#x27;?2:1.3);
+    const root=M.crossing(dd,r,speed,scenario);if(root!==null&amp;&amp;root&gt;=0&amp;&amp;root&lt;=10){const p=pos(root,dd,M.frontier(root,dd,r,speed,scenario).human);point(p,C.orange,4);text(p,root.toFixed(1),C.orange);}
+    text(pos(10,dd,M.frontier(10,dd,r,speed,scenario).human),&#x27;과제 &#x27;+String.fromCharCode(65+j));
+   }
+   axes(&#x27;가정 시간 t&#x27;,&#x27;과제 조건 d&#x27;,&#x27;로그 성능&#x27;);
+   const nowA=pos(t,d,at.ai),nowH=pos(t,d,at.human);line([nowA,nowH],C.orange,1.7,[3,3]);point(nowA,C.blue,5);point(nowH,C.green,5);
+  }
+  const I=inset(),g=I.g,X=t=&gt;18+t*(I.w-28)/10,Y=q=&gt;I.h-20-(q+3.5)*(I.h-36)/8;
+  g.strokeStyle=C.grid;g.beginPath();g.moveTo(18,10);g.lineTo(18,I.h-20);g.lineTo(I.w-8,I.h-20);g.stroke();
+  for(const key of [&#x27;human&#x27;,&#x27;ai&#x27;]){g.beginPath();for(let i=0;i&lt;=80;i++){const xx=i/8,yy=M.frontier(xx,d,r,speed,scenario)[key];i?g.lineTo(X(xx),Y(yy)):g.moveTo(X(xx),Y(yy));}g.strokeStyle=key===&#x27;ai&#x27;?C.blue:C.green;g.lineWidth=2;g.stroke();}
+  g.strokeStyle=C.orange;g.beginPath();g.moveTo(X(t),10);g.lineTo(X(t),I.h-20);g.stroke();g.fillStyle=C.ink;g.fillText(&#x27;한 조건의 A(파랑) / H(초록)&#x27;,8,I.h-5);
+  const count=Array.from({length:5},(_,i)=&gt;M.crossing(i/4,r,speed,scenario)).filter(x=&gt;x!==null&amp;&amp;x&lt;=t&amp;&amp;x&gt;=0).length;
+  $(&#x27;readout&#x27;).textContent=mode===&#x27;projection&#x27;?`첫 성분의 교점 t*=${cross===null?&#x27;없음&#x27;:cross.toFixed(2)} · 둘째 성분의 간격 ${Number($(&#x27;depth&#x27;).value).toFixed(2)}. 간격이 0이 아니면 같은 입체 점이 아닙니다.`:`설명용 함수 · ln(A/H)=${at.gap.toFixed(3)} · 선택 조건의 t*=${cross===null?&#x27;없음&#x27;:cross.toFixed(2)} · 현재 t까지 통과 ${count}/5. 실측값·연도 예측이 아닙니다.`;
+ }else if(kind===&#x27;moving-observer&#x27;){
+  const t=+$(&#x27;time&#x27;).value,follow=+$(&#x27;follow&#x27;).value,reference=$(&#x27;reference&#x27;).value,landmarks=$(&#x27;landmarks&#x27;).checked,at=M.moving(t,follow,reference);
+  const place=(t,x,lane)=&gt;[x*.27,lane,t*.35-1.7];
+  const rows=[[&#x27;shownTarget&#x27;,0,C.blue,&#x27;대상&#x27;],[&#x27;shownObserver&#x27;,1.25,C.green,&#x27;관찰자&#x27;]];if(landmarks)rows.push([&#x27;shownLandmark&#x27;,-1.25,C.orange,&#x27;고정 표식&#x27;]);
+  for(const [key,lane,color,label]of rows){const trail=Array.from({length:81},(_,i)=&gt;{const tt=i/8;return place(tt,M.moving(tt,follow,reference)[key],lane);});line(trail,color,2);const p=place(t,at[key],lane);point(p,color,6);text(p,label,color);}
+  faces([{ps:[[-2.5,-1.6,t*.35-1.7],[2.5,-1.6,t*.35-1.7],[2.5,1.6,t*.35-1.7],[-2.5,1.6,t*.35-1.7]],color:&#x27;#8ab9e014&#x27;}]);
+  axes(reference===&#x27;lab&#x27;?&#x27;고정 좌표 x&#x27;:&#x27;상대 좌표 x′&#x27;,&#x27;기록 대상&#x27;,&#x27;시간 t&#x27;);
+  const I=inset(),g=I.g,X=t=&gt;15+t*(I.w-25)/10,Y=x=&gt;I.h-20-(x+9)*(I.h-35)/18;
+  g.strokeStyle=C.grid;g.beginPath();g.moveTo(15,10);g.lineTo(15,I.h-20);g.lineTo(I.w-8,I.h-20);g.stroke();
+  for(const [key,lane,color,label]of rows){g.strokeStyle=color;g.beginPath();for(let i=0;i&lt;=80;i++){const tt=i/8,xx=M.moving(tt,follow,reference)[key];i?g.lineTo(X(tt),Y(xx)):g.moveTo(X(tt),Y(xx));}g.stroke();}
+  g.strokeStyle=C.orange;g.beginPath();g.moveTo(X(t),10);g.lineTo(X(t),I.h-20);g.stroke();g.fillStyle=C.ink;g.fillText(reference===&#x27;lab&#x27;?&#x27;고정 좌표의 이력&#x27;:&#x27;관찰자 좌표의 이력&#x27;,8,I.h-4);
+  $(&#x27;readout&#x27;).textContent=`t=${t.toFixed(2)} · 고정 좌표 대상 x=${at.target.toFixed(2)} · 관찰자 x=${at.observer.toFixed(2)} · 둘 사이 Δx=${(at.target-at.observer).toFixed(2)}. 카메라 회전은 좌표 변환과 별개입니다.`;
+ }else if(kind===&#x27;simpson-layers&#x27;){
+  const mix=+$(&#x27;mix&#x27;).value,spread=+$(&#x27;spread&#x27;).value,a=M.aggregate(mix),list=[];
+  function bar(x,y,rate,color){const z=rate*3.5-1.7,base=-1.7,dx=.22,dy=.2,corners=[[x-dx,y-dy],[x+dx,y-dy],[x+dx,y+dy],[x-dx,y+dy]];for(let i=0;i&lt;4;i++){const a=corners[i],b=corners[(i+1)%4];list.push({ps:[[...a,base],[...b,base],[...b,z],[...a,z]],color});}list.push({ps:corners.map(p=&gt;[...p,z]),color});return [x,y,z];}
+  const labels=[];for(const [i,key]of [&#x27;A&#x27;,&#x27;B&#x27;].entries()){
+   const x=i*2.4-1.2,color=key===&#x27;A&#x27;?&#x27;#77baff9a&#x27;:&#x27;#ffc18b9a&#x27;;let p=bar(x,-1.35,a.overall[key],color);labels.push([p,`${key} ${(a.overall[key]*100).toFixed(1)}%`]);
+   if(spread&gt;.015)for(let j=0;j&lt;2;j++){const y=-1.35+(j+1)*1.45*spread,rate=a.rates[key][j],n=1000*(j===0?a.weights[key]:1-a.weights[key]);p=bar(x,y,rate,color);labels.push([p,`${key} ${rate*100}% · n=${Math.round(n)}`]);}
+  }faces(list);axes(&#x27;방법 A / B&#x27;,&#x27;집단 조건&#x27;,&#x27;성공 비율&#x27;);labels.forEach(([p,t])=&gt;text(p,t));text([1.5,-1.35,-1.7],&#x27;합계&#x27;);if(spread&gt;.1){text([1.5,-1.35+1.45*spread,-1.7],&#x27;쉬운 과제&#x27;);text([1.5,-1.35+2.9*spread,-1.7],&#x27;어려운 과제&#x27;);}
+  const I=inset(),g=I.g;for(const [i,key]of [&#x27;A&#x27;,&#x27;B&#x27;].entries()){const x=I.w*(.3+.4*i),height=a.overall[key]*(I.h-28);g.fillStyle=key===&#x27;A&#x27;?C.blue:C.orange;g.fillRect(x-15,I.h-18-height,30,height);g.fillStyle=C.ink;g.fillText(`${key}: ${(a.overall[key]*100).toFixed(1)}%`,x-23,I.h-3);}g.fillStyle=C.muted;g.fillText(&#x27;집단을 합친 비율&#x27;,8,12);
+  $(&#x27;readout&#x27;).textContent=`구성만 변경 · 쉬운 과제 비중 A ${(a.weights.A*100).toFixed(1)}% / B ${(a.weights.B*100).toFixed(1)}% · 전체 A ${(a.overall.A*100).toFixed(1)}% / B ${(a.overall.B*100).toFixed(1)}%. 집단별 A &gt; B는 유지됩니다.`;
+ }else if(kind===&#x27;mercator-area&#x27;){
+  const lat=+$(&#x27;latitude&#x27;).value,projection=$(&#x27;projection&#x27;).value,show=$(&#x27;comparison&#x27;).checked;
+  const graticule=[];for(let phi=-75;phi&lt;=75;phi+=15)graticule.push(Array.from({length:97},(_,i)=&gt;M.globe(i/96*2*Math.PI,phi*Math.PI/180)));for(let lon=0;lon&lt;360;lon+=30)graticule.push(Array.from({length:61},(_,i)=&gt;M.globe(lon*Math.PI/180,(-90+i*3)*Math.PI/180)));
+  const sphere=p=&gt;p.map(x=&gt;x*1.75);for(const ps of graticule)line(ps.map(sphere),C.grid,.8);
+  const centers=show?[0,45,70,lat]:[lat],list=[];
+  centers.forEach((lat,index)=&gt;{const p=M.patch(lat),lon=-.1+(index%3)*.7,color=index===centers.length-1?&#x27;#ffc18b80&#x27;:&#x27;#7fc8ff50&#x27;;for(let i=0;i&lt;8;i++)for(let j=0;j&lt;8;j++)list.push({ps:[[i,j],[i+1,j],[i+1,j+1],[i,j+1]].map(([i,j])=&gt;sphere(M.globe(lon+(i/8-.5)*p.width,p.south+j/8*(p.north-p.south)))),color});text(sphere(M.globe(lon,(p.south+p.north)/2)),lat+&#x27;°&#x27;);});faces(list);text([-1.9,-1.4,-1.7],&#x27;구면: 모든 색 영역의 실제 면적이 같음&#x27;);
+  const I=inset(),g=I.g,plotH=I.h-28,plotW=I.w-18,maxY=projection===&#x27;mercator&#x27;?2.65:1.0;
+  g.strokeStyle=C.grid;for(let lon=-180;lon&lt;=180;lon+=60){let x=9+(lon+180)/360*plotW;g.beginPath();g.moveTo(x,10);g.lineTo(x,10+plotH);g.stroke();}for(let phi=-75;phi&lt;=75;phi+=15){let y=10+plotH/2-mapYdeg(phi)*plotH/(2*maxY);g.beginPath();g.moveTo(9,y);g.lineTo(I.w-9,y);g.stroke();}
+  function mapYdeg(p){return M.mapY(p*Math.PI/180,projection);}
+  centers.forEach((lat,index)=&gt;{const p=M.patch(lat),lon=-.1+(index%3)*.7,x=9+(lon+Math.PI-p.width/2)/(2*Math.PI)*plotW,y=10+plotH/2-M.mapY(p.north,projection)*plotH/(2*maxY),ww=p.width/(2*Math.PI)*plotW,hh=(M.mapY(p.north,projection)-M.mapY(p.south,projection))*plotH/(2*maxY);g.fillStyle=index===centers.length-1?C.orange:C.blue;g.fillRect(x,y,ww,hh);});g.fillStyle=C.ink;g.fillText(projection===&#x27;mercator&#x27;?&#x27;메르카토르 평면&#x27;:&#x27;원통 등적 평면&#x27;,8,I.h-5);
+  const p=M.patch(lat),ratio=p.mercatorArea/p.sphericalArea;
+  $(&#x27;readout&#x27;).textContent=`중심 위도 ${lat}° · 구면 면적 ${p.sphericalArea.toFixed(4)} · 메르카토르 유한 영역 면적비 ${ratio.toFixed(2)}배 · 국소 면적배율 sec²φ=${p.localFactor.toFixed(2)}. 단위 구면·설명용 영역입니다.`;
+ }
+ const legend=kind===&#x27;singularity-frontiers&#x27;?($(&#x27;mode&#x27;).value===&#x27;surface&#x27;?&#x27;초록: 현재 t까지 통과 · 파랑: 이후 · 높이: t*&#x27;:&#x27;파랑: AI · 초록: 인간 기준 · 주황: 비교 위치&#x27;):kind===&#x27;moving-observer&#x27;?&#x27;파랑: 대상 · 초록: 관찰자 · 주황: 고정 표식&#x27;:kind===&#x27;simpson-layers&#x27;?&#x27;파랑: 방법 A · 주황: 방법 B · n: 표본 수&#x27;:&#x27;구면의 색 영역: 같은 실제 면적&#x27;;
+ ctx.fillStyle=C.muted;ctx.font=&#x27;11px system-ui&#x27;;ctx.fillText(legend,8,15);
+ canvas.dataset.camera=yaw.toFixed(4)+&#x27;,&#x27;+pitch.toFixed(4);canvas.dataset.zoom=zoom.toFixed(3);canvas.dataset.rendered=&#x27;true&#x27;;
+ for(const el of controls.querySelectorAll(&#x27;input[type=range]&#x27;)){const out=$(el.id+&#x27;-value&#x27;);if(out)out.textContent=el.value;}
+}
+for(const el of controls.querySelectorAll(&#x27;input,select&#x27;)){defaults[el.id]=el.type===&#x27;checkbox&#x27;?el.checked:el.value;el.addEventListener(&#x27;input&#x27;,schedule);el.addEventListener(&#x27;change&#x27;,schedule);}
+if($(&#x27;face-on&#x27;))$(&#x27;face-on&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{yaw=0;pitch=0;schedule();});
+$(&#x27;reset&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{for(const [id,v]of Object.entries(defaults)){const el=$(id);if(el.type===&#x27;checkbox&#x27;)el.checked=v;else el.value=v;}yaw=.9;pitch=.53;zoom=1;schedule();});
+canvas.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{drag=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId);canvas.focus();});canvas.addEventListener(&#x27;pointermove&#x27;,e=&gt;{if(!drag)return;yaw+=(e.clientX-drag[0])*.008;pitch=Math.max(-1.45,Math.min(1.45,pitch+(e.clientY-drag[1])*.008));drag=[e.clientX,e.clientY];schedule();});for(const k of [&#x27;pointerup&#x27;,&#x27;pointercancel&#x27;])canvas.addEventListener(k,()=&gt;drag=null);
+canvas.addEventListener(&#x27;wheel&#x27;,e=&gt;{e.preventDefault();zoom=Math.max(.4,Math.min(4,zoom*Math.exp(-e.deltaY*.001)));schedule();},{passive:false});
+canvas.addEventListener(&#x27;keydown&#x27;,e=&gt;{if([&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowDown&#x27;,&#x27;+&#x27;,&#x27;-&#x27;,&#x27;=&#x27;,&#x27;0&#x27;].includes(e.key)){e.preventDefault();if(e.key===&#x27;ArrowLeft&#x27;)yaw-=.1;if(e.key===&#x27;ArrowRight&#x27;)yaw+=.1;if(e.key===&#x27;ArrowUp&#x27;)pitch=Math.min(1.45,pitch+.1);if(e.key===&#x27;ArrowDown&#x27;)pitch=Math.max(-1.45,pitch-.1);if(e.key===&#x27;+&#x27;||e.key===&#x27;=&#x27;)zoom=Math.min(4,zoom*1.15);if(e.key===&#x27;-&#x27;)zoom=Math.max(.4,zoom/1.15);if(e.key===&#x27;0&#x27;){yaw=.9;pitch=.53;zoom=1;}schedule();}});
+new ResizeObserver(schedule).observe(canvas);matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).addEventListener(&#x27;change&#x27;,schedule);schedule();
+})();
+&lt;/script&gt;&lt;script id=&quot;model-frame-tools-v1&quot;&gt;/* Added after the original model. Only invokes existing canvas zoom handlers. */
+(() =&gt; {
+  if (document.querySelector(&#x27;[data-model-zoom-tools]&#x27;)) return;
+  const canvas=document.querySelector(&#x27;canvas&#x27;);
+  if (!canvas) return;
+  const style=document.createElement(&#x27;style&#x27;);
+  style.textContent=&#x27;[data-model-zoom-tools]{position:fixed;right:8px;top:8px;z-index:10000;display:flex;gap:4px}[data-model-zoom-tools] button{font:600 13px system-ui;padding:5px 8px;border:1px solid #8b949e;border-radius:6px;background:Canvas;color:CanvasText;cursor:pointer;min-width:30px}[data-model-zoom-tools] button:focus-visible{outline:2px solid #368ce0;outline-offset:2px}&#x27;;
+  document.head.append(style);
+  const box=document.createElement(&#x27;div&#x27;); box.dataset.modelZoomTools=&#x27;v1&#x27;; box.setAttribute(&#x27;role&#x27;,&#x27;group&#x27;); box.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 배율&#x27;);
+  for(const [text,label,delta] of [[&#x27;−&#x27;,&#x27;모형 축소&#x27;,180],[&#x27;+&#x27;,&#x27;모형 확대&#x27;,-180]]) {
+    const b=document.createElement(&#x27;button&#x27;); b.type=&#x27;button&#x27;; b.textContent=text; b.setAttribute(&#x27;aria-label&#x27;,label);
+    b.addEventListener(&#x27;click&#x27;,()=&gt;canvas.dispatchEvent(new WheelEvent(&#x27;wheel&#x27;,{deltaY:delta,bubbles:true,cancelable:true})));
+    box.append(b);
+  }
+  document.body.append(box);
+  const place=()=&gt;{const r=canvas.getBoundingClientRect();box.style.right=Math.max(8,innerWidth-r.right+8)+&#x27;px&#x27;;box.style.top=Math.max(8,r.top+8)+&#x27;px&#x27;;};
+  new ResizeObserver(place).observe(canvas);window.addEventListener(&#x27;resize&#x27;,place);requestAnimationFrame(place);
+  window.addEventListener(&#x27;keydown&#x27;,e=&gt; { if(e.key===&#x27;Escape&#x27;) parent.postMessage({type:&#x27;geometry-model-close&#x27;},&#x27;*&#x27;); });
+})();
+&lt;/script&gt;&lt;script id=&quot;model-playback-config&quot; type=&quot;application/json&quot;&gt;{&quot;target&quot;: &quot;latitude&quot;, &quot;label&quot;: &quot;조건 비교 · 같은 면적의 위도&quot;, &quot;duration&quot;: 18}&lt;/script&gt;&lt;script id=&quot;model-playback-v1&quot;&gt;(() =&gt; {
+  &#x27;use strict&#x27;;
+  const config = JSON.parse(document.getElementById(&#x27;model-playback-config&#x27;).textContent);
+  const style = document.createElement(&#x27;style&#x27;);
+  style.textContent = `html{overflow:hidden!important}body{height:calc(100% - 104px)!important;overflow:auto!important}.model-player{position:fixed;inset:auto 0 0;z-index:90;height:100px;padding:7px 10px;background:light-dark(#f5f8fc,#20242a);border-top:1px solid light-dark(#ccd5e0,#46505b);color:light-dark(#253044,#edf2f7);font:12px/1.4 system-ui;box-sizing:border-box}.player-heading{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px}.player-actions{display:flex;gap:6px;align-items:center}.model-player button,.model-player select{width:auto;min-height:30px;margin:0;font:inherit;padding:4px 8px;border:1px solid light-dark(#bcc9d8,#5a6878);border-radius:5px;background:light-dark(#fff,#303841);color:inherit}.model-player button{cursor:pointer}.model-player button[aria-pressed=true]{background:light-dark(#dbeaff,#314b66)}.model-player label{display:flex;align-items:center;gap:4px;font:inherit}.model-player input{width:100%;height:18px;margin:5px 0 0;accent-color:#72baff}.model-player :focus-visible{outline:2px solid #72baff;outline-offset:2px}#play{display:none!important}@media(max-width:350px){.model-player{padding:6px}.model-player button{padding:4px 6px}.player-heading{font-size:11px}}`;
+  document.head.append(style);
+  const player = document.createElement(&#x27;section&#x27;);
+  player.className = &#x27;model-player&#x27;;player.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 재생&#x27;);
+  player.innerHTML = `&lt;div class=&quot;player-heading&quot;&gt;&lt;span id=&quot;player-description&quot;&gt;&lt;/span&gt;&lt;output id=&quot;player-position&quot;&gt;&lt;/output&gt;&lt;/div&gt;&lt;div class=&quot;player-actions&quot;&gt;&lt;button id=&quot;player-toggle&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;▶ 재생&lt;/button&gt;&lt;button id=&quot;player-start&quot; type=&quot;button&quot;&gt;처음으로&lt;/button&gt;&lt;label&gt;속도&lt;select id=&quot;player-speed&quot; aria-label=&quot;재생 속도&quot;&gt;&lt;option value=&quot;0.5&quot;&gt;0.5×&lt;/option&gt;&lt;option value=&quot;1&quot; selected&gt;1×&lt;/option&gt;&lt;option value=&quot;2&quot;&gt;2×&lt;/option&gt;&lt;option value=&quot;4&quot;&gt;4×&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;/div&gt;&lt;input id=&quot;player-seek&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;1000&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;재생 위치&quot;&gt;`;
+  document.body.append(player);
+  const get = id =&gt; document.getElementById(id);
+  const target = config.target ? get(config.target) : null;
+  let progress = target &amp;&amp; target.type===&#x27;range&#x27; ? (Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min)) : 0;
+  let running = false, last=0, request=0, applying=false, previousStage=-1;
+  get(&#x27;player-description&#x27;).textContent=config.label;
+  function notify(el) {el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));}
+  function write(id,value) {const el=get(id);if(!el)return;const before=el.type===&#x27;checkbox&#x27;?el.checked:el.value;if(el.type===&#x27;checkbox&#x27;)el.checked=Boolean(value);else el.value=String(value);if(before!==(el.type===&#x27;checkbox&#x27;?el.checked:el.value))notify(el);}
+  function display() {
+    get(&#x27;player-seek&#x27;).value=String(Math.round(progress*1000));
+    get(&#x27;player-position&#x27;).textContent=Math.round(progress*100)+&#x27;%&#x27;;
+    player.dataset.progress=progress.toFixed(4);player.dataset.playing=String(running);
+    get(&#x27;player-toggle&#x27;).textContent=running?&#x27;Ⅱ 일시정지&#x27;:&#x27;▶ 재생&#x27;;get(&#x27;player-toggle&#x27;).setAttribute(&#x27;aria-pressed&#x27;,String(running));
+  }
+  function apply() {
+    applying=true;
+    if(config.stages) {
+      const n=config.stages.length;const stage=Math.min(n-1,Math.floor(progress*n));
+      if(stage!==previousStage) {for(const [id,value]of Object.entries(config.stages[stage]))write(id,value);previousStage=stage;}
+      if(config.stageTarget) {
+        const el=get(config.stageTarget),local=progress&gt;=1?1:(progress*n-stage);
+        write(config.stageTarget,Number(el.min)+(Number(el.max)-Number(el.min))*local);
+      }
+    } else if(target) {
+      if(target.type===&#x27;range&#x27;) {
+        const low=config.min??Number(target.min),high=config.max??Number(target.max),step=Number(target.step)||.001;
+        const value=low+(high-low)*progress;write(target.id,Math.max(low,Math.min(high,Math.round(value/step)*step)));
+      } else if(target.tagName===&#x27;SELECT&#x27;) {
+        const options=[...target.options].filter(o=&gt;!o.disabled);write(target.id,options[Math.min(options.length-1,Math.floor(progress*options.length))].value);
+      }
+    }
+    applying=false;display();
+  }
+  function pause() {running=false;cancelAnimationFrame(request);display();}
+  function tick(now) {
+    if(!running)return;const dt=Math.min((now-last)/1000,.1);last=now;
+    progress=Math.min(1,progress+dt*Number(get(&#x27;player-speed&#x27;).value)/(config.duration||18));apply();
+    if(progress&gt;=1)pause();else request=requestAnimationFrame(tick);
+  }
+  get(&#x27;player-toggle&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{if(running){pause();return;}if(progress&gt;=.999){progress=0;previousStage=-1;}apply();running=true;last=performance.now();display();request=requestAnimationFrame(tick);});
+  get(&#x27;player-start&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{pause();progress=0;previousStage=-1;apply();});
+  get(&#x27;player-seek&#x27;).addEventListener(&#x27;input&#x27;,()=&gt;{const value=Number(get(&#x27;player-seek&#x27;).value)/1000;pause();progress=value;previousStage=-1;apply();});
+  for(const kind of [&#x27;input&#x27;,&#x27;change&#x27;,&#x27;click&#x27;])document.addEventListener(kind,event=&gt;{
+    if(applying||player.contains(event.target))return;
+    if(event.target.matches(&#x27;input,select,button&#x27;)){
+      pause();previousStage=-1;const sync=event.target===target||event.target.id===&#x27;reset&#x27;||event.target.hasAttribute(&#x27;data-preset&#x27;);if(config.stages&amp;&amp;event.target.id!==&#x27;model-zoom-in&#x27;&amp;&amp;event.target.id!==&#x27;model-zoom-out&#x27;&amp;&amp;(event.target.matches(&#x27;input,select&#x27;)||event.target.id===&#x27;reset&#x27;))progress=0;
+      if(sync &amp;&amp; target &amp;&amp; target.type===&#x27;range&#x27;)progress=(Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min));display();
+    }
+  });
+  document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;{if(document.hidden)pause();});
+  window.addEventListener(&#x27;pagehide&#x27;,pause);display();
+})();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></section></div></section><section class="reading" aria-labelledby="reading-title"><header class="reading-heading"><p class="reading-kicker">읽을 자료</p><h2 id="reading-title">크기를 바꾸는 투영의 선택</h2></header><div class="reading-scroll" tabindex="0" role="region" aria-label="독립적으로 스크롤하는 읽을 자료"><article class="article"><p class="intro">지구 위에서 같은 면적을 차지하는 영역도 지도에서는 다른 크기로 나타날 수 있다. 투영이 보존하는 성질을 모르고 화면의 면적을 실제 면적으로 읽으면 비교가 달라진다.</p>
+<h3>평면 지도는 무엇을 보존하는가</h3><p>구면 전체를 평면에 옮기면서 거리, 면적, 방향과 모양을 모두 보존할 수는 없다. USGS는 지도의 용도에 맞추어 투영을 선택해야 한다고 설명한다. 메르카토르 투영은 국소 각도를 보존하지만 극지방에 가까울수록 면적을 크게 늘린다. 일정 방위의 항로를 읽는 이점과 세계의 면적을 비교할 때의 한계를 함께 가진다. <a href="#s1">[1]</a></p>
+<h3>같은 구면 면적을 정확히 비교하기</h3><p>단위 구면에서 경도 폭 Δλ, 위도 경계 φ₁·φ₂인 영역의 면적은 <code>Δλ(sinφ₂−sinφ₁)</code>이다. 색 영역은 Δλ=.45, 사인 위도의 폭 .05를 사용해서 모두 .0225의 같은 구면 면적을 가진다. 단순히 경도·위도의 폭을 똑같이 놓은 영역과 다르다. 실제 국가의 윤곽이나 면적을 근사한 자료도 아니다.</p>
+<h3>투영을 바꿀 때 달라지는 수치</h3><p>메르카토르는 <code>x=λ</code>, <code>y=ln tan(π/4+φ/2)</code>이며 국소 면적배율은 <code>sec²φ</code>다. 예를 들어 중심 위도 70°의 국소 배율은 약 8.55배다. 유한한 영역의 지도 면적비는 두 경계의 투영 좌표 차이로 계산하므로 그 국소 수치와 조금 다르다. ‘원통 등적’에서는 <code>x=λ</code>, <code>y=sinφ</code>를 사용한다. 이 선택은 면적을 보존하면서 형태를 바꾼다. 두 평면 지도의 세로 축 범위는 각 투영에 맞춰 표시되므로 서로 다른 지도 사이의 픽셀 크기를 직접 비교하지 말고, 한 지도 안의 면적비와 계산값을 비교하자.</p>
+<h3>작게 또는 크게 보이는 것이 중요도의 증거인가</h3><p>지도가 어떤 지역을 크게 보이게 한다는 사실과 제작자가 의도적으로 그 지역을 우대했다는 주장은 다르다. 다만 독자가 면적 보존을 가정한 채 크기를 읽는다면 비의도적인 크기 판단 오류가 생길 수 있다. 실제 정치적·심리적 영향의 크기를 확정하려면 독자와 사용 상황에 대한 별도의 연구가 필요하다.</p><h3>더 많은 좌표가 자동으로 더 좋은 설명은 아니다</h3><p>화면의 차원을 늘리는 목적은 생략한 조건을 다시 비교하는 데 있다. 종이에도 색, 분할 그림, 표와 범례를 이용해 같은 조건을 기록할 수 있다. 반대로 입체는 가림과 원근 왜곡을 만들 수 있다. 어떤 변수를 보존하고, 무엇을 고정하거나 합쳤는지를 명시하는 일이 매체의 선택보다 먼저다. 그림의 모양만으로 독자가 실제로 편향되었다는 심리적 효과까지 입증할 수는 없다.</p><section class="sources"><h3>문헌과 자료</h3><ol><li id="s1">U.S. Geological Survey. <em>Map Projections</em>, 1993, DOI 10.3133/70047422. 투영의 보존 성질과 용도. <a href="https://www.usgs.gov/publications/map-projections" target="_blank" rel="noopener noreferrer">원문 안내</a> · <a href="https://www.usgs.gov/faqs/how-are-different-map-projections-used" target="_blank" rel="noopener noreferrer">투영 비교 해설</a>. 사용한 세 영역은 동일 면적 조건으로 새로 구성한 수학적 예다.</li></ol></section></article></div></section></main><dialog class="source-page-dialog" id="source-page" aria-labelledby="source-title"><header class="dialog-heading"><h2 id="source-title">메르카토르 지도 — 면적을 읽는 기준 — 평면 도식</h2><button type="button" id="close-source-page">닫기</button></header><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2NDAiIGhlaWdodD0iNDIwIiB2aWV3Qm94PSIwIDAgNjQwIDQyMCI+PHJlY3Qgd2lkdGg9IjY0MCIgaGVpZ2h0PSI0MjAiIGZpbGw9IiNlZGYzZmEiLz48ZyBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzI2MzY0ZCI+PHRleHQgeD0iMzIiIHk9IjQwIiBmb250LXNpemU9IjIzIj7qsJnsnYAg6rWs66m0IOuptOyggSwg64uk66W4IOyngOuPhCDrqbTsoIE8L3RleHQ+PHBhdGggZD0iTTEwMCAzMTBINTYwIiBzdHJva2U9IiM1MzZiODMiIHN0cm9rZS13aWR0aD0iMiIvPjxyZWN0IHg9IjE1NSIgeT0iMzAzLjQ5ODY0NTMyNTI5NCIgd2lkdGg9IjYwIiBoZWlnaHQ9IjYuNTAxMzU0Njc0NzA2MDA2IiBmaWxsPSIjNzdiYWZmIi8+PHRleHQgeD0iMTYxIiB5PSIzNDUiIGZvbnQtc2l6ZT0iMjAiPjDCsDwvdGV4dD48cmVjdCB4PSIzMDUiIHk9IjI5Ni45NzI3OTgyMzc2NyIgd2lkdGg9IjYwIiBoZWlnaHQ9IjEzLjAyNzIwMTc2MjMyOTk4NyIgZmlsbD0iIzc3YmFmZiIvPjx0ZXh0IHg9IjMxMSIgeT0iMzQ1IiBmb250LXNpemU9IjIwIj40NcKwPC90ZXh0PjxyZWN0IHg9IjQ1NSIgeT0iMjUwLjk4MzQwMDY0OTAyODYiIHdpZHRoPSI2MCIgaGVpZ2h0PSI1OS4wMTY1OTkzNTA5NzE0MSIgZmlsbD0iIzc3YmFmZiIvPjx0ZXh0IHg9IjQ2MSIgeT0iMzQ1IiBmb250LXNpemU9IjIwIj43MMKwPC90ZXh0Pjx0ZXh0IHg9IjM1IiB5PSIzODYiIGZvbnQtc2l6ZT0iMTciPuuplOultOy5tO2GoOultCDtiKzsmIEgwrcg7ISk66qF7JqpIOyEuCDsmIHsl63snZgg7Iuk7KCcIOuptOyggeydgCDqsJnri6QuPC90ZXh0PjwvZz48L3N2Zz4=" alt="구면에서 같은 면적을 가진 세 영역의 메르카토르 지도 면적"><p class="source-caption">구면에서 같은 면적을 가진 세 영역의 메르카토르 지도 면적</p></dialog><script>(()=>{const f=document.getElementById('codex-visualization');f.srcdoc=f.dataset.srcdoc;delete f.dataset.srcdoc;const d=document.getElementById('source-page');document.getElementById('open-source-page').addEventListener('click',()=>d.showModal());document.getElementById('close-source-page').addEventListener('click',()=>d.close());})();</script><script id="model-expansion-v1">/* Public case contract v1. Works with allow-scripts-only sandboxed frames. */
+(() => {
+  const frame = document.getElementById('codex-visualization');
+  if (!frame || document.querySelector('.model-view-toolbar')) return;
+  const panel = frame.closest('.digital-panel') || frame.parentElement;
+  const label = panel.querySelector('.panel-label');
+  const bar = document.createElement('div');
+  bar.className = 'model-view-toolbar';
+  const title = document.createElement('span');
+  title.id = 'expanded-model-title';
+  title.textContent = label?.textContent || '조작 가능한 시각화';
+  if (label) label.hidden = true;
+  const toggle = document.createElement('button');
+  toggle.type = 'button'; toggle.className = 'model-expand-toggle';
+  toggle.textContent = '시각화 확대';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-controls', frame.id);
+  bar.append(title, toggle); panel.insertBefore(bar, frame);
+  const guards = [document.createElement('span'), document.createElement('span')];
+  guards.forEach(g => { g.className = 'model-focus-guard'; g.tabIndex = 0; });
+  panel.insertBefore(guards[0], bar); panel.append(guards[1]);
+  let expanded = false, inertRecords = [], savedAttributes = [];
+  function close() {
+    if (!expanded) return;
+    expanded = false;
+    panel.classList.remove('is-model-expanded');
+    document.body.classList.remove('model-expanded');
+    inertRecords.forEach(([el, value]) => { el.inert = value; });
+    savedAttributes.forEach(([key, value]) => { if(value===null) panel.removeAttribute(key); else panel.setAttribute(key,value); });
+    inertRecords = []; savedAttributes = [];
+    toggle.textContent = '시각화 확대'; toggle.setAttribute('aria-expanded', 'false');
+    toggle.focus();
+  }
+  toggle.addEventListener('click', () => {
+    if (expanded) { close(); return; }
+    expanded = true;
+    ['role','aria-modal','aria-labelledby'].forEach(key => savedAttributes.push([key,panel.getAttribute(key)]));
+    panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true'); panel.setAttribute('aria-labelledby',title.id);
+    let branch = panel;
+    while (branch.parentElement) {
+      for (const sibling of branch.parentElement.children) if(sibling!==branch) { inertRecords.push([sibling,sibling.inert]); sibling.inert=true; }
+      branch=branch.parentElement;
+      if(branch===document.body) break;
+    }
+    document.body.classList.add('model-expanded'); panel.classList.add('is-model-expanded');
+    toggle.textContent='확대 닫기'; toggle.setAttribute('aria-expanded','true'); toggle.focus();
+  });
+  guards[0].addEventListener('focus',()=> { if(expanded) frame.focus(); });
+  guards[1].addEventListener('focus',()=> { if(expanded) toggle.focus(); });
+  document.addEventListener('keydown',e=> { if(e.key==='Escape' && expanded) { e.preventDefault(); close(); } });
+  window.addEventListener('message',e=> {
+    if(e.source===frame.contentWindow && e.data?.type==='geometry-model-close' && Object.keys(e.data).length===1) close();
+  });
+})();
+</script></body></html>

@@ -2,7 +2,7 @@
 
 그림과 도식, 수학 공식은 무엇을 압축하고, 조작할 수 있는 표현은 무엇을 펼쳐 보여 주는가. 평면 기록과 디지털 모형을 나란히 놓고 시점, 관계와 조건을 바꾸어 비교한다.
 
-[31개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[35개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 임완철의 **차원증감법**을 바탕으로 원근법과 회화, 곡면과 매듭, 수학 공식과 물리 법칙, 상태와 데이터의 표현을 살핀다. 물리 공간의 차원, 표면 자체의 차원, 데이터의 변수 수와 관찰의 자유도는 서로 구별한다. 디지털 화면도 평면이지만, 좌표와 변환 규칙을 조작하면 한 장에서 생략한 조건을 비교할 수 있다.
 
@@ -10,6 +10,10 @@
 
 **재생**, **일시정지**, **처음으로**, **속도**를 사용해 변화를 따라갈 수 있다. 재생 설명에는 시간 전개, 경로 추적, 조건 비교 또는 단계 전환 중 무엇을 보여 주는지 표시한다. 눈의 위치나 기준계 속도를 순서대로 바꾸는 것은 실제 시간의 흐름과 구별한다. 재생 위치를 직접 고르거나 다른 조건을 수동 조작하면 멈춘다.
 
+- [기술적 특이점 — 한 점에서 조건의 경계로](https://climtc.github.io/teaching-learning-perspectives/singularity-frontiers.html): 과제별 임계 통과와 연속 조건의 경계선·경계면을 비교한다. 화면의 함수는 설명용 가정이며 성능 교점과 기술적 특이점은 구별한다.
+- [함께 움직이는 좌표](https://climtc.github.io/teaching-learning-perspectives/moving-observer.html): 대상·관찰자·표식의 위치를 서로 다른 기준에서 기록한다. 상대 위치가 일정한 것과 변화를 경험할 수 없다는 주장을 구별한다.
+- [심슨의 역설](https://climtc.github.io/teaching-learning-perspectives/simpson-layers.html): 집단별로 높은 성공률이 합계에서 낮아지는 조건과 분모의 역할을 비교한다.
+- [메르카토르 지도](https://climtc.github.io/teaching-learning-perspectives/mercator-area.html): 구면에서 같은 면적을 가진 영역이 투영에 따라 어떻게 다르게 보이는지 확인한다.
 - [시선의 주인 — 도식이 고른 관점](https://climtc.github.io/teaching-learning-perspectives/viewpoint-owner.html): 삼각형이 선택한 관계와 투영 방향을 따로 바꾸고, 투영과 단면을 비교한다. 매개된 활동의 삼각형과 위치 지어진 관점에 관한 문헌을 함께 읽는다.
 - [바둑 — 미래 수순의 시간 층](https://climtc.github.io/teaching-learning-perspectives/go-futures.html): 실제 KataGo 분석에서 갈라진 세 후보와 각각 200수의 조건부 수순을 비교한다. 한 층은 한 수 뒤의 전체 국면이다. 수백 층은 수백 개의 독립 공간 차원이나 확정된 미래를 뜻하지 않는다.
 - [가르치다와 배우다](https://climtc.github.io/teaching-learning-perspectives/): 두 구의 투영이 겹치는 면적과 실제 공유 부피를 구별한다. 교사와 학습자의 관점은 설명을 위한 선택이며 사람들의 실제 경험을 일정한 시선으로 분류하지 않는다.
