@@ -48,11 +48,11 @@
  function schedule(){if(!request)request=requestAnimationFrame(()=>{request=0;scene();});}
  function pause(){ $('angle').dispatchEvent(new Event('input',{bubbles:true})); }
  for(const id of ['family','angle','right-angle','right-tilt','emphasis','labels','mirror'])$(id).addEventListener('input',()=>{if(id==='family'){$('right-angle').value=0;$('right-tilt').value=0;$('mirror').checked=false;zoom=1;pitch=.3;}schedule();});
- $('front').addEventListener('click',()=>{pitch=0;$('angle').value=0;schedule();});
- $('oblique').addEventListener('click',()=>{pitch=.5;$('angle').value=35;schedule();});
+ $('front').addEventListener('click',()=>{pitch=0;$('angle').value=0;pause();schedule();});
+ $('oblique').addEventListener('click',()=>{pitch=.5;$('angle').value=35;pause();schedule();});
  $('reset').addEventListener('click',()=>{pitch=.3;zoom=1;$('family').value='constitution';$('angle').value=25;$('right-angle').value=0;$('right-tilt').value=0;$('emphasis').checked=true;$('labels').checked=true;$('mirror').checked=false;schedule();});
  canvas.addEventListener('pointerdown',e=>{drag=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId);pause();});canvas.addEventListener('pointerup',()=>drag=null);canvas.addEventListener('pointercancel',()=>drag=null);
- canvas.addEventListener('pointermove',e=>{if(!drag)return;$('angle').value=(Number($('angle').value)+(e.clientX-drag[0])*.6+360)%360;pitch=Math.max(-Math.PI/2,Math.min(Math.PI/2,pitch+(e.clientY-drag[1])*.009));drag=[e.clientX,e.clientY];schedule();});
+ canvas.addEventListener('pointermove',e=>{if(!drag)return;$('angle').value=(Number($('angle').value)+(e.clientX-drag[0])*.6+360)%360;pitch=Math.max(-Math.PI/2,Math.min(Math.PI/2,pitch+(e.clientY-drag[1])*.009));drag=[e.clientX,e.clientY];pause();schedule();});
  canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.35,Math.min(4,zoom*Math.exp(-e.deltaY*.001)));pause();schedule();},{passive:false});
  canvas.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown','+','-'].includes(e.key)){e.preventDefault();if(e.key==='ArrowLeft'||e.key==='ArrowRight')$('angle').value=(Number($('angle').value)+(e.key==='ArrowLeft'?-5:5)+360)%360;if(e.key==='ArrowUp'||e.key==='ArrowDown')pitch=Math.max(-Math.PI/2,Math.min(Math.PI/2,pitch+(e.key==='ArrowUp'?.05:-.05)));if(e.key==='+'||e.key==='-')zoom=Math.max(.35,Math.min(4,zoom*(e.key==='+'?1.2:1/1.2)));pause();schedule();}});
  $('show-controls').addEventListener('click',()=>{document.body.dataset.controlsVisible='true';$('controls').scrollIntoView({block:'start'});$('back-model').focus({preventScroll:true});});$('back-model').addEventListener('click',()=>{document.body.scrollTop=0;document.body.dataset.controlsVisible='false';canvas.focus({preventScroll:true});});document.body.addEventListener('scroll',()=>{if(document.body.scrollTop<20)document.body.dataset.controlsVisible='false';});
