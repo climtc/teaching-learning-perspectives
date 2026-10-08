@@ -127,6 +127,26 @@ Gapminder의 12개국·1990–2010년 252행을 고정 버전에서 결합했다
 
 ## 사례 관리
 
-현재 전체 목록은 **22개 개별 사례**이다. 토러스, 뫼비우스의 띠, 끈의 고리, 보로메오 고리, 세잎매듭, 생톰도 다른 사례와 같은 단위로 표시한다. 저자별 카테고리를 만들지 않으며, 시대와 표현의 문제를 공통 태그로 사용한다.
+현재 전체 목록은 **29개 개별 사례**이다. 토러스, 뫼비우스의 띠, 끈의 고리, 보로메오 고리, 세잎매듭, 생톰도 다른 사례와 같은 단위로 표시한다. 저자별 카테고리를 만들지 않으며, 시대와 표현의 문제를 공통 태그로 사용한다.
 
-[사례 관리 규칙](CASE_MANAGEMENT.md) · [사례 등록부](cases.json). 목록은 등록부로부터 정적으로 생성하므로 기존 CSP를 변경하거나 실행 중 자료 요청을 추가하지 않는다. 변경 후 `python3 manage_cases.py --write`로 목록을 갱신하고 `python3 manage_cases.py --check`로 등록부와 카드의 일치를 확인한다.
+[사례 관리 규칙](CASE_MANAGEMENT.md) · [사례 등록부](cases.json). 목록은 등록부로부터 정적으로 생성하므로 기존 CSP를 변경하거나 실행 중 자료 요청을 추가하지 않는다. 변경 후 `python3 add_model_expansion.py`, `python3 manage_cases.py --write`, `python3 manage_cases.py --check`를 순서대로 실행한다.
+
+## 수학 공식과 물리 법칙의 추가 실험
+
+- [오일러 공식 — 회전을 각도로 펼치기](https://climtc.github.io/teaching-learning-perspectives/euler-formula.html): 복소평면의 회전과 각도 나선을 비교한다. `e^(iθ)=cosθ+i sinθ`, 특히 `e^(iπ)=−1`을 확인한다. 높이는 복소수의 새 성분이 아니라 각도의 기록이다.
+- [뉴턴의 중력 — 공식에서 궤도로](https://climtc.github.io/teaching-learning-perspectives/newton-orbits.html): 고정된 중심체와 작은 물체의 타원 궤도, 에너지와 각운동량을 비교한다.
+- [전자기파 — 두 장과 전파 방향](https://climtc.github.io/teaching-learning-perspectives/electromagnetic-wave.html): 진공 평면파의 전기장·자기장·전파 방향을 구별하고 파장과 편광을 바꾼다.
+- [로런츠 변환 — 같은 사건의 다른 좌표](https://climtc.github.io/teaching-learning-perspectives/lorentz-transform.html): 2+1차원 시공간에서 좌표와 불변 간격을 비교한다. 기존 Lorenz 시스템 사례와 구별한다.
+- [푸리에 급수 — 합을 성분으로 펼치기](https://climtc.github.io/teaching-learning-perspectives/fourier-series.html): 사각파의 유한 부분합과 홀수 조화 성분을 비교한다. 깊이는 성분 순서다.
+- [블로흐 구 — 양자 상태와 측정 축](https://climtc.github.io/teaching-learning-perspectives/bloch-sphere.html): 단일 큐비트의 순수 상태와 X·Y·Z 측정 확률을 연결한다. 구 위의 점은 입자의 실제 위치가 아니다.
+- [미분과 기울기 — 평면의 벡터와 함수의 높이](https://climtc.github.io/teaching-learning-perspectives/gradient-surface.html): 등고선, 기울기와 접평면을 비교한다. 높이는 함수값이다.
+
+평면 도식은 공개 수학 관계를 바탕으로 새로 작성한 SVG다. 문헌 원본의 캡처와 구별한다. [공개 출처 목록](formula-sources.json)은 NIST DLMF, Caltech의 Feynman Lectures, MIT OpenCourseWare와 IBM Quantum 문헌으로 연결한다. 계산과 시각화는 페이지에 내장되어 외부 실행 서비스 없이 동작한다.
+
+`python3 build_formula_cases.py`로 일곱 페이지를 다시 생성한 뒤 공통 확대 기능과 목록을 갱신한다. `node verify_formula_models.js`는 지수함수의 독립적인 급수 계산, 궤도의 보존량과 운동 방정식, 진공파의 관계, 로런츠 변환의 역변환·간격, 푸리에 계수 적분, 양자 상태의 Born 확률과 유한 차분의 미분값을 검사한다.
+
+## 모든 사례의 확대와 복원
+
+모든 29개 사례에 **시각화 확대** 버튼을 제공한다. 화면 크기로 늘린 상태에서도 회전·매개변수·재생 등 원래의 조작이 가능하다. **확대 닫기** 또는 **Escape**로 비교 화면으로 돌아와도 조작 상태가 유지된다. iframe을 옮기거나 새로 만들지 않으며, sandbox와 CSP도 유지한다. 모형 안의 **+ / −**는 시각화 자체의 배율을 바꾼다. 읽을 자료는 원래 비교 화면에서 독립적으로 스크롤한다.
+
+이 확대·배율 기능은 앞으로 등록하는 모든 사례에도 적용하는 필수 규칙이다. 공통 소스를 정적으로 내장하는 생성기와 `manage_cases.py`의 검사를 함께 사용하고, 공개 전에 실제 조작과 상태 보존을 브라우저에서 확인한다.

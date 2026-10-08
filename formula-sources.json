@@ -1,0 +1,245 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "case_id": "euler-formula",
+      "sources": [
+        {
+          "title": "NIST, Digital Library of Mathematical Functions, §4.2, 식 4.2.24",
+          "url": "https://dlmf.nist.gov/4.2#E24",
+          "scope": "일반 복소 지수함수에서 실수부 x=0을 대입한다.",
+          "acquisition": {
+            "sha256": "ad9f43b664a1b0b593d8bc2ea4ea7c1b7d058457690532c928095f23bc079670",
+            "bytes": 229471,
+            "format": "html",
+            "body_check": [
+              "Exponential Function"
+            ],
+            "acquired_at": "2026-10-08T02:59:45Z"
+          }
+        },
+        {
+          "title": "NIST DLMF, §4.3(ii), Exponential function의 복소평면 대응",
+          "url": "https://dlmf.nist.gov/4.3#ii",
+          "scope": "지수함수의 주기성과 복소평면의 대응을 확인한다.",
+          "acquisition": {
+            "sha256": "9cad1bb576d7d5a50413572e08f977e30c8b15fe053125f0701ff132a6afdd42",
+            "bytes": 60009,
+            "format": "html",
+            "body_check": [
+              "Exponential Function"
+            ],
+            "acquired_at": "2026-10-08T02:59:46Z"
+          }
+        }
+      ],
+      "diagrams": "Newly authored explanatory SVGs; no source facsimiles."
+    },
+    {
+      "case_id": "newton-orbits",
+      "sources": [
+        {
+          "title": "Feynman, Leighton & Sands, The Feynman Lectures on Physics, I, Ch. 7, §§7–1, 7–2, 7–4",
+          "url": "https://www.feynmanlectures.caltech.edu/I_07.html",
+          "scope": "역제곱 중력과 케플러의 타원·면적 법칙.",
+          "acquisition": {
+            "sha256": "a31da6800eacbe2e9dd8720b2575acc93c316b39f21800abb91739410f0a0efc",
+            "bytes": 61288,
+            "format": "html",
+            "body_check": [
+              "The Theory of Gravitation"
+            ],
+            "acquired_at": "2026-10-08T02:59:45Z"
+          }
+        },
+        {
+          "title": "The Feynman Lectures on Physics, I, Ch. 9, §9–7, Planetary motions",
+          "url": "https://www.feynmanlectures.caltech.edu/I_09.html",
+          "scope": "중심체를 고정한 행성 운동의 근사 조건.",
+          "acquisition": {
+            "sha256": "e75a043ab3007598bbebee7b5cd057dcbe4f3afb11b24a86ffb9fbdb127fc5e7",
+            "bytes": 62034,
+            "format": "html",
+            "body_check": [
+              "Planetary motions"
+            ],
+            "acquired_at": "2026-10-08T02:59:47Z"
+          }
+        }
+      ],
+      "diagrams": "Newly authored explanatory SVGs; no source facsimiles."
+    },
+    {
+      "case_id": "electromagnetic-wave",
+      "sources": [
+        {
+          "title": "The Feynman Lectures on Physics, II, Ch. 20, §§20–1–20–3",
+          "url": "https://www.feynmanlectures.caltech.edu/II_20.html",
+          "scope": "진공의 파동 방정식과 평면 전자기파의 E, B, c 관계.",
+          "acquisition": {
+            "sha256": "7ab5f9289f4273a1fa3a2166493f33674c17338532f9ca8985e97da315455a41",
+            "bytes": 73425,
+            "format": "html",
+            "body_check": [
+              "Solutions of Maxwell"
+            ],
+            "acquired_at": "2026-10-08T02:59:45Z"
+          }
+        }
+      ],
+      "diagrams": "Newly authored explanatory SVGs; no source facsimiles."
+    },
+    {
+      "case_id": "lorentz-transform",
+      "sources": [
+        {
+          "title": "The Feynman Lectures on Physics, I, Ch. 15, §15–2, 식 15.3",
+          "url": "https://www.feynmanlectures.caltech.edu/I_15.html",
+          "scope": "x 방향 로런츠 변환. 여기에 β=v/c와 ct를 사용했다.",
+          "acquisition": {
+            "sha256": "bf7b702bba74105d76b0dc8a8ad09623ecf828aaed083ee786fc6cf41f2f1e28",
+            "bytes": 59992,
+            "format": "html",
+            "body_check": [
+              "Lorentz transformation"
+            ],
+            "acquired_at": "2026-10-08T02:59:45Z"
+          }
+        },
+        {
+          "title": "The Feynman Lectures on Physics, I, Ch. 17, Space-Time",
+          "url": "https://www.feynmanlectures.caltech.edu/I_17.html",
+          "scope": "시공간과 간격에 대한 기하학적 설명.",
+          "acquisition": {
+            "sha256": "6cfb27d23fcbb31f0c7cc332169beaa5ab3337ffbe37e7c3ce594b5be639cddd",
+            "bytes": 64807,
+            "format": "html",
+            "body_check": [
+              "Space-time intervals"
+            ],
+            "acquired_at": "2026-10-08T02:59:48Z"
+          }
+        }
+      ],
+      "diagrams": "Newly authored explanatory SVGs; no source facsimiles."
+    },
+    {
+      "case_id": "fourier-series",
+      "sources": [
+        {
+          "title": "MIT OpenCourseWare, 18.03SC, Fourier Series: Basics",
+          "url": "https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/pages/unit-iii-fourier-series-and-laplace-transform/fourier-series-basics/",
+          "scope": "2011년 강의의 정의·계수·예제 자료.",
+          "acquisition": {
+            "sha256": "b3a2f683d18d33f8795df6b818f7631afacc6453af32f56134d62cdbf5c77c89",
+            "bytes": 125574,
+            "format": "html",
+            "body_check": [
+              "Definition and Coefficients"
+            ],
+            "acquired_at": "2026-10-08T02:59:45Z"
+          }
+        },
+        {
+          "title": "MIT 18.03SC, Examples, Example 1–2, PDF 1–2쪽",
+          "url": "https://ocw.mit.edu/courses/18-03sc-differential-equations-fall-2011/5333a9260c136fe463610f21d23f2b94_MIT18_03SCF11_s21_5text.pdf",
+          "scope": "사각파의 홀수 계수와 유한 부분합. 도식은 본 프로젝트에서 새로 그렸다.",
+          "acquisition": {
+            "sha256": "5060b98ef05c8a374a64390491e6051eee7823e41e4a6e3fc6b52e783ae9b736",
+            "bytes": 213589,
+            "format": "pdf",
+            "body_check": [
+              "square",
+              "Examples"
+            ],
+            "acquired_at": "2026-10-08T02:59:45Z"
+          }
+        },
+        {
+          "title": "NIST DLMF, §6.16(i), The Gibbs Phenomenon",
+          "url": "https://dlmf.nist.gov/6.16#i",
+          "scope": "점프 근방의 초과와 비균등 수렴. 본 모형은 이 급수에 4/π를 곱한다.",
+          "acquisition": {
+            "sha256": "c04a67c7e90ef0a110e6f16e59fa6a69e1d19ca28b4f2f562d2192b8a0dee67d",
+            "bytes": 74757,
+            "format": "html",
+            "body_check": [
+              "The Gibbs Phenomenon",
+              "6.16.2"
+            ],
+            "acquired_at": "2026-10-08T03:03:28Z"
+          }
+        }
+      ],
+      "diagrams": "Newly authored explanatory SVGs; no source facsimiles."
+    },
+    {
+      "case_id": "bloch-sphere",
+      "sources": [
+        {
+          "title": "IBM Quantum Learning, Bloch sphere (IBM Quantum Documentation Mirror)",
+          "url": "https://qiskit.qotlabs.org/learning/courses/general-formulation-of-quantum-information/density-matrices/bloch-sphere",
+          "scope": "순수 상태의 각도 표기, 파울리 행렬 계수와 단위 2-구의 대응.",
+          "acquisition": {
+            "sha256": "30a54138d228b2a523cf814465803f14589011d1f4a54eb4b55cd765625bd10a",
+            "bytes": 647293,
+            "format": "html",
+            "body_check": [
+              "Qubit states as points on a sphere"
+            ],
+            "acquired_at": "2026-10-08T02:59:45Z"
+          }
+        },
+        {
+          "title": "IBM Quantum Documentation, Visualize quantum states",
+          "url": "https://quantum.cloud.ibm.com/docs/en/guides/plot-quantum-states",
+          "scope": "블로흐 구 등 양자 상태를 표시하는 방법.",
+          "acquisition": {
+            "sha256": "a74be4f761064fa9ddfe2a6a76636d71d1dfbeea6c4793bd4ddbd7802d115677",
+            "bytes": 777358,
+            "format": "html",
+            "body_check": [
+              "Bloch"
+            ],
+            "acquired_at": "2026-10-08T02:59:49Z"
+          }
+        }
+      ],
+      "diagrams": "Newly authored explanatory SVGs; no source facsimiles."
+    },
+    {
+      "case_id": "gradient-surface",
+      "sources": [
+        {
+          "title": "MIT, Calculus with Applications, §6.5, The Tangent Plane and the Gradient Vector",
+          "url": "https://www.ocw.mit.edu/ans7870/18/18.013a/textbook/HTML/chapter06/section05.html",
+          "scope": "접평면과 두 성분의 기울기.",
+          "acquisition": {
+            "sha256": "c8c6bbb2750836789fca94483243d7264871ed6aa39024952d980528648a8cfd",
+            "bytes": 4225,
+            "format": "html",
+            "body_check": [
+              "Tangent Plane"
+            ],
+            "acquired_at": "2026-10-08T02:59:50Z"
+          }
+        },
+        {
+          "title": "MIT, Calculus with Applications, §6.6, The Gradient and Directional Derivatives",
+          "url": "https://www.ocw.mit.edu/ans7870/18/18.013a/textbook/HTML/chapter06/section06.html",
+          "scope": "기울기, 표면 법선의 투영과 방향미분의 관계.",
+          "acquisition": {
+            "sha256": "3af313105cbec4501b08a5e2ce6eab2e10a27c388e30906ae30d65035dc4968b",
+            "bytes": 5981,
+            "format": "html",
+            "body_check": [
+              "directional derivative"
+            ],
+            "acquired_at": "2026-10-08T02:59:45Z"
+          }
+        }
+      ],
+      "diagrams": "Newly authored explanatory SVGs; no source facsimiles."
+    }
+  ]
+}

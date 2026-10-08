@@ -8,3 +8,5 @@ Public artifacts may contain interactive experiments, usage explanations, openly
 
 # Case management
 Read and follow `CASE_MANAGEMENT.md`. One interactive case page is one stable entry in `cases.json` and one card in `geometry-lab.html`; do not make exclusive author categories or bundle cards. Keep source-reading guides outside case counts. Update the static catalogue with `python3 manage_cases.py --write`, then validate with `python3 manage_cases.py --check`. Preserve all iframe bodies, sandbox attributes and CSP when changing navigation. Never publish private manuscript evidence in the case registry.
+
+Every current and future case must support in-place interactive viewer expansion, closing via its button or Escape, state preservation and model zoom. Run `python3 add_model_expansion.py` before catalogue validation. Do not move or recreate an iframe to expand it. Test the rendered expanded viewer and model controls, not only the presence of feature markers. Formula examples are rebuilt with `build_formula_cases.py`; their public models are tested with `node verify_formula_models.js`.

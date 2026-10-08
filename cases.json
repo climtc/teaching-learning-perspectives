@@ -257,6 +257,90 @@
         "data"
       ],
       "summary": "같은 표본을 만드는 두 코사인파를 시간 평면과 주파수 공간에서 비교합니다."
+    },
+    {
+      "id": "euler-formula",
+      "title": "오일러 공식 — 회전을 각도로 펼치기",
+      "date": "18세기 공식 · 현대의 매개변수 표현",
+      "era": "modern",
+      "topics": [
+        "projection",
+        "data"
+      ],
+      "summary": "복소 지수함수의 회전과 각도 나선을 비교하고 e^(iπ) = −1을 직접 확인합니다.",
+      "page": "euler-formula.html"
+    },
+    {
+      "id": "newton-orbits",
+      "title": "뉴턴의 중력 — 공식에서 궤도로",
+      "date": "1687년 역학 · 케플러 궤도",
+      "era": "premodern",
+      "topics": [
+        "dimension",
+        "relation"
+      ],
+      "summary": "중심력의 타원 궤도를 조작하고 거리, 속도 방향, 에너지와 각운동량을 비교합니다.",
+      "page": "newton-orbits.html"
+    },
+    {
+      "id": "electromagnetic-wave",
+      "title": "전자기파 — 두 장과 전파 방향",
+      "date": "19세기 맥스웰 이론",
+      "era": "modern",
+      "topics": [
+        "dimension",
+        "relation"
+      ],
+      "summary": "파장과 편광을 바꾸어 전기장·자기장·전파 방향의 직교 관계를 확인합니다.",
+      "page": "electromagnetic-wave.html"
+    },
+    {
+      "id": "lorentz-transform",
+      "title": "로런츠 변환 — 같은 사건의 다른 좌표",
+      "date": "1905년 특수상대론의 좌표 관계",
+      "era": "data",
+      "topics": [
+        "dimension",
+        "data"
+      ],
+      "summary": "관찰자의 속도를 바꾸고 같은 사건의 좌표와 시공간 간격을 비교합니다.",
+      "page": "lorentz-transform.html"
+    },
+    {
+      "id": "fourier-series",
+      "title": "푸리에 급수 — 합을 성분으로 펼치기",
+      "date": "19세기 푸리에 해석",
+      "era": "modern",
+      "topics": [
+        "data",
+        "projection"
+      ],
+      "summary": "사각파의 유한 근사를 홀수 사인파 성분으로 펼치고 항 수에 따른 변화를 봅니다.",
+      "page": "fourier-series.html"
+    },
+    {
+      "id": "bloch-sphere",
+      "title": "블로흐 구 — 양자 상태와 측정 축",
+      "date": "20세기 단일 큐비트의 상태 표현",
+      "era": "data",
+      "topics": [
+        "data",
+        "dimension"
+      ],
+      "summary": "한 큐비트의 순수 상태와 X·Y·Z 측정 축을 조작하고 확률을 비교합니다.",
+      "page": "bloch-sphere.html"
+    },
+    {
+      "id": "gradient-surface",
+      "title": "미분과 기울기 — 평면의 벡터와 함수의 높이",
+      "date": "다변수 미적분의 기하학",
+      "era": "modern",
+      "topics": [
+        "projection",
+        "dimension"
+      ],
+      "summary": "점의 위치를 바꾸고 등고선의 기울기, 함수의 표면과 접평면을 비교합니다.",
+      "page": "gradient-surface.html"
     }
   ]
 }

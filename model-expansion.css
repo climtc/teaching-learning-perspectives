@@ -1,0 +1,15 @@
+/* In-place expansion: the iframe is never moved or reloaded. */
+.model-view-toolbar { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
+.model-view-toolbar span { font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-view-toolbar button { flex-shrink:0; font:inherit; font-size:12px; padding:4px 9px; border:1px solid var(--line, #888); border-radius:6px; color:var(--ink, CanvasText); background:var(--paper, Canvas); cursor:pointer; }
+.model-focus-guard { display:none; }
+body.model-expanded .page::before { content:''; position:fixed; inset:0; background:#0009; z-index:9998; }
+.is-model-expanded { position:fixed !important; inset:12px !important; z-index:9999 !important; width:auto !important; max-width:none !important; height:calc(100dvh - 24px) !important; min-height:0 !important; max-height:none !important; margin:0 !important; padding:12px !important; display:flex !important; flex-direction:column !important; flex-basis:auto !important; gap:0 !important; border:1px solid var(--line, #888); border-radius:10px; background:var(--paper, Canvas); box-shadow:0 10px 50px #0005; }
+.is-model-expanded > :not(#codex-visualization):not(.model-view-toolbar):not(.model-focus-guard) { display:none !important; }
+.is-model-expanded #codex-visualization { flex:1 1 0 !important; width:100% !important; height:100% !important; min-height:0 !important; max-height:none !important; }
+.is-model-expanded .model-view-toolbar { margin-bottom:8px; }
+.is-model-expanded .model-view-toolbar span { font-size:14px; color:var(--ink, CanvasText); }
+.is-model-expanded .model-focus-guard { display:block; width:0; height:0; overflow:hidden; }
+@media(max-width:680px) { .is-model-expanded { inset:4px !important; height:calc(100dvh - 8px) !important; padding:8px !important; } .model-view-toolbar span { font-size:11px; } }
+
+.digital-panel > .panel-label[hidden] { display:none !important; }

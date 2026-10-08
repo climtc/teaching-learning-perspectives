@@ -1,0 +1,374 @@
+<!doctype html><html lang="ko-KR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="referrer" content="no-referrer"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>오일러 공식 — 회전을 각도로 펼치기 — 차원 압축과 펼침 실험</title><meta name="description" content="복소 지수함수의 회전과 각도 나선을 비교하고 e^(iπ) = −1을 직접 확인합니다."><style>
+:root { color-scheme: light dark; --paper: light-dark(#fff, #181818); --ink: light-dark(#23262b, #f1f1f1); --quiet: light-dark(#616772, #aab0ba); --line: light-dark(#dce1e7, #3a3e45); background: var(--paper); color: var(--ink); }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+a { color: light-dark(#21669e, #88c6f5); text-underline-offset: 3px; }
+.page { position: fixed; inset: 0; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; overflow: clip; display: flex; flex-direction: column; max-width: 1120px; margin: 0 auto; }
+.visualization { display: flex; flex-direction: column; flex: 0 0 clamp(390px, 49dvh, 510px); min-height: 0; padding: 12px 20px 10px; gap: 10px; }
+.comparison-heading { flex: 0 0 auto; }
+.comparison-heading h1 { margin: 0; font-size: 20px; font-weight: 650; letter-spacing: -.03em; line-height: 1.4; }
+.comparison-heading p { margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: var(--quiet); }
+.comparison-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.35fr); gap: 22px; flex: 1 1 0; min-height: 0; }
+.paper-panel, .digital-panel { min-width: 0; min-height: 0; }
+.panel-label { margin: 0 0 6px; font-size: 12px; line-height: 1.5; font-weight: 600; color: var(--quiet); }
+.paper-panel { display: flex; flex-direction: column; }
+.paper-panel figure { display: flex; flex-direction: column; margin: 0; flex: 1 1 0; min-height: 0; }
+.paper-diagrams { display: block; width: 100%; min-height: 0; flex: 1 1 0; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.paper-panel figcaption { margin-top: 8px; font-size: 13px; line-height: 1.65; }
+.paper-panel figcaption span { display: block; color: var(--quiet); font-size: 12px; }
+.paper-panel button { align-self: flex-start; margin-top: 8px; }
+button { font: inherit; color: var(--ink); background: light-dark(#f3f6f9, #282d33); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font-size: 12px; line-height: 1.5; cursor: pointer; }
+button:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: 2px; }
+.digital-panel { display: flex; flex-direction: column; }
+#codex-visualization { display: block; width: 100%; flex: 1 1 0; min-height: 0; height: 100% !important; max-height: 100% !important; margin: 0; border: 0; }
+.reading { display: flex; flex: 1 1 0; flex-direction: column; min-height: 0; border-top: 1px solid var(--line); }
+.reading-heading { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 0; padding: 10px 20px 9px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.reading-heading .reading-kicker { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--quiet); }
+.reading-heading h2 { margin: 0; font-size: 19px; line-height: 1.4; letter-spacing: -.025em; font-weight: 650; }
+.reading-scroll { width: 100%; flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; scrollbar-gutter: stable; scroll-padding-top: 16px; }
+.reading-scroll:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: -3px; }
+.article { width: 100%; max-width: 54rem; padding: 16px 20px 48px; margin: 0; font-size: 17px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+.article h2 { margin: 28px 0 10px; font-size: 20px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; text-wrap: balance; }
+.article h3 { margin: 28px 0 10px; font-size: 19px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; text-wrap: balance; }
+.article p { margin: 0 0 20px; }
+.article .intro { color: var(--quiet); }
+.article sup { font-size: .75em; }
+.article .experiment { padding: 16px 20px 1px; margin: 20px 0; border-left: 3px solid light-dark(#438dc3, #78b7e7); background: light-dark(#f4f7fa, #23272d); }
+.article .sources { margin-top: 28px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.8; }
+.article .sources h2 { margin-top: 18px; font-size: 17px; }
+.article .sources .note { color: var(--quiet); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+.register-table { margin: 20px 0; }
+.register-table table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.75; }
+.register-table th, .register-table td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.register-table thead { color: var(--quiet); font-size: 13px; }
+.register-table tbody th { width: 22%; white-space: nowrap; font-weight: 600; }
+.source-page-dialog { width: min(800px, 95vw); max-height: 92dvh; margin: auto; padding: 0; overflow: auto; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 10px; }
+.source-page-dialog::backdrop { background: #000b; }
+.dialog-heading { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.dialog-heading h2 { margin: 0; font-size: 16px; line-height: 1.5; }
+.source-page-dialog img { display: block; width: 100%; height: auto; background: #fff; }
+.source-page-dialog .source-caption { margin: 0; padding: 12px 16px; font-size: 13px; line-height: 1.7; }
+@media (max-width: 680px) {
+  .visualization { padding: 8px 12px; gap: 8px; flex-basis: clamp(430px, 60dvh, 540px); }
+  .comparison-heading h1 { font-size: 17px; }
+  .comparison-heading p { display: none; }
+  .comparison-grid { display: flex; flex-direction: column; gap: 8px; }
+  .paper-panel { display: grid; grid-template-columns: 100px minmax(0, 1fr); grid-template-rows: auto auto; gap: 3px 10px; flex: 0 0 auto; }
+  .paper-panel .panel-label { grid-column: 2; grid-row: 1; margin: 0; font-size: 11px; }
+  .paper-panel figure { display: contents; }
+  .paper-diagrams { grid-column: 1; grid-row: 1 / 4; width: 100%; height: 64px; padding: 3px; }
+  .paper-panel figcaption { grid-column: 2; grid-row: 2; margin: 0; font-size: 11px; line-height: 1.4; }
+  .paper-panel figcaption span { display: none; }
+  .paper-panel button { grid-column: 2; grid-row: 3; justify-self: start; margin: 0; padding: 2px 6px; font-size: 11px; }
+  .digital-panel { flex: 1 1 0; }
+  .digital-panel > .panel-label { display: none; }
+  .reading-heading { padding: 8px 16px; gap: 4px 8px; }
+  .reading-heading h2 { font-size: 17px; }
+  .article { padding: 12px 16px 36px; font-size: 16px; line-height: 1.85; }
+  .article h2 { font-size: 19px; }
+  .article h3 { font-size: 18px; }
+  .article .experiment { padding: 12px 14px 1px; }
+  .register-table table { font-size: 14px; }
+  .register-table th, .register-table td { padding: 10px 8px; }
+}
+@media (max-height: 500px) and (min-width: 681px) {
+  .visualization { flex-basis: 320px; padding-top: 6px; gap: 6px; }
+  .comparison-heading h1 { font-size: 16px; }
+  .comparison-heading p { display: none; }
+  .paper-panel figcaption span { display: none; }
+  .reading-heading { padding-top: 6px; padding-bottom: 6px; }
+  .reading-heading h2 { font-size: 16px; }
+}
+@media (pointer: coarse) and (max-width: 680px) {
+  .visualization { flex-basis: clamp(480px, 60dvh, 540px); }
+}
+@media (pointer: coarse) and (max-height: 500px) and (min-width: 681px) {
+  .comparison-heading, .digital-panel > .panel-label { display: none; }
+}
+@media (max-width: 359px) {
+  .reading-heading, .article { padding-left: 12px; padding-right: 12px; }
+  .reading-heading h2 { font-size: 15px; }
+}
+
+.atlas-nav { display:flex; align-items:center; flex-wrap:wrap; gap:4px 12px; font-size:12px; line-height:1.5; margin-bottom:6px; }
+.atlas-nav a { text-decoration:none; }
+.atlas-nav a:hover { text-decoration:underline; }
+.article li { margin-bottom:8px; }
+.article .next { display:flex; flex-wrap:wrap; gap:12px; margin:24px 0; }
+@media(max-width:680px){.atlas-nav{margin-bottom:4px;font-size:11px;gap:4px 9px}.visualization{flex-basis:clamp(450px,62dvh,560px)}}
+@media(pointer:coarse) and (max-width:680px){.visualization{flex-basis:clamp(480px,62dvh,560px)}}
+@media(max-height:500px) and (min-width:681px){.atlas-nav a:not(:first-child){display:none}.atlas-nav{margin:0;font-size:11px}.visualization{flex-basis:310px}.comparison-heading p{display:none}}
+
+.visualization{flex-basis:clamp(440px,57dvh,580px)} .article .formula{font-size:20px;line-height:1.6;font-family:Georgia,serif} .paper-panel figcaption{font-size:12px} @media(max-width:680px){.visualization{flex-basis:clamp(510px,68dvh,610px)}}</style><style id="model-expansion-v1">/* In-place expansion: the iframe is never moved or reloaded. */
+.model-view-toolbar { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
+.model-view-toolbar span { font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-view-toolbar button { flex-shrink:0; font:inherit; font-size:12px; padding:4px 9px; border:1px solid var(--line, #888); border-radius:6px; color:var(--ink, CanvasText); background:var(--paper, Canvas); cursor:pointer; }
+.model-focus-guard { display:none; }
+body.model-expanded .page::before { content:''; position:fixed; inset:0; background:#0009; z-index:9998; }
+.is-model-expanded { position:fixed !important; inset:12px !important; z-index:9999 !important; width:auto !important; max-width:none !important; height:calc(100dvh - 24px) !important; min-height:0 !important; max-height:none !important; margin:0 !important; padding:12px !important; display:flex !important; flex-direction:column !important; flex-basis:auto !important; gap:0 !important; border:1px solid var(--line, #888); border-radius:10px; background:var(--paper, Canvas); box-shadow:0 10px 50px #0005; }
+.is-model-expanded > :not(#codex-visualization):not(.model-view-toolbar):not(.model-focus-guard) { display:none !important; }
+.is-model-expanded #codex-visualization { flex:1 1 0 !important; width:100% !important; height:100% !important; min-height:0 !important; max-height:none !important; }
+.is-model-expanded .model-view-toolbar { margin-bottom:8px; }
+.is-model-expanded .model-view-toolbar span { font-size:14px; color:var(--ink, CanvasText); }
+.is-model-expanded .model-focus-guard { display:block; width:0; height:0; overflow:hidden; }
+@media(max-width:680px) { .is-model-expanded { inset:4px !important; height:calc(100dvh - 8px) !important; padding:8px !important; } .model-view-toolbar span { font-size:11px; } }
+
+.digital-panel > .panel-label[hidden] { display:none !important; }
+</style></head><body><main class="page"><section class="visualization" aria-labelledby="comparison-title"><header class="comparison-heading"><nav class="atlas-nav" aria-label="사례 탐색"><a href="geometry-lab.html">← 전체 사례</a><a href="index.html">가르치다와 배우다</a><a href="CASE_MANAGEMENT.md">사례 관리 규칙</a></nav><h1 id="comparison-title">오일러 공식 — 회전을 각도로 펼치기</h1><p>복소평면의 한 바퀴와, 그 한 바퀴를 펼친 매개변수 축을 비교합니다.</p></header><div class="comparison-grid"><section class="paper-panel" aria-labelledby="paper-label"><h2 class="panel-label" id="paper-label">01 · 기호와 평면 도식</h2><figure><img class="paper-diagrams" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MzAgMzQwIj48cmVjdCB3aWR0aD0iNDMwIiBoZWlnaHQ9IjM0MCIgZmlsbD0iI2Y4ZmFmYyIvPjxwYXRoIGQ9Ik01NSAyMTVMMzc1IDIxNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjODI5M2EzIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxwYXRoIGQ9Ik0yMTUgMzAwTDIxNSAxMTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzgyOTNhMyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIyMTUiIGN5PSIyMTUiIHI9Ijc4IiBmaWxsPSJub25lIiBzdHJva2U9IiMyNzdlZDMiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0yMTUgMjE1TDI3MCAxNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2RkNzcyZSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIyOTIiIHk9IjE1NyIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzI3MzQ0MiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ZeKBseG2vzwvdGV4dD48dGV4dCB4PSIyMTUiIHk9IjMxOCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzI3MzQ0MiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UmUgLyBJbSDCtyDri6jsnITsm5A8L3RleHQ+PHRleHQgeD0iMjE1IiB5PSIzNyIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzI3MzQ0MiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ZeKBseG2vyA9IGNvcyDOuCArIGkgc2luIM64PC90ZXh0Pjx0ZXh0IHg9IjIxNSIgeT0iNzAiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiMyNzM0NDIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPs64ID0gz4Ag4oaSIGVeKGnPgCkgPSDiiJIxPC90ZXh0Pjwvc3ZnPg==" alt="eⁱᶿ = cos θ + i sin θ · θ = π → e^(iπ) = −1 · 평면 도식"><figcaption>eⁱᶿ = cos θ + i sin θ<span>θ = π → e^(iπ) = −1<br>공개 수학 관계를 바탕으로 새로 그린 설명용 도식입니다.</span></figcaption></figure><button id="open-source-page" type="button" aria-haspopup="dialog" aria-controls="source-page">공식과 평면 도식 확대</button></section><section class="digital-panel" aria-labelledby="digital-label"><h2 class="panel-label" id="digital-label">02 · 조건과 시점을 조작하는 모형</h2><iframe id="codex-visualization" title="오일러 공식 — 회전을 각도로 펼치기 — 조작 가능한 모형" sandbox="allow-scripts" data-srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;ko&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;style&gt;
+:root{color-scheme:light dark;--paper:light-dark(#fff,#181818);--ink:light-dark(#263444,#e5edf5);--quiet:light-dark(#647385,#a6b4c5);--line:light-dark(#dce3eb,#3d4653)}
+*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden}body{font:12px/1.45 system-ui;background:var(--paper);color:var(--ink);display:flex;flex-direction:column;gap:5px;padding:0 2px 4px}
+#model-title{font-size:13px;font-weight:600;padding:3px 70px 0 2px;margin:0;min-height:24px}canvas{display:block;width:100%;flex:1 1 0;min-height:90px;touch-action:none;cursor:grab;border-radius:7px;background:light-dark(#f6f9fc,#1d2530)}canvas:active{cursor:grabbing}canvas:focus-visible{outline:2px solid #368ce0;outline-offset:-2px}
+#readout{display:flex;flex-wrap:wrap;gap:3px 12px;font-size:11px;font-variant-numeric:tabular-nums;min-height:18px;color:var(--ink)}#readout span{white-space:nowrap}#caption{font-size:11px;color:var(--quiet);margin:0;line-height:1.4;min-height:16px}
+#controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 12px}.control{display:flex;flex-direction:column;min-width:0;gap:1px}.control span{display:flex;justify-content:space-between;gap:6px}output{font-variant-numeric:tabular-nums;color:var(--quiet)}input[type=range]{width:100%;margin:1px 0;height:16px;accent-color:#347fc1}select{font:inherit;width:100%;padding:3px;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:4px}.check{flex-direction:row;align-items:center}.actions{display:flex;flex-wrap:wrap;gap:4px;align-items:center}button{font:inherit;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:5px;padding:3px 7px;cursor:pointer}button:focus-visible{outline:2px solid #368ce0}.help{font-size:10px;color:var(--quiet);margin-left:auto}
+@media(max-width:430px){#caption{font-size:10px}#readout{font-size:10px}.help{display:none}#controls{gap:4px 8px}#model-title{font-size:12px}}@media(min-height:600px){body{gap:10px;padding:8px}#model-title{font-size:16px}#readout,#controls{font-size:14px}#caption{font-size:13px}.actions button{font-size:13px;padding:6px 10px}.help{font-size:12px}input[type=range]{height:22px}}
+&lt;/style&gt;&lt;/head&gt;&lt;body data-case=&quot;euler-formula&quot;&gt;&lt;h2 id=&quot;model-title&quot;&gt;eⁱᶿ = cos θ + i sin θ&lt;/h2&gt;&lt;canvas id=&quot;model&quot; tabindex=&quot;0&quot; role=&quot;img&quot; aria-label=&quot;조작 가능한 모형&quot;&gt;&lt;/canvas&gt;&lt;div id=&quot;readout&quot; role=&quot;status&quot; aria-live=&quot;off&quot;&gt;&lt;/div&gt;&lt;p id=&quot;caption&quot;&gt;&lt;/p&gt;&lt;div id=&quot;controls&quot;&gt;&lt;label class=&quot;control&quot; for=&quot;theta&quot;&gt;&lt;span&gt;각도 θ / π &lt;output id=&quot;theta-value&quot;&gt;0.5&lt;/output&gt;&lt;/span&gt;&lt;input id=&quot;theta&quot; type=&quot;range&quot; min=&quot;-2&quot; max=&quot;2&quot; step=&quot;0.01&quot; value=&quot;0.5&quot;&gt;&lt;/label&gt;&lt;label class=&quot;control&quot; for=&quot;view&quot;&gt;&lt;span&gt;시점&lt;/span&gt;&lt;select id=&quot;view&quot;&gt;&lt;option value=&quot;space&quot;&gt;입체 · 각도 펼침&lt;/option&gt;&lt;option value=&quot;plane&quot;&gt;복소평면으로 투영&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;/div&gt;&lt;div class=&quot;actions&quot;&gt;&lt;button type=&quot;button&quot; data-preset=&quot;{&amp;quot;theta&amp;quot;: 0}&quot;&gt;θ = 0&lt;/button&gt;&lt;button type=&quot;button&quot; data-preset=&quot;{&amp;quot;theta&amp;quot;: 1}&quot;&gt;θ = π&lt;/button&gt;&lt;button type=&quot;button&quot; data-preset=&quot;{&amp;quot;theta&amp;quot;: 2}&quot;&gt;θ = 2π&lt;/button&gt;&lt;button id=&quot;play&quot; type=&quot;button&quot;&gt;재생&lt;/button&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;초기화&lt;/button&gt;&lt;span class=&quot;help&quot;&gt;드래그·방향키: 회전 · +/−: 배율&lt;/span&gt;&lt;/div&gt;&lt;script&gt;/* Exact mathematical models used by the seven formula experiments. */
+(function(root) {
+  const TAU=2*Math.PI;
+  const dot=(a,b)=&gt;a.reduce((s,v,i)=&gt;s+v*b[i],0);
+  const cross=(a,b)=&gt;[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+  const euler=theta=&gt;({re:Math.cos(theta),im:Math.sin(theta),theta});
+  function kepler(a,e,M,mu=1) {
+    if(!(a&gt;0 &amp;&amp; e&gt;=0 &amp;&amp; e&lt;1 &amp;&amp; mu&gt;0)) throw new RangeError(&#x27;Elliptic orbit requires a&gt;0, 0≤e&lt;1, μ&gt;0&#x27;);
+    M=((M+Math.PI)%TAU+TAU)%TAU-Math.PI;
+    let E=M;
+    for(let i=0;i&lt;30;i++) { const delta=(E-e*Math.sin(E)-M)/(1-e*Math.cos(E)); E-=delta; if(Math.abs(delta)&lt;1e-13) break; }
+    const q=Math.sqrt(1-e*e), n=Math.sqrt(mu/(a*a*a)), rate=n/(1-e*Math.cos(E));
+    const position=[a*(Math.cos(E)-e),a*q*Math.sin(E),0];
+    const velocity=[-a*Math.sin(E)*rate,a*q*Math.cos(E)*rate,0];
+    const r=Math.hypot(...position), energy=dot(velocity,velocity)/2-mu/r;
+    return {position,velocity,r,E,M,energy,angularMomentum:cross(position,velocity)[2],period:TAU/n,acceleration:position.map(v=&gt;-mu*v/(r*r*r))};
+  }
+  function wave(x,t,wavelength,polarization=0) {
+    const k=TAU/wavelength, v=Math.cos(k*(x-t)); // normalized c=1
+    const E=[0,v*Math.cos(polarization),v*Math.sin(polarization)];
+    const B=[0,-v*Math.sin(polarization),v*Math.cos(polarization)];
+    return {E,B,k,phase:k*(x-t)};
+  }
+  function lorentz(event,beta) {
+    if(Math.abs(beta)&gt;=1) throw new RangeError(&#x27;|β| must be below 1&#x27;);
+    const [x,y,ct]=event, gamma=1/Math.sqrt(1-beta*beta);
+    return [gamma*(x-beta*ct),y,gamma*(ct-beta*x)];
+  }
+  const interval=([x,y,ct])=&gt;ct*ct-x*x-y*y;
+  const harmonic=(j,t)=&gt;4/Math.PI*Math.sin((2*j-1)*t)/(2*j-1);
+  const fourier=(n,t)=&gt;Array.from({length:n},(_,i)=&gt;harmonic(i+1,t)).reduce((a,b)=&gt;a+b,0);
+  const bloch=(theta,phi)=&gt;[Math.sin(theta)*Math.cos(phi),Math.sin(theta)*Math.sin(phi),Math.cos(theta)];
+  const probability=(r,n)=&gt;Math.max(0,Math.min(1,(1+dot(r,n))/2));
+  const surface=(x,y)=&gt;.5*x*x+.9*y*y;
+  const gradient=(x,y)=&gt;[x,1.8*y];
+  const tangent=(x,y,x0,y0)=&gt;surface(x0,y0)+x0*(x-x0)+1.8*y0*(y-y0);
+  const api={TAU,dot,cross,euler,kepler,wave,lorentz,interval,harmonic,fourier,bloch,probability,surface,gradient,tangent};
+  root.FormulaModels=api;
+  if(typeof module!==&#x27;undefined&#x27; &amp;&amp; module.exports) module.exports=api;
+})(globalThis);
+
+/* Dependency-free Canvas renderer. The third axis is labelled per case. */
+(() =&gt; {
+  const M=FormulaModels, kind=document.body.dataset.case;
+  const canvas=document.getElementById(&#x27;model&#x27;),ctx=canvas.getContext(&#x27;2d&#x27;);
+  const readout=document.getElementById(&#x27;readout&#x27;), controls=document.getElementById(&#x27;controls&#x27;);
+  const C={blue:&#x27;#277ed3&#x27;,orange:&#x27;#dd772e&#x27;,green:&#x27;#27a071&#x27;,purple:&#x27;#9764d3&#x27;,ink:&#x27;#2b3643&#x27;,quiet:&#x27;#8393a3&#x27;,grid:&#x27;#c4cdd733&#x27;};
+  let yaw=.55,pitch=.55,zoom=1.25,drag=null,playing=false,animation=0,last=0,drawPending=false;
+  const defaults={};
+  const value=id=&gt;Number(document.getElementById(id).value);
+  const select=id=&gt;document.getElementById(id).value;
+  const get=id=&gt;document.getElementById(id);
+  const sample=(lo,hi,n,fn)=&gt;Array.from({length:n+1},(_,i)=&gt;fn(lo+(hi-lo)*i/n,i));
+  const fmt=(v,n=3)=&gt; (Math.abs(v)&lt;.5*10**(-n)?0:v).toFixed(n);
+  const angle=v=&gt;fmt(v/Math.PI,2)+&#x27;π&#x27;;
+  const deg=v=&gt;v*Math.PI/180;
+  function scene() {
+    const lines=[],points=[],faces=[],labels=[];
+    const line=(ps,color=C.quiet,width=1,dash=[])=&gt;lines.push({ps,color,width,dash});
+    const point=(p,color=C.orange,r=5)=&gt;points.push({p,color,r});
+    const label=(p,text,color=C.ink)=&gt;labels.push({p,text,color});
+    function arrow(a,b,color) { line([a,b],color,2); points.push({p:b,color,r:3}); }
+    let extent=2, metrics=[], caption=&#x27;&#x27;;
+    const axes=(length,names)=&gt;{ [[length,0,0],[0,length,0],[0,0,length]].forEach((p,i)=&gt;{line([[0,0,0],p],C.quiet);label(p,names[i]);}); };
+    if(kind===&#x27;euler-formula&#x27;) {
+      const t=value(&#x27;theta&#x27;)*Math.PI,p=M.euler(t),z=t/Math.PI*.7;
+      extent=2.1; axes(1.35,[&#x27;Re&#x27;,&#x27;Im&#x27;,&#x27;θ / π · 높이 0.7배&#x27;]);
+      line(sample(-2*Math.PI,2*Math.PI,240,t=&gt;[Math.cos(t),Math.sin(t),.7*t/Math.PI]),C.blue,2.5);
+      line(sample(0,M.TAU,120,t=&gt;[Math.cos(t),Math.sin(t),0]),C.quiet,1.5,[4,4]);
+      line([[p.re,p.im,z],[p.re,p.im,0]],C.orange,1.5,[4,3]);
+      arrow([0,0,0],[p.re,p.im,0],C.orange);point([p.re,p.im,z]);point([p.re,p.im,0],C.orange,4);
+      line([[0,0,0],[p.re,0,0],[p.re,p.im,0]],C.green,1.5,[4,3]);
+      metrics=[&#x27;θ = &#x27;+angle(t),&#x27;Re = &#x27;+fmt(p.re),&#x27;Im = &#x27;+fmt(p.im),&#x27;|eⁱᶿ| = &#x27;+fmt(Math.hypot(p.re,p.im))];
+      caption=&#x27;파랑: 각도를 펼친 나선 · 주황: 현재 값과 평면 투영. 높이는 복소수의 새 성분이 아닙니다.&#x27;;
+    } else if(kind===&#x27;newton-orbits&#x27;) {
+      const a=value(&#x27;a&#x27;),e=value(&#x27;e&#x27;),t=value(&#x27;phase&#x27;)*M.TAU,inc=deg(value(&#x27;inclination&#x27;));
+      const orb=M.kepler(a,e,t),rot=([x,y,z])=&gt;[x,y*Math.cos(inc),y*Math.sin(inc)];
+      extent=3.8; axes(2.5,[&#x27;x&#x27;,&#x27;y&#x27;,&#x27;z · 공간&#x27;]);
+      line(sample(0,M.TAU,220,E=&gt;rot([a*(Math.cos(E)-e),a*Math.sqrt(1-e*e)*Math.sin(E),0])),C.blue,2.5);
+      point([0,0,0],C.orange,9); label([0,0,.2],&#x27;중심체&#x27;);point(rot(orb.position),C.green,6);
+      line([[0,0,0],rot(orb.position)],C.orange,1,[4,3]);
+      const speed=Math.hypot(...orb.velocity),r=orb.r;
+      arrow(rot(orb.position),rot(orb.position.map((v,i)=&gt;v+.55*orb.velocity[i]/speed)),C.green);
+      arrow(rot(orb.position),rot(orb.position.map(v=&gt;v-.5*v/r)),C.orange);
+      metrics=[&#x27;r = &#x27;+fmt(r),&#x27;ε = &#x27;+fmt(orb.energy),&#x27;L = &#x27;+fmt(orb.angularMomentum),&#x27;T = &#x27;+fmt(orb.period)];
+      caption=&#x27;μ=1인 중심력의 타원 궤도. 초록은 속도 방향, 주황은 중력 방향이며 화살표 길이는 정규화했습니다.&#x27;;
+    } else if(kind===&#x27;electromagnetic-wave&#x27;) {
+      const lambda=value(&#x27;wavelength&#x27;),t=value(&#x27;phase&#x27;)*lambda,pol=deg(value(&#x27;polarization&#x27;));
+      extent=3.5; axes(2.8,[&#x27;x · 전파&#x27;,&#x27;y · E/E₀, cB/E₀&#x27;,&#x27;z · E/E₀, cB/E₀&#x27;]);
+      line([[-3,0,0],[3,0,0]],C.quiet,1.2);
+      const vectors=x=&gt;M.wave(x,t,lambda,pol);
+      line(sample(-3,3,220,x=&gt;{const q=vectors(x).E;return [x,q[1],q[2]];}),C.blue,2.5);
+      line(sample(-3,3,220,x=&gt;{const q=vectors(x).B;return [x,q[1],q[2]];}),C.orange,2.5);
+      for(let x=-3;x&lt;=3;x+=.3) {const q=vectors(x);arrow([x,0,0],[x,q.E[1],q.E[2]],C.blue);arrow([x,0,0],[x,q.B[1],q.B[2]],C.orange);}
+      const q=vectors(0),flux=M.cross(q.E,q.B)[0];
+      metrics=[&#x27;λ = &#x27;+fmt(lambda,2),&#x27;E·B = &#x27;+fmt(M.dot(q.E,q.B)),&#x27;|E| = |cB| = &#x27;+fmt(Math.hypot(...q.E)),&#x27;전파 방향 +x&#x27;];
+      caption=&#x27;파랑 E · 주황 cB. 곡선의 높이는 전기장·자기장의 성분값이며 물질이 흔들리는 경로가 아닙니다.&#x27;;
+    } else if(kind===&#x27;lorentz-transform&#x27;) {
+      const beta=value(&#x27;beta&#x27;),events={time:[.5,.4,1.5],light:[1,0,1],space:[1.5,.4,.5]};
+      const p=events[select(&#x27;event&#x27;)],q=M.lorentz(p,beta);extent=4.8; axes(3.5,[&#x27;x&#x27;,&#x27;y&#x27;,&#x27;ct · 시간&#x27;]);
+      for(const z of [-2,-1,1,2]) line(sample(0,M.TAU,64,t=&gt;[Math.abs(z)*Math.cos(t),Math.abs(z)*Math.sin(t),z]),C.quiet,1);
+      for(let i=0;i&lt;16;i++) {const t=i*M.TAU/16;line([[-2*Math.cos(t),-2*Math.sin(t),-2],[0,0,0],[2*Math.cos(t),2*Math.sin(t),2]],C.grid,1);}
+      arrow([0,0,0],p,C.blue);arrow([0,0,0],q,C.orange);point(p,C.blue,6);point(q,C.orange,6);label(p,&#x27;S&#x27;);label(q,&quot;S′&quot;,C.orange);
+      metrics=[&#x27;β = &#x27;+fmt(beta,2),&quot;x′ = &quot;+fmt(q[0])+&quot;, ct′ = &quot;+fmt(q[2]),&#x27;s²(S) = &#x27;+fmt(M.interval(p)),&quot;s²(S′) = &quot;+fmt(M.interval(q))];
+      caption=&#x27;같은 사건을 두 기준계의 좌표값으로 겹쳐 표시했습니다. 두 점을 잇는 이동이나 카메라 회전이 로런츠 변환은 아닙니다.&#x27;;
+    } else if(kind===&#x27;fourier-series&#x27;) {
+      const n=value(&#x27;terms&#x27;),t=value(&#x27;phase&#x27;)*M.TAU;extent=3.6; axes(2.7,[&#x27;t · 위상&#x27;,&#x27;진폭&#x27;,&#x27;성분 순서&#x27;]);
+      const X=t=&gt; (t-Math.PI)*.8,depth=j=&gt; .15+(j-1)*2.2/Math.max(1,n-1);
+      for(let j=1;j&lt;=n;j++) {
+        line(sample(0,M.TAU,240,t=&gt;[X(t),M.harmonic(j,t),depth(j)]),j%2?C.blue:C.green,1.2);
+        point([X(t),M.harmonic(j,t),depth(j)],C.orange,3);
+        label([X(M.TAU),0,depth(j)],String(2*j-1)+&#x27;ω&#x27;,C.quiet);
+      }
+      line(sample(0,M.TAU,320,t=&gt;[X(t),M.fourier(n,t),0]),C.orange,2.6);
+      line([[X(0),0,0],[X(0),1,0],[X(Math.PI),1,0],[X(Math.PI),-1,0],[X(M.TAU),-1,0],[X(M.TAU),0,0]],C.quiet,1,[4,3]);
+      line([[X(t),-1.5,0],[X(t),1.5,0]],C.purple,1,[4,3]);point([X(t),M.fourier(n,t),0],C.orange,5);
+      metrics=[&#x27;홀수 성분 &#x27;+n+&#x27;개&#x27;,&#x27;최고 조화수 &#x27;+(2*n-1),&#x27;t = &#x27;+angle(t),&#x27;합 = &#x27;+fmt(M.fourier(n,t))];
+      caption=&#x27;뒤쪽: 홀수 사인파 성분 · 앞쪽 주황: 합 · 점선: 목표 사각파. 깊이는 성분의 순서입니다.&#x27;;
+    } else if(kind===&#x27;bloch-sphere&#x27;) {
+      const theta=deg(value(&#x27;theta&#x27;)),phi=deg(value(&#x27;phi&#x27;)),r=M.bloch(theta,phi),axis=select(&#x27;axis&#x27;);
+      const n={x:[1,0,0],y:[0,1,0],z:[0,0,1]}[axis],p=M.probability(r,n);extent=1.55;axes(1.25,[&#x27;σₓ&#x27;,&#x27;σᵧ&#x27;,&#x27;σ_z&#x27;]);
+      for(let j=-2;j&lt;=2;j++) {const z=j/3,radius=Math.sqrt(1-z*z);line(sample(0,M.TAU,80,t=&gt;[radius*Math.cos(t),radius*Math.sin(t),z]),C.grid);}
+      for(let j=0;j&lt;6;j++) {const phi=j*Math.PI/6;line(sample(0,M.TAU,100,t=&gt;[Math.sin(t)*Math.cos(phi),Math.sin(t)*Math.sin(phi),Math.cos(t)]),C.quiet,.7);}
+      arrow([0,0,0],r,C.blue);point(r,C.blue,7);arrow(n.map(x=&gt;-x),n,C.orange);label([0,0,1.08],&#x27;|0⟩&#x27;);label([0,0,-1.1],&#x27;|1⟩&#x27;);
+      metrics=[&#x27;r = (&#x27;+r.map(x=&gt;fmt(x,2)).join(&#x27;, &#x27;)+&#x27;)&#x27;,&#x27;|r| = &#x27;+fmt(Math.hypot(...r)),&#x27;P(+ &#x27;+axis.toUpperCase()+&#x27;) = &#x27;+fmt(p),&#x27;P(− &#x27;+axis.toUpperCase()+&#x27;) = &#x27;+fmt(1-p)];
+      caption=&#x27;파랑: 한 큐비트의 순수 상태 · 주황: 측정 축. 점은 입자의 공간 위치가 아닙니다.&#x27;;
+    } else if(kind===&#x27;gradient-surface&#x27;) {
+      const x=value(&#x27;x&#x27;),y=value(&#x27;y&#x27;),z=M.surface(x,y),g=M.gradient(x,y);extent=3.1;axes(2,[&#x27;x&#x27;,&#x27;y&#x27;,&#x27;f(x,y) · 값&#x27;]);
+      const meshN=18,lo=-1.5,step=3/meshN;
+      for(let i=0;i&lt;meshN;i++) for(let j=0;j&lt;meshN;j++) {const x=lo+i*step,y=lo+j*step;faces.push({ps:[[x,y,M.surface(x,y)],[x+step,y,M.surface(x+step,y)],[x+step,y+step,M.surface(x+step,y+step)],[x,y+step,M.surface(x,y+step)]],color:&#x27;#3786be28&#x27;,stroke:&#x27;#5b9ddf77&#x27;});}
+      for(const h of [.25,.6,1,1.5]) line(sample(0,M.TAU,120,t=&gt;[Math.sqrt(2*h)*Math.cos(t),Math.sqrt(h/.9)*Math.sin(t),0]),C.quiet,.8,[3,3]);
+      if(get(&#x27;tangent&#x27;).checked) {const s=.5;faces.push({ps:[[x-s,y-s,M.tangent(x-s,y-s,x,y)],[x+s,y-s,M.tangent(x+s,y-s,x,y)],[x+s,y+s,M.tangent(x+s,y+s,x,y)],[x-s,y+s,M.tangent(x-s,y+s,x,y)]],color:&#x27;#dd772e30&#x27;,stroke:C.orange});}
+      point([x,y,z],C.blue,6);point([x,y,0],C.blue,4);line([[x,y,0],[x,y,z]],C.blue,1,[3,3]);
+      arrow([x,y,0],[x+.45*g[0],y+.45*g[1],0],C.green);
+      const norm=Math.hypot(...g),u=norm&gt;1e-9?g.map(v=&gt;v/norm):[0,0];
+      arrow([x,y,z],[x+.35*u[0],y+.35*u[1],z+.35*norm],C.orange);
+      metrics=[&#x27;f = &#x27;+fmt(z),&#x27;∇f = (&#x27;+g.map(v=&gt;fmt(v,2)).join(&#x27;, &#x27;)+&#x27;)&#x27;,&#x27;최대 방향미분 = &#x27;+fmt(norm),&#x27;접평면 · &#x27;+(get(&#x27;tangent&#x27;).checked?&#x27;표시&#x27;:&#x27;숨김&#x27;)];
+      caption=&#x27;초록: 밑면의 기울기 벡터（0.45배） · 주황: 상승 방향의 접벡터와 접평면. 높이는 함수값입니다.&#x27;;
+    }
+    return {lines,points,faces,labels,extent,metrics,caption};
+  }
+  function draw() {
+    drawPending=false;
+    const w=canvas.clientWidth,h=canvas.clientHeight;if(!w||!h)return;
+    const dpr=Math.min(2,window.devicePixelRatio||1);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,w,h);
+    const dark=matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).matches;C.ink=dark?&#x27;#e0e7ef&#x27;:&#x27;#2b3643&#x27;;C.quiet=dark?&#x27;#91a1b4&#x27;:&#x27;#8293a3&#x27;;C.grid=dark?&#x27;#a8bbd533&#x27;:&#x27;#63758b33&#x27;;
+    const s=scene(); let py=pitch,ya=yaw;if(get(&#x27;view&#x27;)?.value===&#x27;plane&#x27;) {py=-Math.PI/2;ya=0;}
+    const scale=Math.min(w*.43,h*.40)/s.extent*zoom;
+    const project=([x,y,z])=&gt;{const X=x*Math.cos(ya)-y*Math.sin(ya),Y=x*Math.sin(ya)+y*Math.cos(ya);return [w/2+X*scale,h*.54-(z*Math.cos(py)-Y*Math.sin(py))*scale,Y*Math.cos(py)+z*Math.sin(py)];};
+    const path=ps=&gt;{ctx.beginPath();ps.forEach((p,i)=&gt;{const q=project(p);i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]);});};
+    s.faces.sort((a,b)=&gt;b.ps.reduce((sum,p)=&gt;sum+project(p)[2],0)/b.ps.length-a.ps.reduce((sum,p)=&gt;sum+project(p)[2],0)/a.ps.length).forEach(f=&gt;{path(f.ps);ctx.closePath();ctx.fillStyle=f.color;ctx.fill();ctx.strokeStyle=f.stroke;ctx.lineWidth=.6;ctx.stroke();});
+    for(const l of s.lines) {path(l.ps);ctx.strokeStyle=l.color;ctx.lineWidth=l.width;ctx.setLineDash(l.dash);ctx.stroke();} ctx.setLineDash([]);
+    for(const p of s.points) {const q=project(p.p);ctx.beginPath();ctx.arc(q[0],q[1],p.r,0,M.TAU);ctx.fillStyle=p.color;ctx.fill();}
+    ctx.font=&#x27;12px system-ui&#x27;;for(const l of s.labels) {const q=project(l.p);ctx.fillStyle=l.color;ctx.fillText(l.text,q[0]+5,q[1]-5);}
+    readout.replaceChildren(...s.metrics.map(text=&gt;{const el=document.createElement(&#x27;span&#x27;);el.textContent=text;return el;}));
+    get(&#x27;caption&#x27;).textContent=s.caption;
+    canvas.dataset.zoom=zoom.toFixed(3);canvas.dataset.camera=yaw.toFixed(3)+&#x27;,&#x27;+pitch.toFixed(3);
+    canvas.setAttribute(&#x27;aria-label&#x27;,get(&#x27;model-title&#x27;).textContent+&#x27;。&#x27;+s.metrics.join(&#x27;。&#x27;)+&#x27;。&#x27;+s.caption);
+    for(const input of controls.querySelectorAll(&#x27;input[type=range]&#x27;)) {const out=get(input.id+&#x27;-value&#x27;);if(out) out.textContent=input.value;}
+  }
+  function schedule() {if(!drawPending){drawPending=true;requestAnimationFrame(draw);}}
+  for(const el of controls.querySelectorAll(&#x27;input,select&#x27;)) {defaults[el.id]=el.type===&#x27;checkbox&#x27;?el.checked:el.value;el.addEventListener(&#x27;input&#x27;,schedule);el.addEventListener(&#x27;change&#x27;,schedule);}
+  get(&#x27;reset&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{stop();for(const [id,v]of Object.entries(defaults)){const el=get(id);if(el.type===&#x27;checkbox&#x27;)el.checked=v;else el.value=v;}yaw=.55;pitch=.55;zoom=1.25;schedule();});
+  document.querySelectorAll(&#x27;[data-preset]&#x27;).forEach(b=&gt;b.addEventListener(&#x27;click&#x27;,()=&gt;{const vals=JSON.parse(b.dataset.preset);for(const [id,v]of Object.entries(vals))get(id).value=v;schedule();}));
+  canvas.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{drag=[e.clientX,e.clientY];canvas.setPointerCapture(e.pointerId);canvas.focus();});
+  canvas.addEventListener(&#x27;pointermove&#x27;,e=&gt;{if(!drag)return;yaw+=(e.clientX-drag[0])*.008;pitch=Math.max(-1.5,Math.min(1.5,pitch+(e.clientY-drag[1])*.008));drag=[e.clientX,e.clientY];schedule();});
+  [&#x27;pointerup&#x27;,&#x27;pointercancel&#x27;].forEach(k=&gt;canvas.addEventListener(k,()=&gt;{drag=null;}));
+  canvas.addEventListener(&#x27;wheel&#x27;,e=&gt;{e.preventDefault();zoom=Math.max(.55,Math.min(2.8,zoom*Math.exp(-e.deltaY*.001)));schedule();},{passive:false});
+  canvas.addEventListener(&#x27;keydown&#x27;,e=&gt;{if([&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowDown&#x27;,&#x27;+&#x27;,&#x27;-&#x27;,&#x27;=&#x27;,&#x27;0&#x27;].includes(e.key)){e.preventDefault();if(e.key===&#x27;ArrowLeft&#x27;)yaw-=.12;if(e.key===&#x27;ArrowRight&#x27;)yaw+=.12;if(e.key===&#x27;ArrowUp&#x27;)pitch=Math.min(1.5,pitch+.12);if(e.key===&#x27;ArrowDown&#x27;)pitch=Math.max(-1.5,pitch-.12);if(e.key===&#x27;+&#x27;||e.key===&#x27;=&#x27;)zoom=Math.min(2.8,zoom*1.15);if(e.key===&#x27;-&#x27;)zoom=Math.max(.55,zoom/1.15);if(e.key===&#x27;0&#x27;){yaw=.55;pitch=.55;zoom=1.25;}schedule();}});
+  function stop(){playing=false;cancelAnimationFrame(animation);if(get(&#x27;play&#x27;))get(&#x27;play&#x27;).textContent=&#x27;재생&#x27;;}
+  function tick(time){if(!playing)return;const delta=Math.min((time-last)/1000,.05);last=time;const input=get(kind===&#x27;euler-formula&#x27;?&#x27;theta&#x27;:&#x27;phase&#x27;);const lo=Number(input.min),hi=Number(input.max),step=kind===&#x27;euler-formula&#x27;?.45:.12;let v=Number(input.value)+delta*step;if(v&gt;hi)v=lo;input.value=v.toFixed(3);schedule();animation=requestAnimationFrame(tick);}
+  get(&#x27;play&#x27;)?.addEventListener(&#x27;click&#x27;,()=&gt;{if(playing){stop();return;}playing=true;get(&#x27;play&#x27;).textContent=&#x27;일시정지&#x27;;last=performance.now();animation=requestAnimationFrame(tick);});
+  document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;{if(document.hidden)stop();});
+  new ResizeObserver(schedule).observe(canvas);matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).addEventListener(&#x27;change&#x27;,schedule);schedule();
+})();
+&lt;/script&gt;&lt;script id=&quot;model-frame-tools-v1&quot;&gt;/* Added after the original model. Only invokes existing canvas zoom handlers. */
+(() =&gt; {
+  if (document.querySelector(&#x27;[data-model-zoom-tools]&#x27;)) return;
+  const canvas=document.querySelector(&#x27;canvas&#x27;);
+  if (!canvas) return;
+  const style=document.createElement(&#x27;style&#x27;);
+  style.textContent=&#x27;[data-model-zoom-tools]{position:fixed;right:8px;top:8px;z-index:10000;display:flex;gap:4px}[data-model-zoom-tools] button{font:600 13px system-ui;padding:5px 8px;border:1px solid #8b949e;border-radius:6px;background:Canvas;color:CanvasText;cursor:pointer;min-width:30px}[data-model-zoom-tools] button:focus-visible{outline:2px solid #368ce0;outline-offset:2px}&#x27;;
+  document.head.append(style);
+  const box=document.createElement(&#x27;div&#x27;); box.dataset.modelZoomTools=&#x27;v1&#x27;; box.setAttribute(&#x27;role&#x27;,&#x27;group&#x27;); box.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 배율&#x27;);
+  for(const [text,label,delta] of [[&#x27;−&#x27;,&#x27;모형 축소&#x27;,180],[&#x27;+&#x27;,&#x27;모형 확대&#x27;,-180]]) {
+    const b=document.createElement(&#x27;button&#x27;); b.type=&#x27;button&#x27;; b.textContent=text; b.setAttribute(&#x27;aria-label&#x27;,label);
+    b.addEventListener(&#x27;click&#x27;,()=&gt;canvas.dispatchEvent(new WheelEvent(&#x27;wheel&#x27;,{deltaY:delta,bubbles:true,cancelable:true})));
+    box.append(b);
+  }
+  document.body.append(box);
+  const place=()=&gt;{const r=canvas.getBoundingClientRect();box.style.right=Math.max(8,innerWidth-r.right+8)+&#x27;px&#x27;;box.style.top=Math.max(8,r.top+8)+&#x27;px&#x27;;};
+  new ResizeObserver(place).observe(canvas);window.addEventListener(&#x27;resize&#x27;,place);requestAnimationFrame(place);
+  window.addEventListener(&#x27;keydown&#x27;,e=&gt; { if(e.key===&#x27;Escape&#x27;) parent.postMessage({type:&#x27;geometry-model-close&#x27;},&#x27;*&#x27;); });
+})();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></section></div></section><section class="reading" aria-labelledby="reading-title"><header class="reading-heading"><p class="reading-kicker">읽을 자료</p><h2 id="reading-title">값은 되돌아오지만 각도의 기록은 이어진다</h2></header><div class="reading-scroll" role="region" tabindex="0" aria-label="독립적으로 스크롤하는 읽을 자료"><article class="article"><p class="intro">오일러 공식은 지수함수와 삼각함수를 연결한다. θ를 바꾸면 실수부와 허수부가 함께 변하며 복소평면의 단위원을 돈다. θ = π일 때의 값은 −1이고, 이를 e^(iπ) + 1 = 0으로 쓸 수도 있다. <a href="#s1">[1]</a></p><p class="formula">eⁱᶿ = cos θ + i sin θ<br>θ = π → e^(iπ) = −1</p><h3>종이의 식에 들어 있는 회전</h3><p>i² = −1이다. eⁱᶿ의 실수부는 cos θ, 허수부는 sin θ이므로 점의 원점까지 거리는 항상 1이다. 0, π, 2π 버튼을 눌러 출발점, 반대편, 다시 돌아온 점을 확인할 수 있다. π와 2π에서는 부동소수점 계산의 아주 작은 오차를 표시 자릿수 안에서 0으로 정리한다.</p><h3>세 번째 축에 무엇을 추가했는가</h3><p>오른쪽 나선은 (cos θ, sin θ, 0.7θ/π)로 그렸다. 높이는 복소수의 세 번째 성분이 아니라 변화시킨 각도의 기록이다. θ = 0과 2π는 같은 복소수 1을 나타내지만, 펼친 축에서는 다른 높이에 놓인다. ‘복소평면으로 투영’을 선택하면 서로 다른 높이의 점들이 같은 원 위에 겹친다.</p><h3>차원을 펼친다고 새로운 정리가 되는 것은 아니다</h3><p>나선은 공식을 이해하기 위해 이 프로젝트가 선택한 표현이다. 복소수 자체는 두 실수 성분으로 표현할 수 있으며 오일러 공식의 성립에 3차원이 필요한 것은 아니다. 추가 축은 값과 변화의 이력을 함께 확인하게 한다. 시간으로 읽으려면 θ가 시간에 어떻게 의존하는지 별도의 규칙을 정해야 한다.</p><div class="experiment"><p><strong>직접 확인하기.</strong> θ = 0과 θ = 2π를 차례로 선택하세요. 복소평면에서 같은 값이 어떻게 나선에서는 다른 위치로 보이는지 확인한 뒤, θ = π에서 실수부 −1과 허수부 0을 확인하세요.</p></div><p>‘차원 압축과 펼침 실험’은 같은 관계를 기호, 평면 도식과 조작 가능한 모형으로 비교한다. 추가된 축의 의미와 유지되는 조건을 함께 확인할 때 표현의 설명 범위를 판단할 수 있다. 이것은 프로젝트의 표현 실험이며 물리 법칙을 새로 발견하거나 증명하는 절차는 아니다.</p><div class="next"><a href="geometry-lab.html">전체 개별 사례</a><a href="euler-formula.html">오일러 공식</a><a href="borromean-rings.html">보로메오 고리</a></div><section class="sources" aria-label="출처와 범위"><h3>공개 출처와 구현 범위</h3><ol><li id="s1"><a href="https://dlmf.nist.gov/4.2#E24" target="_blank" rel="noopener noreferrer">NIST, Digital Library of Mathematical Functions, §4.2, 식 4.2.24</a>. 일반 복소 지수함수에서 실수부 x=0을 대입한다.</li><li id="s2"><a href="https://dlmf.nist.gov/4.3#ii" target="_blank" rel="noopener noreferrer">NIST DLMF, §4.3(ii), Exponential function의 복소평면 대응</a>. 지수함수의 주기성과 복소평면의 대응을 확인한다.</li></ol><p class="note">도식과 글은 본 프로젝트에서 작성했다. 원문 도판을 전재하지 않았다. 계산은 페이지에 내장되어 실행되며 외부 서비스를 호출하지 않는다. <a href="formula-sources.json">공개 출처 목록</a> · <a href="formula-models.js">계산 모형</a>. 한 페이지를 하나의 개별 사례로 관리한다.</p></section></article></div></section></main><dialog id="source-page" class="source-page-dialog" aria-labelledby="source-title"><header class="dialog-heading"><h2 id="source-title">기호와 평면 도식 · 설명용 재구성</h2><button id="close-source-page" type="button">닫기</button></header><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA0MzAgMzQwIj48cmVjdCB3aWR0aD0iNDMwIiBoZWlnaHQ9IjM0MCIgZmlsbD0iI2Y4ZmFmYyIvPjxwYXRoIGQ9Ik01NSAyMTVMMzc1IDIxNSIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjODI5M2EzIiBzdHJva2Utd2lkdGg9IjEuNSIvPjxwYXRoIGQ9Ik0yMTUgMzAwTDIxNSAxMTIiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzgyOTNhMyIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48Y2lyY2xlIGN4PSIyMTUiIGN5PSIyMTUiIHI9Ijc4IiBmaWxsPSJub25lIiBzdHJva2U9IiMyNzdlZDMiIHN0cm9rZS13aWR0aD0iMiIvPjxwYXRoIGQ9Ik0yMTUgMjE1TDI3MCAxNjAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2RkNzcyZSIgc3Ryb2tlLXdpZHRoPSIxLjUiLz48dGV4dCB4PSIyOTIiIHk9IjE1NyIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzI3MzQ0MiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ZeKBseG2vzwvdGV4dD48dGV4dCB4PSIyMTUiIHk9IjMxOCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzI3MzQ0MiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+UmUgLyBJbSDCtyDri6jsnITsm5A8L3RleHQ+PHRleHQgeD0iMjE1IiB5PSIzNyIgZm9udC1zaXplPSIxNyIgZmlsbD0iIzI3MzQ0MiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ZeKBseG2vyA9IGNvcyDOuCArIGkgc2luIM64PC90ZXh0Pjx0ZXh0IHg9IjIxNSIgeT0iNzAiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiMyNzM0NDIiIHRleHQtYW5jaG9yPSJtaWRkbGUiPs64ID0gz4Ag4oaSIGVeKGnPgCkgPSDiiJIxPC90ZXh0Pjwvc3ZnPg==" alt="eⁱᶿ = cos θ + i sin θ · θ = π → e^(iπ) = −1"><p class="source-caption">eⁱᶿ = cos θ + i sin θ<br>θ = π → e^(iπ) = −1<br>수학 관계를 설명하기 위해 새로 그렸습니다. 문헌의 원본 도판이나 역사적 원고 캡처가 아닙니다.</p></dialog><script>(()=>{const f=document.getElementById('codex-visualization');f.srcdoc=f.dataset.srcdoc;delete f.dataset.srcdoc;const d=document.getElementById('source-page');document.getElementById('open-source-page').addEventListener('click',()=>d.showModal());document.getElementById('close-source-page').addEventListener('click',()=>d.close());})();</script><script id="model-expansion-v1">/* Public case contract v1. Works with allow-scripts-only sandboxed frames. */
+(() => {
+  const frame = document.getElementById('codex-visualization');
+  if (!frame || document.querySelector('.model-view-toolbar')) return;
+  const panel = frame.closest('.digital-panel') || frame.parentElement;
+  const label = panel.querySelector('.panel-label');
+  const bar = document.createElement('div');
+  bar.className = 'model-view-toolbar';
+  const title = document.createElement('span');
+  title.id = 'expanded-model-title';
+  title.textContent = label?.textContent || '조작 가능한 시각화';
+  if (label) label.hidden = true;
+  const toggle = document.createElement('button');
+  toggle.type = 'button'; toggle.className = 'model-expand-toggle';
+  toggle.textContent = '시각화 확대';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-controls', frame.id);
+  bar.append(title, toggle); panel.insertBefore(bar, frame);
+  const guards = [document.createElement('span'), document.createElement('span')];
+  guards.forEach(g => { g.className = 'model-focus-guard'; g.tabIndex = 0; });
+  panel.insertBefore(guards[0], bar); panel.append(guards[1]);
+  let expanded = false, inertRecords = [], savedAttributes = [];
+  function close() {
+    if (!expanded) return;
+    expanded = false;
+    panel.classList.remove('is-model-expanded');
+    document.body.classList.remove('model-expanded');
+    inertRecords.forEach(([el, value]) => { el.inert = value; });
+    savedAttributes.forEach(([key, value]) => { if(value===null) panel.removeAttribute(key); else panel.setAttribute(key,value); });
+    inertRecords = []; savedAttributes = [];
+    toggle.textContent = '시각화 확대'; toggle.setAttribute('aria-expanded', 'false');
+    toggle.focus();
+  }
+  toggle.addEventListener('click', () => {
+    if (expanded) { close(); return; }
+    expanded = true;
+    ['role','aria-modal','aria-labelledby'].forEach(key => savedAttributes.push([key,panel.getAttribute(key)]));
+    panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true'); panel.setAttribute('aria-labelledby',title.id);
+    let branch = panel;
+    while (branch.parentElement) {
+      for (const sibling of branch.parentElement.children) if(sibling!==branch) { inertRecords.push([sibling,sibling.inert]); sibling.inert=true; }
+      branch=branch.parentElement;
+      if(branch===document.body) break;
+    }
+    document.body.classList.add('model-expanded'); panel.classList.add('is-model-expanded');
+    toggle.textContent='확대 닫기'; toggle.setAttribute('aria-expanded','true'); toggle.focus();
+  });
+  guards[0].addEventListener('focus',()=> { if(expanded) frame.focus(); });
+  guards[1].addEventListener('focus',()=> { if(expanded) toggle.focus(); });
+  document.addEventListener('keydown',e=> { if(e.key==='Escape' && expanded) { e.preventDefault(); close(); } });
+  window.addEventListener('message',e=> {
+    if(e.source===frame.contentWindow && e.data?.type==='geometry-model-close' && Object.keys(e.data).length===1) close();
+  });
+})();
+</script></body></html>

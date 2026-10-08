@@ -44,7 +44,22 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
   .reading-bar { padding-top: 7px; padding-bottom: 7px; }
 }
 </style>
-</head>
+<style id="model-expansion-v1">/* In-place expansion: the iframe is never moved or reloaded. */
+.model-view-toolbar { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
+.model-view-toolbar span { font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-view-toolbar button { flex-shrink:0; font:inherit; font-size:12px; padding:4px 9px; border:1px solid var(--line, #888); border-radius:6px; color:var(--ink, CanvasText); background:var(--paper, Canvas); cursor:pointer; }
+.model-focus-guard { display:none; }
+body.model-expanded .page::before { content:''; position:fixed; inset:0; background:#0009; z-index:9998; }
+.is-model-expanded { position:fixed !important; inset:12px !important; z-index:9999 !important; width:auto !important; max-width:none !important; height:calc(100dvh - 24px) !important; min-height:0 !important; max-height:none !important; margin:0 !important; padding:12px !important; display:flex !important; flex-direction:column !important; flex-basis:auto !important; gap:0 !important; border:1px solid var(--line, #888); border-radius:10px; background:var(--paper, Canvas); box-shadow:0 10px 50px #0005; }
+.is-model-expanded > :not(#codex-visualization):not(.model-view-toolbar):not(.model-focus-guard) { display:none !important; }
+.is-model-expanded #codex-visualization { flex:1 1 0 !important; width:100% !important; height:100% !important; min-height:0 !important; max-height:none !important; }
+.is-model-expanded .model-view-toolbar { margin-bottom:8px; }
+.is-model-expanded .model-view-toolbar span { font-size:14px; color:var(--ink, CanvasText); }
+.is-model-expanded .model-focus-guard { display:block; width:0; height:0; overflow:hidden; }
+@media(max-width:680px) { .is-model-expanded { inset:4px !important; height:calc(100dvh - 8px) !important; padding:8px !important; } .model-view-toolbar span { font-size:11px; } }
+
+.digital-panel > .panel-label[hidden] { display:none !important; }
+</style></head>
 <body>
 <main class="page">
 <section class="visualization" aria-label="가르침과 배움의 관계 시각화">
@@ -1782,6 +1797,9 @@ html&gt;body{padding:0}&lt;/style&gt;
         return [...build(sorted),...build(sorted.slice().reverse())];
       }
 
+      /* geometry-world-zoom-v1 */
+      let geometryWorldZoom=1;
+      world.addEventListener(&quot;wheel&quot;,e=&gt;{e.preventDefault();geometryWorldZoom=Math.max(.6,Math.min(2.5,geometryWorldZoom*Math.exp(-e.deltaY*.001)));schedule();},{passive:false});
       function drawWorld() {
         const [w,h]=worldSize;if(!w||!theme.series.length)return;
         world.dataset.cameraYaw=state.yaw.toFixed(4);world.dataset.cameraPitch=state.pitch.toFixed(4);
@@ -1797,7 +1815,7 @@ html&gt;body{padding:0}&lt;/style&gt;
         const maxX=Math.max(...bounds.map(p=&gt;Math.abs(p[0])));
         const maxY=Math.max(...bounds.map(p=&gt;p[1]));
         const minY=Math.max(...bounds.map(p=&gt;-p[1]));
-        const scale=Math.min((w/2-18)/maxX,(h*.46-20)/maxY,(h*.54-24)/minY);
+        const scale=geometryWorldZoom*Math.min((w/2-18)/maxX,(h*.46-20)/maxY,(h*.54-24)/minY);
         const project=v=&gt;{const p=rotate(v);return [w/2+scale*p[0],h*.46-scale*p[1],p[2]];};
         wc.strokeStyle=rgb(theme.border,.65);wc.lineWidth=.7;
         for(let n=-3;n&lt;=3;n++) {
@@ -2567,7 +2585,26 @@ html, body { height: 100%; overflow: hidden; }
   #teaching-learning-perspectives-v1 .tl-detail { font-size: 10px; }
 }
 &lt;/style&gt;
-&lt;/body&gt;
+&lt;script id=&quot;model-frame-tools-v1&quot;&gt;/* Added after the original model. Only invokes existing canvas zoom handlers. */
+(() =&gt; {
+  if (document.querySelector(&#x27;[data-model-zoom-tools]&#x27;)) return;
+  const canvas=document.querySelector(&#x27;canvas&#x27;);
+  if (!canvas) return;
+  const style=document.createElement(&#x27;style&#x27;);
+  style.textContent=&#x27;[data-model-zoom-tools]{position:fixed;right:8px;top:8px;z-index:10000;display:flex;gap:4px}[data-model-zoom-tools] button{font:600 13px system-ui;padding:5px 8px;border:1px solid #8b949e;border-radius:6px;background:Canvas;color:CanvasText;cursor:pointer;min-width:30px}[data-model-zoom-tools] button:focus-visible{outline:2px solid #368ce0;outline-offset:2px}&#x27;;
+  document.head.append(style);
+  const box=document.createElement(&#x27;div&#x27;); box.dataset.modelZoomTools=&#x27;v1&#x27;; box.setAttribute(&#x27;role&#x27;,&#x27;group&#x27;); box.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 배율&#x27;);
+  for(const [text,label,delta] of [[&#x27;−&#x27;,&#x27;모형 축소&#x27;,180],[&#x27;+&#x27;,&#x27;모형 확대&#x27;,-180]]) {
+    const b=document.createElement(&#x27;button&#x27;); b.type=&#x27;button&#x27;; b.textContent=text; b.setAttribute(&#x27;aria-label&#x27;,label);
+    b.addEventListener(&#x27;click&#x27;,()=&gt;canvas.dispatchEvent(new WheelEvent(&#x27;wheel&#x27;,{deltaY:delta,bubbles:true,cancelable:true})));
+    box.append(b);
+  }
+  document.body.append(box);
+  const place=()=&gt;{const r=canvas.getBoundingClientRect();box.style.right=Math.max(8,innerWidth-r.right+8)+&#x27;px&#x27;;box.style.top=Math.max(8,r.top+8)+&#x27;px&#x27;;};
+  new ResizeObserver(place).observe(canvas);window.addEventListener(&#x27;resize&#x27;,place);requestAnimationFrame(place);
+  window.addEventListener(&#x27;keydown&#x27;,e=&gt; { if(e.key===&#x27;Escape&#x27;) parent.postMessage({type:&#x27;geometry-model-close&#x27;},&#x27;*&#x27;); });
+})();
+&lt;/script&gt;&lt;/body&gt;
 &lt;/html&gt;
 "></iframe>
 
@@ -2814,5 +2851,59 @@ html, body { height: 100%; overflow: hidden; }
   delete frame.dataset.srcdoc;
 })();
 </script>
-</body>
+<script id="model-expansion-v1">/* Public case contract v1. Works with allow-scripts-only sandboxed frames. */
+(() => {
+  const frame = document.getElementById('codex-visualization');
+  if (!frame || document.querySelector('.model-view-toolbar')) return;
+  const panel = frame.closest('.digital-panel') || frame.parentElement;
+  const label = panel.querySelector('.panel-label');
+  const bar = document.createElement('div');
+  bar.className = 'model-view-toolbar';
+  const title = document.createElement('span');
+  title.id = 'expanded-model-title';
+  title.textContent = label?.textContent || '조작 가능한 시각화';
+  if (label) label.hidden = true;
+  const toggle = document.createElement('button');
+  toggle.type = 'button'; toggle.className = 'model-expand-toggle';
+  toggle.textContent = '시각화 확대';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-controls', frame.id);
+  bar.append(title, toggle); panel.insertBefore(bar, frame);
+  const guards = [document.createElement('span'), document.createElement('span')];
+  guards.forEach(g => { g.className = 'model-focus-guard'; g.tabIndex = 0; });
+  panel.insertBefore(guards[0], bar); panel.append(guards[1]);
+  let expanded = false, inertRecords = [], savedAttributes = [];
+  function close() {
+    if (!expanded) return;
+    expanded = false;
+    panel.classList.remove('is-model-expanded');
+    document.body.classList.remove('model-expanded');
+    inertRecords.forEach(([el, value]) => { el.inert = value; });
+    savedAttributes.forEach(([key, value]) => { if(value===null) panel.removeAttribute(key); else panel.setAttribute(key,value); });
+    inertRecords = []; savedAttributes = [];
+    toggle.textContent = '시각화 확대'; toggle.setAttribute('aria-expanded', 'false');
+    toggle.focus();
+  }
+  toggle.addEventListener('click', () => {
+    if (expanded) { close(); return; }
+    expanded = true;
+    ['role','aria-modal','aria-labelledby'].forEach(key => savedAttributes.push([key,panel.getAttribute(key)]));
+    panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true'); panel.setAttribute('aria-labelledby',title.id);
+    let branch = panel;
+    while (branch.parentElement) {
+      for (const sibling of branch.parentElement.children) if(sibling!==branch) { inertRecords.push([sibling,sibling.inert]); sibling.inert=true; }
+      branch=branch.parentElement;
+      if(branch===document.body) break;
+    }
+    document.body.classList.add('model-expanded'); panel.classList.add('is-model-expanded');
+    toggle.textContent='확대 닫기'; toggle.setAttribute('aria-expanded','true'); toggle.focus();
+  });
+  guards[0].addEventListener('focus',()=> { if(expanded) frame.focus(); });
+  guards[1].addEventListener('focus',()=> { if(expanded) toggle.focus(); });
+  document.addEventListener('keydown',e=> { if(e.key==='Escape' && expanded) { e.preventDefault(); close(); } });
+  window.addEventListener('message',e=> {
+    if(e.source===frame.contentWindow && e.data?.type==='geometry-model-close' && Object.keys(e.data).length===1) close();
+  });
+})();
+</script></body>
 </html>

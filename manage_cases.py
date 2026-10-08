@@ -1,11 +1,35 @@
 """Generate and validate the public static case catalogue; no runtime fetch needed."""
 from pathlib import Path
 from html import escape, unescape
+from html.parser import HTMLParser
 import argparse
 import json
 import re
 
 ROOT = Path(__file__).resolve().parent
+
+
+class CaseFrame(HTMLParser):
+    def __init__(self):
+        super().__init__(); self.frames=[]; self.policies=[]
+    def handle_starttag(self, tag, attrs):
+        a=dict(attrs)
+        if tag=='iframe': self.frames.append(a)
+        if tag=='meta' and a.get('http-equiv','').lower()=='content-security-policy': self.policies.append(a.get('content',''))
+
+
+def validate_viewer(page, filename):
+    parsed=CaseFrame(); parsed.feed(page)
+    assert len(parsed.frames)==1, f'{filename}: expected one sandboxed model'
+    f=parsed.frames[0]
+    assert f.get('id')=='codex-visualization' and f.get('sandbox')=='allow-scripts', f'{filename}: preserve sandbox'
+    assert len(parsed.policies)==1 and "connect-src blob: data:" in parsed.policies[0], f'{filename}: preserve CSP'
+    for tag,file in [('style','model-expansion.css'),('script','model-expansion.js')]:
+        expected=f'<{tag} id="model-expansion-v1">'+(ROOT/file).read_text()+f'</{tag}>'
+        assert page.count(expected)==1, f'{filename}: run add_model_expansion.py'
+    expected='<script id="model-frame-tools-v1">'+(ROOT/'model-frame-tools.js').read_text()+'</script>'
+    assert f.get('data-srcdoc','').count(expected)==1, f'{filename}: model zoom and Escape hook missing'
+    assert re.search(r'''addEventListener\(\s*['"]wheel['"]''', f.get('data-srcdoc','')), f'{filename}: implement canvas wheel zoom before registration'
 
 
 def render(catalog):
@@ -22,6 +46,7 @@ def render(catalog):
         assert all(t in catalog['topics'] for t in c['topics']), 'Unknown topic'
         assert len(c['topics']) == len(set(c['topics'])), 'Duplicate topic'
         page = (ROOT/c['page']).read_text()
+        validate_viewer(page, c['page'])
         image = re.search(r'<img\b[^>]*\bsrc="([^"]+)"[^>]*>', page)
         thumbnail = ('<img src="'+escape(unescape(image[1]), quote=True)+'" alt="" loading="lazy">') if image else '<div class="date" aria-hidden="true">시각화 실험</div>'
         attrs = f'data-case-id="{c["id"]}" data-era="{c["era"]}" data-topics="{" ".join(c["topics"])}"'
