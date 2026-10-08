@@ -1,62 +1,43 @@
 {
-  "version": "1.0",
-  "created": "2026-10-08",
-  "source_policy": "Primary text, mathematical condition, project interpretation, and empirical evidence are separate support types. No raw unpublished book/manuscript files are published.",
   "sources": [
     {
       "id": "LACAN-S9",
       "url": "http://staferla.free.fr/S9/S9%20L%27IDENTIFICATION.pdf",
-      "sha256": "ea40fa1ff014a93acc51f5639c47f86eb0aa104987e4a226318b24caa562174d",
-      "status": "preserved primary unofficial working transcription; editorial additions distinguished",
       "role": "reconstruct original problem and transfer limits"
     },
     {
       "id": "LACAN-S20",
       "url": "http://staferla.free.fr/S20/S20%20ENCORE.pdf",
-      "sha256": "a30ec7f6b61006985576b6a5b980def9cc3eb7186aacd55c9ecb4bdfa2770b0e",
-      "status": "preserved primary unofficial working transcription; editorial additions distinguished",
       "role": "reconstruct original problem and transfer limits"
     },
     {
       "id": "LACAN-S22",
       "url": "http://staferla.free.fr/S22/S22%20R.S.I..pdf",
-      "sha256": "3824bb4f8a86511369938800db2387eaeaa0dba319ef803a920e427f7f519bb8",
-      "status": "preserved primary unofficial working transcription; editorial additions distinguished",
       "role": "reconstruct original problem and transfer limits"
     },
     {
       "id": "LACAN-S23",
       "url": "http://staferla.free.fr/S23/S23%20LE%20SINTHOME.pdf",
-      "sha256": "c5315ad56929512ce5c6113dbb8bef2ffe8175433ac2d8d24e90759cc166b5bd",
-      "status": "preserved primary unofficial working transcription; editorial additions distinguished",
       "role": "reconstruct original problem and transfer limits"
     },
     {
       "id": "FLATLAND-GUTENBERG.html",
       "url": "https://www.gutenberg.org/files/97/97-h/97-h.htm",
-      "sha256": "95b213f7e326086528093cd51dac75b9bf8177add5bed83179226c5789d0dec9",
-      "status": "acquired",
       "role": "primary literary source, sections 16–19"
     },
     {
       "id": "FLATLAND-img08.jpg",
       "url": "https://www.gutenberg.org/files/97/97-h/images/img08.jpg",
-      "sha256": "0b1204a03d7c1791a786f200efd43df7011f94ede9f619a62678e3003cd70e86",
-      "status": "acquired",
       "role": "primary illustration, section 16"
     },
     {
       "id": "LORENZ-1963.pdf",
       "url": "https://cdanfort.w3.uvm.edu/research/lorenz-1963.pdf",
-      "sha256": "35cbe8a9e3ac36f210031376989b3b838de85ca3ba0290ba44131dcfd204cc2f",
-      "status": "acquired",
       "role": "primary paper, equations and diagram; scanned image, visual review PDF 6–8"
     },
     {
       "id": "EULER-E53",
       "url": "https://scholarlycommons.pacific.edu/euler-works/53/",
-      "sha256": null,
-      "status": "archive bibliographic/problem record verified; PDF acquisition returned HTTP 403",
       "role": "identify the primary problem; diagram is authored redraw, finite graph independently verified"
     },
     {
@@ -65,7 +46,6 @@
       "year": 2019,
       "publisher": "지식노마드",
       "locator": "제2장, 출간본 54–65쪽",
-      "status": "author source confirmed locally; original file not published",
       "role": "focal practical difficulty"
     },
     {
@@ -74,7 +54,6 @@
       "year": 2020,
       "publisher": "새물결",
       "locator": "제7장: 차원을 높여 생각하는 방법과 차원증감법",
-      "status": "Published book; private edition records are kept locally.",
       "role": "specific dimension-raising proposal"
     }
   ],
@@ -83,129 +62,97 @@
       "id": "S9-p110",
       "source_id": "LACAN-S9",
       "lecture_date": "1962-03-07",
-      "pdf_page": 110,
-      "page_text_sha256": "5441033e2cca309e8ca2c51faf07816259edecefc717a5b7bb3879dfe0f26dbf",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 110
     },
     {
       "id": "S9-p111",
       "source_id": "LACAN-S9",
       "lecture_date": "1962-03-07",
-      "pdf_page": 111,
-      "page_text_sha256": "3e98962860b6ec6f59ac0773ef0ec7b3c7c685ac26cfeb27bd7fcefcb02e6255",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 111
     },
     {
       "id": "S9-p197",
       "source_id": "LACAN-S9",
       "lecture_date": "1962-05-16",
-      "pdf_page": 197,
-      "page_text_sha256": "866515c96aac55cc8d886786626ca79e78ca1cdb5d95c0f0908de9459fe494f2",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 197
     },
     {
       "id": "S9-p198",
       "source_id": "LACAN-S9",
       "lecture_date": "1962-05-16",
-      "pdf_page": 198,
-      "page_text_sha256": "2b92fec8a55a70379db7f7fcdad947c8a7839ad65952ed5c71bfbd5971005f4a",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 198
     },
     {
       "id": "S9-p202",
       "source_id": "LACAN-S9",
       "lecture_date": "1962-05-23",
-      "pdf_page": 202,
-      "page_text_sha256": "852170abcebf2bcc23447bf5ffebfb1a0037507424330fd5dcd5906672a0ba19",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 202
     },
     {
       "id": "S20-p99",
       "source_id": "LACAN-S20",
       "lecture_date": "1973-03-20",
-      "pdf_page": 99,
-      "page_text_sha256": "d2c8ea9e05d6540a1af002e4877348646308c217074b0cd78b039b0b8a3eab9c",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 99
     },
     {
       "id": "S22-p6",
       "source_id": "LACAN-S22",
       "lecture_date": "1974-12-10",
-      "pdf_page": 6,
-      "page_text_sha256": "ff080ea714f49d106840db57e2da2db0ef7b47e4618ee2de907860be64009d8d",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 6
     },
     {
       "id": "S22-p7",
       "source_id": "LACAN-S22",
       "lecture_date": "1974-12-10",
-      "pdf_page": 7,
-      "page_text_sha256": "2591fc04d2f4d878900f3da0ab89782932b931e362c3f084a7f35340c5c310ad",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 7
     },
     {
       "id": "S22-p8",
       "source_id": "LACAN-S22",
       "lecture_date": "1974-12-10",
-      "pdf_page": 8,
-      "page_text_sha256": "f502f79996e59a1f65c6736620e6e37367fc6904b0dfd504d26426614e9dad9e",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 8
     },
     {
       "id": "S22-p16",
       "source_id": "LACAN-S22",
       "lecture_date": "1974-12-17",
-      "pdf_page": 16,
-      "page_text_sha256": "97e51f96e40fd9bf984abc4640bf967a582f5026f6917047e27c72903889f36d",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 16
     },
     {
       "id": "S22-p17",
       "source_id": "LACAN-S22",
       "lecture_date": "1974-12-17",
-      "pdf_page": 17,
-      "page_text_sha256": "a30ac5b2fb570625743d994126dea6ec98edc44adedce4aeb8620a27f964d074",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 17
     },
     {
       "id": "S22-p18",
       "source_id": "LACAN-S22",
       "lecture_date": "1974-12-17",
-      "pdf_page": 18,
-      "page_text_sha256": "ec762a1b01d11e7ccc06c95eac33e24aa7fd27d0240735ffb5368e4b819a8b24",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 18
     },
     {
       "id": "S23-p21",
       "source_id": "LACAN-S23",
       "lecture_date": "1975-12-09",
-      "pdf_page": 21,
-      "page_text_sha256": "d1e754812c3768d33523895979daff27a1932f18dbf1c9962b5e4659729fc8a6",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 21
     },
     {
       "id": "S23-p69",
       "source_id": "LACAN-S23",
       "lecture_date": "1976-02-17",
-      "pdf_page": 69,
-      "page_text_sha256": "daba0f8c46d5382033ead852b5a68197cfe4ebe93df1fedf7eb5971c6edbda44",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 69
     },
     {
       "id": "S23-p72",
       "source_id": "LACAN-S23",
       "lecture_date": "1976-02-17",
-      "pdf_page": 72,
-      "page_text_sha256": "7647dfbf655341399e2a5fe4d7e241d0cf40873e7c8dc1af45a966100e979b73",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 72
     },
     {
       "id": "S23-p73",
       "source_id": "LACAN-S23",
       "lecture_date": "1976-02-17",
-      "pdf_page": 73,
-      "page_text_sha256": "244d4ed4e6d0242a79bbb7bf36ebcfbea371dca950b78c791ffb320867b85ad4",
-      "source_status": "working transcription; page number not print-edition page"
+      "pdf_page": 73
     },
     {
       "id": "FLATLAND-16",
@@ -222,28 +169,20 @@
         25,
         26,
         27
-      ],
-      "verification": "manual visual reading; no valid text layer"
+      ]
     },
     {
       "id": "LORENZ-PAR",
       "source_id": "LORENZ-1963.pdf",
       "print_page": 136,
-      "pdf_page": 7,
-      "verification": "manual visual reading"
+      "pdf_page": 7
     },
     {
       "id": "LORENZ-FIG",
       "source_id": "LORENZ-1963.pdf",
       "print_page": 137,
       "pdf_page": 8,
-      "figure": "Figure 2, upper Y–Z projection only",
-      "capture_normalized_xyxy": [
-        0.526,
-        0.409,
-        0.9,
-        0.675
-      ]
+      "figure": "Figure 2, upper Y–Z projection only"
     }
   ],
   "claims": [
@@ -336,8 +275,7 @@
       "claim": "A correct flat diagram can suffice; 3D layout does not change graph degree or route existence",
       "evidence": [
         "EULER-E53"
-      ],
-      "verification": "mathematical-validation.json exhaustive finite graph search"
+      ]
     },
     {
       "id": "L-F",
@@ -346,8 +284,7 @@
       "evidence": [
         "LORENZ-EQ",
         "LORENZ-PAR"
-      ],
-      "verification": "short-time quarter-step convergence only"
+      ]
     },
     {
       "id": "L-T",
@@ -359,12 +296,5 @@
       ],
       "limit": "requires evidence of additional useful distinctions before stronger transfer"
     }
-  ],
-  "new_pages": [
-    "flatland-slices.html",
-    "euler-bridges.html",
-    "lorenz-flow.html",
-    "lacan-problems.html",
-    "geometry-lab.html"
   ]
 }

@@ -1,288 +1,155 @@
 {
-  "schema": "dimension-history-evidence/1",
-  "project": "차원 압축과 펼침 실험",
-  "date": "2026-10-08",
-  "prior_sources": "geometry-lab-sources.json",
-  "prior_lacan_sources": "lacan-atlas-sources.json",
   "sources": [
     {
       "id": "REM-RECORD",
-      "url": "https://www.nga.gov/artworks/79-self-portrait",
-      "error": "HTTP Error 403: Forbidden",
-      "accessed": "2026-10-08"
+      "url": "https://www.nga.gov/artworks/79-self-portrait"
     },
     {
       "id": "GRIS-RECORD",
-      "url": "https://www.nga.gov/artworks/56101-fantomas",
-      "error": "HTTP Error 403: Forbidden",
-      "accessed": "2026-10-08"
+      "url": "https://www.nga.gov/artworks/56101-fantomas"
     },
     {
       "id": "REM-IMP",
-      "url": "https://www.nga.gov/visit/tours-guides/audio-tours/west-building-tour-featured-selections-stop-250",
-      "error": "HTTP Error 403: Forbidden",
-      "accessed": "2026-10-08"
+      "url": "https://www.nga.gov/visit/tours-guides/audio-tours/west-building-tour-featured-selections-stop-250"
     },
     {
       "id": "ASTRO-HISTORY",
-      "url": "https://www.cabinet.ox.ac.uk/astrolabe",
-      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>",
-      "accessed": "2026-10-08"
+      "url": "https://www.cabinet.ox.ac.uk/astrolabe"
     },
     {
       "id": "CEZANNE-ESSAY",
-      "url": "https://www.metmuseum.org/essays/paul-cezanne-1839-1906",
-      "error": "HTTP Error 429: Too Many Requests",
-      "accessed": "2026-10-08"
+      "url": "https://www.metmuseum.org/essays/paul-cezanne-1839-1906"
     },
     {
       "id": "CUBISM-ESSAY",
-      "url": "https://www.metmuseum.org/essays/cubism",
-      "error": "HTTP Error 429: Too Many Requests",
-      "accessed": "2026-10-08"
+      "url": "https://www.metmuseum.org/essays/cubism"
     },
     {
       "id": "WORD-PAPER",
       "url": "https://arxiv.org/abs/1611.05469",
-      "resolved_url": "https://arxiv.org/abs/1611.05469",
-      "filename": "WORD-PAPER.html",
-      "bytes": 39516,
-      "sha256": "3d9fedcde1d1d595cf90f8074df03e4c59b63051125e9501ff645f1a739482b4",
-      "mime": "text/html; charset=utf-8",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://arxiv.org/abs/1611.05469"
     },
     {
       "id": "STEREO",
       "url": "https://mathworld.wolfram.com/StereographicProjection.html",
-      "resolved_url": "https://mathworld.wolfram.com/StereographicProjection.html",
-      "filename": "STEREO.html",
-      "bytes": 63126,
-      "sha256": "06488625f8dbd280fa5d1930b4a10dd04e3b3e2c5ca2c0fd2773a9a247eac2b2",
-      "mime": "text/html; charset=UTF-8",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://mathworld.wolfram.com/StereographicProjection.html"
     },
     {
       "id": "WORD-CONFIG",
       "url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/oss_data/oss_demo_projector_config.json",
-      "resolved_url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/oss_data/oss_demo_projector_config.json",
-      "filename": "WORD-CONFIG.json",
-      "bytes": 1381,
-      "sha256": "e2d07eaeda11766df7262f272e1012bd8038c28ec5484233bc9415bfee9649b5",
-      "mime": "text/plain; charset=utf-8",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/oss_data/oss_demo_projector_config.json"
     },
     {
       "id": "WORD-LICENSE",
-      "url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/LICENSE",
-      "error": "HTTP Error 404: Not Found",
-      "accessed": "2026-10-08"
+      "url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/LICENSE"
     },
     {
       "id": "WORD-README",
-      "url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/README.md",
-      "error": "HTTP Error 404: Not Found",
-      "accessed": "2026-10-08"
+      "url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/README.md"
     },
     {
       "id": "WORD-LABELS",
       "url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/oss_data/word2vec_10000_200d_labels.tsv",
-      "resolved_url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/oss_data/word2vec_10000_200d_labels.tsv",
-      "filename": "WORD-LABELS.tsv",
-      "bytes": 121647,
-      "sha256": "8d6b7a5c141379420581ffed8df38c3ec8ee61241fa28cd287ccb4ad44bb2a49",
-      "mime": "text/plain; charset=utf-8",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/oss_data/word2vec_10000_200d_labels.tsv"
     },
     {
       "id": "WINE-RECORD",
       "url": "https://archive.ics.uci.edu/dataset/109/wine",
-      "resolved_url": "https://archive.ics.uci.edu/dataset/109/wine",
-      "filename": "WINE-RECORD.html",
-      "bytes": 186494,
-      "sha256": "81cfff17de10f8081e52e6ca201aaf590b41d5bb5a6c5b933dce0e9331c3d327",
-      "mime": "text/html",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://archive.ics.uci.edu/dataset/109/wine"
     },
     {
       "id": "WORD-DOC",
       "url": "https://www.tensorflow.org/text/guide/word_embeddings",
-      "resolved_url": "https://www.tensorflow.org/text/guide/word_embeddings",
-      "filename": "WORD-DOC.html",
-      "bytes": 171082,
-      "sha256": "88674481675d692bc5512d2c4a5f1ad4e11ac4f1e70b8df98af2b0094433b73f",
-      "mime": "text/html; charset=utf-8",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://www.tensorflow.org/text/guide/word_embeddings"
     },
     {
       "id": "DURER-RECORD",
-      "url": "https://www.metmuseum.org/art/collection/search/387741",
-      "error": "HTTP Error 429: Too Many Requests",
-      "accessed": "2026-10-08"
+      "url": "https://www.metmuseum.org/art/collection/search/387741"
     },
     {
       "id": "WINE-ZIP",
       "url": "https://archive.ics.uci.edu/static/public/109/wine.zip",
-      "resolved_url": "https://archive.ics.uci.edu/static/public/109/wine.zip",
-      "filename": "WINE-ZIP.zip",
-      "bytes": 6038,
-      "sha256": "2bae62c4481220623579d4c4fb36b55652b6b75e06e49fa1981b8198362dfdab",
-      "mime": "",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://archive.ics.uci.edu/static/public/109/wine.zip"
     },
     {
       "id": "CEZANNE-RECORD",
-      "url": "https://www.metmuseum.org/art/collection/search/435877",
-      "error": "HTTP Error 429: Too Many Requests",
-      "accessed": "2026-10-08"
+      "url": "https://www.metmuseum.org/art/collection/search/435877"
     },
     {
       "id": "HINTON",
       "url": "https://www.gutenberg.org/cache/epub/67153/pg67153-images.html",
-      "resolved_url": "https://www.gutenberg.org/cache/epub/67153/pg67153-images.html",
-      "filename": "HINTON.html",
-      "bytes": 570654,
-      "sha256": "ec2a462dc85093d6e4d0b566c215826e86df2ccc2d820df4b3a93699468d7579",
-      "mime": "text/html; charset=utf-8",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://www.gutenberg.org/cache/epub/67153/pg67153-images.html"
     },
     {
       "id": "DURER-API",
       "url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/387741",
-      "resolved_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/387741",
-      "filename": "DURER-API.json",
-      "bytes": 2225,
-      "sha256": "cc79370e65c050825713b1a97f9b4fc1ea6675892aa43004723cf2e97e7975ec",
-      "mime": "application/json",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/387741"
     },
     {
       "id": "WORD-DATA",
       "url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/oss_data/word2vec_10000_200d_tensors.bytes",
-      "resolved_url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/oss_data/word2vec_10000_200d_tensors.bytes",
-      "filename": "WORD-DATA.bytes",
-      "bytes": 8000000,
-      "sha256": "deaedca3920530dcf2e6eb4084fd6a6af747bdfada8919886d1ed8b9438c297a",
-      "mime": "application/octet-stream",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://raw.githubusercontent.com/tensorflow/embedding-projector-standalone/master/oss_data/word2vec_10000_200d_tensors.bytes"
     },
     {
       "id": "CEZANNE-API",
       "url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/435877",
-      "resolved_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/435877",
-      "filename": "CEZANNE-API.json",
-      "bytes": 2611,
-      "sha256": "4511610ce5d861bf9af7f477587aa1f743335b244422e15a1d314db6381fc9ac",
-      "mime": "application/json",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/435877"
     },
     {
       "id": "ASTROLABE-RECORD",
-      "url": "https://www.metmuseum.org/art/collection/search/444408",
-      "error": "HTTP Error 429: Too Many Requests",
-      "accessed": "2026-10-08"
+      "url": "https://www.metmuseum.org/art/collection/search/444408"
     },
     {
       "id": "ASTROLABE-API",
       "url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/444408",
-      "resolved_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/444408",
-      "filename": "ASTROLABE-API.json",
-      "bytes": 5627,
-      "sha256": "ced6a55c139d6c9c911a713c070cdf7bf0f7d074f0ba1178277633c96ccce2e7",
-      "mime": "application/json",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/444408"
     },
     {
       "id": "DURER-IMAGE",
       "url": "https://images.metmuseum.org/CRDImages/dp/original/DP816495.jpg",
-      "resolved_url": "https://images.metmuseum.org/CRDImages/dp/original/DP816495.jpg",
-      "filename": "DURER-IMAGE.jpg",
-      "bytes": 3451712,
-      "sha256": "cd793eedc0cf17342c6fec8ca27deb7932c695baa4545fe15f88f5ff7baa8725",
-      "mime": "image/jpeg",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://images.metmuseum.org/CRDImages/dp/original/DP816495.jpg"
     },
     {
       "id": "CEZANNE-IMAGE",
       "url": "https://images.metmuseum.org/CRDImages/ep/original/DP-20099-001.jpg",
-      "resolved_url": "https://images.metmuseum.org/CRDImages/ep/original/DP-20099-001.jpg",
-      "filename": "CEZANNE-IMAGE.jpg",
-      "bytes": 6423070,
-      "sha256": "034a91583008e7237b6d87effb5d95bd9504632eef925fe14ecd57ffa8fbcae8",
-      "mime": "image/jpeg",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://images.metmuseum.org/CRDImages/ep/original/DP-20099-001.jpg"
     },
     {
       "id": "ASTROLABE-IMAGE",
       "url": "https://images.metmuseum.org/CRDImages/is/original/DP170386.jpg",
-      "resolved_url": "https://images.metmuseum.org/CRDImages/is/original/DP170386.jpg",
-      "filename": "ASTROLABE-IMAGE.jpg",
-      "bytes": 1604887,
-      "sha256": "ebb29384c49cfd5882179b4f56cbb581de8e7c370effee245288241ad15026b3",
-      "mime": "image/jpeg",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://images.metmuseum.org/CRDImages/is/original/DP170386.jpg"
     },
     {
       "id": "HINTON-IMAGE",
       "url": "https://www.gutenberg.org/cache/epub/67153/images/colop.png",
-      "resolved_url": "https://www.gutenberg.org/cache/epub/67153/images/colop.png",
-      "filename": "HINTON-IMAGE.jpg",
-      "bytes": 25366,
-      "sha256": "840c952eb013dbbd1922d77562f664ad2d280e719f1d5a8eefceebb858ec69be",
-      "mime": "image/png",
-      "accessed": "2026-10-08"
+      "resolved_url": "https://www.gutenberg.org/cache/epub/67153/images/colop.png"
     },
     {
       "id": "HINTON-FRONTIS",
-      "filename": "HINTON-FRONTIS.jpg",
-      "url": "https://www.gutenberg.org/cache/epub/67153/images/i_frontis.jpg",
-      "bytes": 95629,
-      "sha256": "f1f24c8871bc54f08c1dc7ae7ea25c464123523360c22b55f3f0351cc9515bfa",
-      "accessed": "2026-10-08"
+      "url": "https://www.gutenberg.org/cache/epub/67153/images/i_frontis.jpg"
     },
     {
       "id": "DURER-BOOK",
-      "filename": "DURER-BOOK.json",
-      "url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/349059",
-      "bytes": 2270,
-      "sha256": "8d8c02cc9a442e62a36d272101755aba0a1f81cca8950bcee7d827d14cea912e",
-      "accessed": "2026-10-08"
+      "url": "https://collectionapi.metmuseum.org/public/collection/v1/objects/349059"
     },
     {
       "id": "GRIS-IMAGE",
-      "filename": "GRIS-IMAGE.jpg",
-      "url": "https://api.nga.gov/iiif/dd10b4c4-bc3b-430f-8c6f-918a3ef2cb3b/full/%21800%2C800/0/default.jpg",
-      "bytes": 188136,
-      "sha256": "124a6f57678cff9ffcd9360266d5db5504d773e95985e91d3185d7c0100261ea",
-      "accessed": "2026-10-08"
+      "url": "https://api.nga.gov/iiif/dd10b4c4-bc3b-430f-8c6f-918a3ef2cb3b/full/%21800%2C800/0/default.jpg"
     },
     {
       "id": "REM-IMAGE",
-      "filename": "REM-IMAGE.jpg",
-      "url": "https://api.nga.gov/iiif/5dc133fb-5304-4ccb-b715-9361f638f281/full/%21800%2C800/0/default.jpg",
-      "bytes": 83112,
-      "sha256": "536e215ce40fa58bd2518d20e9e58c6bb236022f838c13dbd5229fab156f915b",
-      "accessed": "2026-10-08"
+      "url": "https://api.nga.gov/iiif/5dc133fb-5304-4ccb-b715-9361f638f281/full/%21800%2C800/0/default.jpg"
     },
     {
-      "id": "PEARSON.pdf",
-      "error": "<urlopen error [Errno 61] Connection refused>",
-      "accessed": "2026-10-08"
+      "id": "PEARSON.pdf"
     },
     {
       "id": "WORD-COMMIT",
-      "filename": "WORD-COMMIT.json",
-      "url": "https://api.github.com/repos/tensorflow/embedding-projector-standalone/commits/master",
-      "bytes": 4126,
-      "sha256": "edf14e88a3301c2b3750295d252d73e5f2a95c7bc415bb677f44cb01e71660ee",
-      "accessed": "2026-10-08"
+      "url": "https://api.github.com/repos/tensorflow/embedding-projector-standalone/commits/master"
     },
     {
       "id": "ASTRO-CAM",
-      "filename": "ASTRO-CAM.html",
-      "url": "https://www.sites.hps.cam.ac.uk/starry/hippaslabe.html",
-      "bytes": 4276,
-      "sha256": "50744b896014de0e648342483ebf5d4992d492571782f9d7904fefcf0d1dca68",
-      "accessed": "2026-10-08"
+      "url": "https://www.sites.hps.cam.ac.uk/starry/hippaslabe.html"
     },
     {
       "id": "BOOK-DIMENSION-METHOD",
@@ -291,9 +158,7 @@
       "publisher": "새물결",
       "year": 2020,
       "isbn": "978-89-5559-427-0",
-      "locator": "제7장: 차원을 높여 생각하는 방법과 차원증감법",
-      "verification": "출간된 책의 서지정보를 표기; 로컬 작업본 정보는 포함하지 않음",
-      "raw_redistributed": false
+      "locator": "제7장: 차원을 높여 생각하는 방법과 차원증감법"
     }
   ],
   "claim_locators": [
@@ -315,20 +180,17 @@
     {
       "claim": "세잔은 큐비즘의 선행 영향",
       "url": "https://www.metmuseum.org/essays/paul-cezanne-1839-1906",
-      "location": "James Voorhies 2004, 색과 형태/단일 시점/후대 Braque를 다루는 본문",
-      "verification": "web 도구로 본문 확인; 직접 HTTP 저장은 429. 도구의 열람 기록은 연구 폴더에 보존."
+      "location": "James Voorhies 2004, 색과 형태/단일 시점/후대 Braque를 다루는 본문"
     },
     {
       "claim": "큐비즘 1907–1914와 평면성",
       "url": "https://www.metmuseum.org/essays/cubism",
-      "location": "Sabine Rewald 2004, 첫 세 본문 문단",
-      "verification": "web 본문 확인; 직접 HTTP 저장은 429."
+      "location": "Sabine Rewald 2004, 첫 세 본문 문단"
     },
     {
       "claim": "렘브란트의 impasto와 얇은 밑칠",
       "url": "https://www.nga.gov/visit/tours-guides/audio-tours/west-building-tour-featured-selections-stop-250",
-      "location": "Arthur Wheelock, Transcript, thickly applied/rough paint/under painting 문단",
-      "verification": "web 본문 확인; 직접 HTTP 저장은 403. 원작 요철 수치는 제공되지 않았다."
+      "location": "Arthur Wheelock, Transcript, thickly applied/rough paint/under painting 문단"
     },
     {
       "claim": "NGA 두 이미지의 공개 재사용",
@@ -337,8 +199,7 @@
         "https://www.nga.gov/artworks/56101-fantomas"
       ],
       "location": "Media Options, public domain 문구와 공개 이미지 링크",
-      "license": "Public Domain / NGA Open Access",
-      "verification": "각 작품 기록의 공개 이미지 문구를 확인하고 해당 이미지 링크만 사용."
+      "license": "Public Domain / NGA Open Access"
     },
     {
       "claim": "힌턴 초판1904/열람판1906와 권두 도판",
@@ -360,18 +221,15 @@
       "location": "embeddings[0].tensorShape / tensorPath / metadataPath",
       "commit": "6ff71f7233ac5947450409e7938b58ec14d1e24c",
       "license": "자료의 별도 재배포 라이선스 미기재",
-      "raw_vectors_redistributed": false,
       "published": "선정 63단어의 PCA 좌표와 정규화 원공간의 쌍별 거리만 제공",
       "training_corpus": "미확인: 추정하지 않음"
     },
     {
       "claim": "200D 코사인과 정규화 유클리드 거리",
       "source": "project-derived calculation",
-      "location": "d²=2(1−cosθ); 10000벡터 L2정규화 후 평균 제거, SVD; 원본 거리와 PCA 거리 대조",
-      "verification": "수학 항등식과 수치 검산으로 확인"
+      "location": "d²=2(1−cosθ); 10000벡터 L2정규화 후 평균 제거, SVD; 원본 거리와 PCA 거리 대조"
     }
   ],
-  "asset_policy": "Met와 NGA의 공개 허용 이미지, Gutenberg 권두 도판, UCI 자료의 새 도식만 사용. 가상 지형·물감은 원작 복원이 아니다. 원시 단어 벡터 미배포.",
   "interpretation_limits": [
     "물리적 공간 차원, 곡면 내재 차원, 변수 개수와 조작 자유도를 구별",
     "디지털 화면의 최종 출력은 2차원",

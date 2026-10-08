@@ -13,3 +13,6 @@ body.model-expanded .page::before { content:''; position:fixed; inset:0; backgro
 @media(max-width:680px) { .is-model-expanded { inset:4px !important; height:calc(100dvh - 8px) !important; padding:8px !important; } .model-view-toolbar span { font-size:11px; } }
 
 .digital-panel > .panel-label[hidden] { display:none !important; }
+@media(max-width:680px) {
+  .visualization { overflow-y:auto; overscroll-behavior-y:contain; }
+}

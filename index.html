@@ -59,6 +59,9 @@ body.model-expanded .page::before { content:''; position:fixed; inset:0; backgro
 @media(max-width:680px) { .is-model-expanded { inset:4px !important; height:calc(100dvh - 8px) !important; padding:8px !important; } .model-view-toolbar span { font-size:11px; } }
 
 .digital-panel > .panel-label[hidden] { display:none !important; }
+@media(max-width:680px) {
+  .visualization { overflow-y:auto; overscroll-behavior-y:contain; }
+}
 </style></head>
 <body>
 <main class="page">
@@ -2604,6 +2607,67 @@ html, body { height: 100%; overflow: hidden; }
   new ResizeObserver(place).observe(canvas);window.addEventListener(&#x27;resize&#x27;,place);requestAnimationFrame(place);
   window.addEventListener(&#x27;keydown&#x27;,e=&gt; { if(e.key===&#x27;Escape&#x27;) parent.postMessage({type:&#x27;geometry-model-close&#x27;},&#x27;*&#x27;); });
 })();
+&lt;/script&gt;&lt;script id=&quot;model-playback-config&quot; type=&quot;application/json&quot;&gt;{&quot;target&quot;: &quot;tl-angle&quot;, &quot;label&quot;: &quot;조건 비교 · 투영의 시선 방향&quot;, &quot;duration&quot;: 18}&lt;/script&gt;&lt;script id=&quot;model-playback-v1&quot;&gt;(() =&gt; {
+  &#x27;use strict&#x27;;
+  const config = JSON.parse(document.getElementById(&#x27;model-playback-config&#x27;).textContent);
+  const style = document.createElement(&#x27;style&#x27;);
+  style.textContent = `html{overflow:hidden!important}body{height:calc(100% - 104px)!important;overflow:auto!important}.model-player{position:fixed;inset:auto 0 0;z-index:90;height:100px;padding:7px 10px;background:light-dark(#f5f8fc,#20242a);border-top:1px solid light-dark(#ccd5e0,#46505b);color:light-dark(#253044,#edf2f7);font:12px/1.4 system-ui;box-sizing:border-box}.player-heading{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px}.player-actions{display:flex;gap:6px;align-items:center}.model-player button,.model-player select{width:auto;min-height:30px;margin:0;font:inherit;padding:4px 8px;border:1px solid light-dark(#bcc9d8,#5a6878);border-radius:5px;background:light-dark(#fff,#303841);color:inherit}.model-player button{cursor:pointer}.model-player button[aria-pressed=true]{background:light-dark(#dbeaff,#314b66)}.model-player label{display:flex;align-items:center;gap:4px;font:inherit}.model-player input{width:100%;height:18px;margin:5px 0 0;accent-color:#72baff}.model-player :focus-visible{outline:2px solid #72baff;outline-offset:2px}#play{display:none!important}@media(max-width:350px){.model-player{padding:6px}.model-player button{padding:4px 6px}.player-heading{font-size:11px}}`;
+  document.head.append(style);
+  const player = document.createElement(&#x27;section&#x27;);
+  player.className = &#x27;model-player&#x27;;player.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 재생&#x27;);
+  player.innerHTML = `&lt;div class=&quot;player-heading&quot;&gt;&lt;span id=&quot;player-description&quot;&gt;&lt;/span&gt;&lt;output id=&quot;player-position&quot;&gt;&lt;/output&gt;&lt;/div&gt;&lt;div class=&quot;player-actions&quot;&gt;&lt;button id=&quot;player-toggle&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;▶ 재생&lt;/button&gt;&lt;button id=&quot;player-start&quot; type=&quot;button&quot;&gt;처음으로&lt;/button&gt;&lt;label&gt;속도&lt;select id=&quot;player-speed&quot; aria-label=&quot;재생 속도&quot;&gt;&lt;option value=&quot;0.5&quot;&gt;0.5×&lt;/option&gt;&lt;option value=&quot;1&quot; selected&gt;1×&lt;/option&gt;&lt;option value=&quot;2&quot;&gt;2×&lt;/option&gt;&lt;option value=&quot;4&quot;&gt;4×&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;/div&gt;&lt;input id=&quot;player-seek&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;1000&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;재생 위치&quot;&gt;`;
+  document.body.append(player);
+  const get = id =&gt; document.getElementById(id);
+  const target = config.target ? get(config.target) : null;
+  let progress = target &amp;&amp; target.type===&#x27;range&#x27; ? (Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min)) : 0;
+  let running = false, last=0, request=0, applying=false, previousStage=-1;
+  get(&#x27;player-description&#x27;).textContent=config.label;
+  function notify(el) {el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));}
+  function write(id,value) {const el=get(id);if(!el)return;const before=el.type===&#x27;checkbox&#x27;?el.checked:el.value;if(el.type===&#x27;checkbox&#x27;)el.checked=Boolean(value);else el.value=String(value);if(before!==(el.type===&#x27;checkbox&#x27;?el.checked:el.value))notify(el);}
+  function display() {
+    get(&#x27;player-seek&#x27;).value=String(Math.round(progress*1000));
+    get(&#x27;player-position&#x27;).textContent=Math.round(progress*100)+&#x27;%&#x27;;
+    player.dataset.progress=progress.toFixed(4);player.dataset.playing=String(running);
+    get(&#x27;player-toggle&#x27;).textContent=running?&#x27;Ⅱ 일시정지&#x27;:&#x27;▶ 재생&#x27;;get(&#x27;player-toggle&#x27;).setAttribute(&#x27;aria-pressed&#x27;,String(running));
+  }
+  function apply() {
+    applying=true;
+    if(config.stages) {
+      const n=config.stages.length;const stage=Math.min(n-1,Math.floor(progress*n));
+      if(stage!==previousStage) {for(const [id,value]of Object.entries(config.stages[stage]))write(id,value);previousStage=stage;}
+      if(config.stageTarget) {
+        const el=get(config.stageTarget),local=progress&gt;=1?1:(progress*n-stage);
+        write(config.stageTarget,Number(el.min)+(Number(el.max)-Number(el.min))*local);
+      }
+    } else if(target) {
+      if(target.type===&#x27;range&#x27;) {
+        const low=config.min??Number(target.min),high=config.max??Number(target.max),step=Number(target.step)||.001;
+        const value=low+(high-low)*progress;write(target.id,Math.max(low,Math.min(high,Math.round(value/step)*step)));
+      } else if(target.tagName===&#x27;SELECT&#x27;) {
+        const options=[...target.options].filter(o=&gt;!o.disabled);write(target.id,options[Math.min(options.length-1,Math.floor(progress*options.length))].value);
+      }
+    }
+    applying=false;display();
+  }
+  function pause() {running=false;cancelAnimationFrame(request);display();}
+  function tick(now) {
+    if(!running)return;const dt=Math.min((now-last)/1000,.1);last=now;
+    progress=Math.min(1,progress+dt*Number(get(&#x27;player-speed&#x27;).value)/(config.duration||18));apply();
+    if(progress&gt;=1)pause();else request=requestAnimationFrame(tick);
+  }
+  get(&#x27;player-toggle&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{if(running){pause();return;}if(progress&gt;=.999){progress=0;previousStage=-1;}apply();running=true;last=performance.now();display();request=requestAnimationFrame(tick);});
+  get(&#x27;player-start&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{pause();progress=0;previousStage=-1;apply();});
+  get(&#x27;player-seek&#x27;).addEventListener(&#x27;input&#x27;,()=&gt;{const value=Number(get(&#x27;player-seek&#x27;).value)/1000;pause();progress=value;previousStage=-1;apply();});
+  for(const kind of [&#x27;input&#x27;,&#x27;change&#x27;,&#x27;click&#x27;])document.addEventListener(kind,event=&gt;{
+    if(applying||player.contains(event.target))return;
+    if(event.target.matches(&#x27;input,select,button&#x27;)){
+      pause();previousStage=-1;const sync=event.target===target||event.target.id===&#x27;reset&#x27;||event.target.hasAttribute(&#x27;data-preset&#x27;);if(config.stages&amp;&amp;event.target.id!==&#x27;model-zoom-in&#x27;&amp;&amp;event.target.id!==&#x27;model-zoom-out&#x27;&amp;&amp;(event.target.matches(&#x27;input,select&#x27;)||event.target.id===&#x27;reset&#x27;))progress=0;
+      if(sync &amp;&amp; target &amp;&amp; target.type===&#x27;range&#x27;)progress=(Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min));display();
+    }
+  });
+  document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;{if(document.hidden)pause();});
+  window.addEventListener(&#x27;pagehide&#x27;,pause);display();
+})();
 &lt;/script&gt;&lt;/body&gt;
 &lt;/html&gt;
 "></iframe>
@@ -2634,7 +2698,7 @@ html, body { height: 100%; overflow: hidden; }
       <h2>두 가지 조작을 비교해 보기</h2>
       <div class="experiment">
         <p><strong>거리를 고정하고 시선을 바꿔 보자.</strong> 초기 거리 2.70은 반지름의 2배보다 크므로 두 구는 떨어져 있다. 학생과 교사의 시선 예시를 번갈아 선택하면 오른쪽 투영의 겹침은 달라져도 왼쪽의 실제 교집합 부피는 0%로 유지된다. 학생과 교사라는 이름은 강연의 상황을 설명하는 예시이며, 모든 학생과 교사가 반드시 그 방향에서 본다는 뜻은 아니다.</p>
-        <p><strong>이번에는 두 구의 거리를 바꿔 보자.</strong> 중심 간 거리를 2보다 작게 만들면 공간에서 두 구가 실제로 겹친다. 이것은 시선의 변화와 달리 모형의 배치 자체를 바꾼 결과다. 왼쪽 배치 그림을 드래그해 회전하는 조작과, 오른쪽 투영을 정하는 ‘시선의 방향’ 조작도 구분해 살펴보자.</p>
+        <p><strong>두 구의 거리를 바꿔 보자.</strong> 중심 간 거리를 2보다 작게 만들면 공간에서 두 구가 실제로 겹친다. 이것은 시선의 변화와 달리 모형의 배치 자체를 바꾼 결과다. 왼쪽 배치 그림을 드래그해 회전하는 조작과, 오른쪽 투영을 정하는 ‘시선의 방향’ 조작도 구분해 살펴보자.</p>
       </div>
       <p>부피 비율의 분모는 구 하나의 부피이고, 투영 면적 비율의 분모는 원 하나의 면적이다. 두 값은 서로 다른 기하학적 양을 나타낸다. 이 모형은 같은 반지름의 두 구를 사용하며, 표시되는 비율은 학습률이나 수업 효과, 통계적 상관계수 또는 인과관계의 추정치가 아니다. 교육의 관계를 탐구하려면 이 모형이 드러내는 차이를 실제 사례와 대조하고, 도형에 담기지 않는 과정도 함께 물어야 한다.</p>
 
@@ -2646,7 +2710,7 @@ html, body { height: 100%; overflow: hidden; }
         <p id="source-1"><strong>[1] 임완철, 『읽는다는 것의 미래: 책이 생각하게 되면 우리는 무엇을 읽어야 할까?』</strong>, 지식노마드, 2019. ISBN 979-11-87481-52-2. 제2장 「교육 문제를 다룰 때 작동하는 우리 생각의 기초들」의 단어(54–57쪽), 수업(58–62쪽), 학습(63–65쪽) 논의. <a href="https://www.yes24.com/product/goods/69288352" target="_blank" rel="noopener noreferrer">도서 정보</a></p>
         <p id="source-2"><strong>[2] 임완철, 『가르치는 인공지능은 가능한가?: 장치의 교육학을 위한 시론』</strong>, 새물결, 2020. ISBN 978-89-5559-427-0. 제7장 「교육장치의 디지털전환」 중 「16. 5. 차원을 높여 생각하는 방법」. <a href="https://m.yes24.com/Goods/Detail/94158747" target="_blank" rel="noopener noreferrer">도서 정보</a></p>
         <p class="note">가르침과 배움의 동일성에 대한 문제는 [1]을, 차원을 더하는 벤다이어그램의 구체적인 제안은 [2]를 근거로 삼았다. 이 글은 두 책의 논의를 바탕으로 시각화에 맞게 새로 작성한 해설이며, 원문의 전재가 아니다.</p>
-        <p><a href="https://www.youtube.com/watch?v=cvE8M0FkCFc" target="_blank" rel="noopener noreferrer">관련 강연 보기</a> · <a href="https://github.com/climtc/teaching-learning-perspectives" target="_blank" rel="noopener noreferrer">GitHub 저장소</a> · <a href="./borromean-rings.html">보로메오 고리와 라캉 읽기</a></p>
+        <p><a href="https://www.youtube.com/watch?v=cvE8M0FkCFc" target="_blank" rel="noopener noreferrer">관련 강연 보기</a> ·  · <a href="./borromean-rings.html">보로메오 고리와 라캉 읽기</a></p>
       </footer>
     </article>
   </div>

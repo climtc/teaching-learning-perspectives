@@ -1,6 +1,4 @@
 {
-  "schema": "experiment-sources/1",
-  "review_date": "2026-10-08",
   "datasets": {
     "repository": "open-numbers/ddf--gapminder--systema_globalis",
     "commit": "ee190605fdec9d1c35c38e18e869a400a5818fe6",
@@ -11,31 +9,23 @@
     "downloads": [
       {
         "indicator": "gdppercapita_us_inflation_adjusted",
-        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/countries-etc-datapoints/ddf--datapoints--gdppercapita_us_inflation_adjusted--by--geo--time.csv",
-        "sha256": "f9a73ce1aa5345ee4b53b059a2d4fa30a87207723080afd94522bee436da08c8",
-        "bytes": 225615
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/countries-etc-datapoints/ddf--datapoints--gdppercapita_us_inflation_adjusted--by--geo--time.csv"
       },
       {
         "indicator": "life_expectancy_at_birth_data_from_ihme",
-        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/countries-etc-datapoints/ddf--datapoints--life_expectancy_at_birth_data_from_ihme--by--geo--time.csv",
-        "sha256": "779c7bfecf05d0f3fef9ffaf6eae475ee4da4b1ea056568d76fafe9d51b2fd62",
-        "bytes": 62343
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/countries-etc-datapoints/ddf--datapoints--life_expectancy_at_birth_data_from_ihme--by--geo--time.csv"
       },
       {
         "indicator": "total_population_with_projections",
-        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/countries-etc-datapoints/ddf--datapoints--total_population_with_projections--by--geo--time.csv",
-        "sha256": "18a043e8b3c2563212988e2672f94421ea4e842ccca4602e10de329300f9831b",
-        "bytes": 372471
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/countries-etc-datapoints/ddf--datapoints--total_population_with_projections--by--geo--time.csv"
       }
     ],
     "metadata": [
       {
-        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/ddf--concepts.csv",
-        "sha256": "3ad2ab0754bca3db0973ff3e94dd4d4d14491572f03b779691df8ccd6f2a364e"
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/ddf--concepts.csv"
       },
       {
-        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/ddf--entities--geo--country.csv",
-        "sha256": "eb9428941f8a2d7b6ce10feada30d723f8b5284fcb47e566128851a1637a4e35"
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/ddf--entities--geo--country.csv"
       }
     ]
   },
