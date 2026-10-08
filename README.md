@@ -1,10 +1,18 @@
-# 가르치다와 배우다 — 누구의 시선인가
+# 차원 압축과 펼침 실험
 
-[시각화 열기](https://climtc.github.io/teaching-learning-perspectives/) · [관련 강연](https://www.youtube.com/watch?v=cvE8M0FkCFc)
+[전체 사례 탐색](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html) · [라캉의 세 질문](https://climtc.github.io/teaching-learning-perspectives/lacan-problems.html)
+
+[출발 사례: 가르치다와 배우다](https://climtc.github.io/teaching-learning-perspectives/) · [관련 강연](https://www.youtube.com/watch?v=cvE8M0FkCFc)
 
 ## 저장소 개요
 
-가르치는 사람이 의도한 것과 배우는 사람이 배운 것은 같은 것일까? 이 저장소는 그 물음을 두 구의 공간 배치와 시선에 따른 투영으로 탐구하는 인터랙티브 시각화다. 파란 구는 ‘가르치다’, 주황 구는 ‘배우다’를 나타낸다. 두 구의 거리를 유지한 채 시선을 바꾸면, 공간에서의 관계는 그대로인데 평면에 겹쳐 보이는 모습은 달라진다. 이를 통해 관계 자체와 관계를 표현하는 기호, 그리고 그 기호를 바라보는 관점을 함께 생각할 수 있다.
+**차원 압축과 펼침 실험**은 임완철이 책에서 제안한 **차원증감법**을 바탕으로, 평면의 작품·도식과 조작 가능한 디지털 표현을 비교하는 프로젝트다. 원근법과 회화, 표면과 매듭, 단면과 4차원 도형, 실제 고차원 데이터까지 긴 시간축에서 탐색한다. 각 사례는 상단의 비교 실험과 하단에서 독립적으로 스크롤하는 읽을 자료, 원작이나 재도식의 출처를 제공한다.
+
+대상의 물리적 깊이, 곡면 자체의 차원, 데이터의 변수 수, 시점과 조작의 자유도를 구별한다. 차원을 더할 때 확인하게 되는 관계와 압축 과정에서 잃는 정보를 함께 검토한다. 기존 라캉 연구는 경계·반복·전체 결속이라는 문제와 그 적용 조건을 설명하는 이론 자료로 연결했다. 프로젝트 이름과 메뉴는 확장했으며 기존 페이지 URL을 유지한다.
+
+## 출발 사례 — 가르치다와 배우다
+
+가르치는 사람이 의도한 것과 배우는 사람이 배운 것은 같은 것일까? 출발 사례는 그 물음을 두 구의 공간 배치와 시선에 따른 투영으로 탐구하는 인터랙티브 시각화다. 파란 구는 ‘가르치다’, 주황 구는 ‘배우다’를 나타낸다. 두 구의 거리를 유지한 채 시선을 바꾸면, 공간에서의 관계는 그대로인데 평면에 겹쳐 보이는 모습은 달라진다. 이를 통해 관계 자체와 관계를 표현하는 기호, 그리고 그 기호를 바라보는 관점을 함께 생각할 수 있다.
 
 이 탐구의 바탕은 임완철의 『읽는다는 것의 미래: 책이 생각하게 되면 우리는 무엇을 읽어야 할까?』에 있다. 이 책은 단어와 수업, 학습이라는 장치가 교육을 이해하는 방식에 어떻게 관여하는지 살핀다. ‘가르쳤다’는 말이 곧바로 ‘배웠다’는 사실을 보증하지 않으며, 가르침에서 의도한 ‘무엇’과 배움에서 일어난 ‘무엇’을 동일하게 놓을 수 있는지도 다시 물어야 한다. 변화하는 과정을 하나의 단어와 그림에 고정하면 생각하기는 쉬워지지만, 그 표현이 드러내지 못하는 과정과 경계도 생긴다.[1]
 
@@ -71,12 +79,30 @@
 
 책과의 연결: 임완철, 『읽는다는 것의 미래』(2019), 제2장 「교육 문제를 다룰 때 작동하는 우리 생각의 기초들」; 『가르치는 인공지능은 가능한가?』(2020), 제7장 중 「16. 5. 차원을 높여 생각하는 방법」. 이번 글은 연구용 해설이며 책의 단원 전체를 전재한 것이 아니다. 이 라캉 사례 묶음은 라캉 텍스트를 중심으로 구성했다. 다른 텍스트의 사례와 이론 모형은 아래의 확장 단계에 정리했다.
 
-## 시각화 확장과 이론 모형 — 두 방향의 탐구
+## 시각화 확장과 이론 모형 — 차원 압축과 펼침 실험
 
-[두 방향의 탐구 시작하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[차원 압축과 펼침 실험](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 첫 방향은 라캉 밖의 원전에서 선정한 [플랫랜드의 단면](https://climtc.github.io/teaching-learning-perspectives/flatland-slices.html), [오일러의 다리](https://climtc.github.io/teaching-learning-perspectives/euler-bridges.html), [로렌츠의 상태 공간](https://climtc.github.io/teaching-learning-perspectives/lorenz-flow.html)이다. 각각 평면 도식, 조작 가능한 모형, 독립적으로 스크롤하는 해설과 출처를 제공한다.
 
 두 번째 방향은 [라캉의 세 질문과 분석 모형](https://climtc.github.io/teaching-learning-perspectives/lacan-problems.html)이다. 경계, 반복, 전체 결속의 원문 문제를 재구성하고, `M=(X,R,O,T,I,E)`로 대상·관계·관찰·조작·보존 성질·근거를 기록하는 분석 틀을 제시한다. [원고](THEORY_MODEL.md)에 책과 기존 페이지의 적용, 철회 조건, 반론, 원고 편집 제안을 함께 남겼다. 라캉의 매듭 자체를 통상의 모형으로 부르지 않는 원문상의 제한과 프로젝트의 분석 모형을 구별한다. 교육 효과나 정신 상태의 측정식으로 사용하지 않는다.
 
 플랫랜드는 원전 삽화, 로렌츠는 논문 그림 2의 일부, 오일러는 출처 상태를 명시한 재도식을 사용한다. [계획과 실행 범위](NEXT_STAGE_PLAN.md), [출처와 원본 해시](geometry-lab-sources.json)에서 근거를 확인할 수 있다.
+
+## 차원 압축과 펼침 실험 — 역사와 데이터의 확장
+
+사용자가 선택한 프로젝트 이름이다. 임완철의 **차원증감법**을 핵심 개념으로 삼고, 2차원 기록과 조작 가능한 디지털 표현을 비교한다. 『가르치는 인공지능은 가능한가?』(새물결, 2020), 제7장 16.6절, 보관한 최종 원고 186쪽(PDF 176쪽)에 용어의 명명 대목이 있다. 이는 출간본 쪽수와 구별된다. 『읽는다는 것의 미래』(지식노마드, 2019), 제2장 출간본 54–65쪽의 관계 도식과 연결한다.
+
+[전체 탐색 화면](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)에서 시대와 문제를 선택한다. 이번 확장은 다음 일곱 페이지이다.
+
+- [구면을 평면에 펼치기](https://climtc.github.io/teaching-learning-perspectives/stereographic-projection.html)
+- [원근법 — 눈과 그림 평면](https://climtc.github.io/teaching-learning-perspectives/perspective.html)
+- [물감의 요철 — 빛에 따라 달라지는 표면](https://climtc.github.io/teaching-learning-perspectives/impasto-light.html)
+- [세잔과 큐비즘 — 여러 시점의 재배치](https://climtc.github.io/teaching-learning-perspectives/cezanne-cubism.html)
+- [테서랙트 — 4차원 회전과 투영](https://climtc.github.io/teaching-learning-perspectives/hypercube.html)
+- [고차원 데이터 — 13개 변수를 펼쳐 보기](https://climtc.github.io/teaching-learning-perspectives/pca-vectors.html)
+- [단어 벡터 — 의미의 배치와 투영의 손실](https://climtc.github.io/teaching-learning-perspectives/word-vector-projections.html)
+
+세잔을 큐비즘 창시자로 기술하지 않는다. 물감 모형은 원작 높이의 복원이 아니다. 물리 차원, 내재 차원, 변수 수와 관찰 자유도를 구별한다. 각 페이지에 원작 또는 재도식, 조작에 따른 보존 성질과 손실, 출처와 범위를 기록했다. 와인 데이터는 CC BY 4.0이며, 단어 데모는 원시 벡터를 재배포하지 않고 계산한 좌표와 선정 표본 간 거리만 포함한다. 외부 실행 코드 없이 기존 CSP와 iframe sandbox를 유지한다.
+
+[선정과 실행 계획](DIMENSION_HISTORY_PLAN.md) · [출처와 해시](dimension-history-sources.json). 기존 URL과 라캉 연구 원고는 계속 사용할 수 있다.
