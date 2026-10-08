@@ -1,0 +1,13 @@
+# Private source material and work in progress stay outside this public repository.
+*.hwp
+*.hwpx
+*.docx
+*.odt
+*.pages
+private/
+local-only/
+manuscripts/
+MANUSCRIPT_CASES_PLAN.md
+manuscript-cases-sources.json
+THEORY_MODEL.md
+*private-source*
