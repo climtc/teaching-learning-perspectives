@@ -26,6 +26,11 @@ function ephemeris(rows,time){
 const dot=(a,b)=>a.slice(0,3).reduce((v,x,i)=>v+x*b[i],0),cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]],unit=a=>{const n=Math.hypot(...a);return a.map(x=>x/n);};
 function sunBasis(sun){const x=unit(sun.slice(0,3).map(v=>-v)),z=unit(cross(sun.slice(0,3),sun.slice(3,6))),y=cross(z,x);return[x,y,z];}
 function missionPosition(earthRelative,sun,frame){return frame==='inertial'?earthRelative.slice(0,3).map((x,i)=>x-sun[i]):sunBasis(sun).map(axis=>dot(earthRelative,axis));}
+// Instantaneous two-body axes. Input states are geometric Earth-relative km, km/s.
+function pairBasis(sun,moon,system){if(system==='sun-earth')return sunBasis(sun);const x=unit(moon.slice(0,3)),z=unit(cross(moon.slice(0,3),moon.slice(3,6))),y=cross(z,x);return[x,y,z];}
+function fromBasis(p,basis){return [0,1,2].map(j=>p.reduce((v,x,i)=>v+x*basis[i][j],0));}
+function scenePosition(q,sun,moon,system,frame){return frame==='inertial'?q.slice(0,3).map((x,i)=>x-sun[i]):pairBasis(sun,moon,system).map(axis=>dot(q,axis));}
+function referencePosition(p,mu,sun,moon,system,frame){const length=Math.hypot(...(system==='sun-earth'?sun:moon).slice(0,3)),origin=system==='sun-earth'?1-mu:-mu,rel=p.map((v,i)=>(v-(i===0?origin:0))*length);return scenePosition(fromBasis(rel,pairBasis(sun,moon,system)),sun,moon,system,frame);}
 function missionTime(window,fraction){return window.start+Math.max(0,Math.min(1,fraction))*(window.end-window.start);}
-return{potential,gradient,dynamics,jacobi,rotate,inertialState,state,stableTriangular,distance,ephemeris,sunBasis,missionPosition,missionTime};
+return{potential,gradient,dynamics,jacobi,rotate,inertialState,state,stableTriangular,distance,ephemeris,sunBasis,missionPosition,missionTime,pairBasis,fromBasis,scenePosition,referencePosition};
 });
