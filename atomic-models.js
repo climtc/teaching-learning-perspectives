@@ -59,6 +59,52 @@
     for(let k=1;k<steps;k++)sum+=(k%2?4:2)*slice(s,u,v,k*h,plane);
     return sum*h/3*2;
   }
-  const api={states,amplitude,density,radial,cdf,quantile,random,samples,planePoint,slice,marginal,energy:s=>-13.6/states[s].n**2};
+  // CODATA 2022. Nuclear masses are not neutral-atom masses or abundance averages.
+  const constants={electronMassU:.0005485799090441,rydbergEV:13.605693122990,bohrRadiusNM:.0529177210544};
+  const species={
+    H:{label:'¹H · 수소',short:'¹H',Z:1,N:1,nuclearMassU:1.0072764665789,massRatio:1836.152673426,kind:'hydrogenic'},
+    D:{label:'²H · 중수소',short:'²H',Z:1,N:1,nuclearMassU:2.013553212544,kind:'hydrogenic'},
+    'He+':{label:'⁴He⁺ · 전자 하나',short:'⁴He⁺',Z:2,N:1,nuclearMassU:4.001506179129,kind:'hydrogenic'},
+    He:{label:'⁴He · 전자 둘 · 변분 근사',short:'⁴He',Z:2,N:2,nuclearMassU:4.001506179129,kind:'variational'}
+  };
+  for(const info of Object.values(species))if(!info.massRatio)info.massRatio=info.nuclearMassU/constants.electronMassU;
+  function parameters(id='H',massMode='finite'){
+    const info=species[id];if(!info)throw new Error('Unknown atomic species');
+    const eta=info.kind==='variational'||massMode==='infinite'?1:info.massRatio/(info.massRatio+1);
+    return {...info,id,eta,scale:info.kind==='variational'?info.Z-5/16:info.Z*eta};
+  }
+  const shape=(s,p)=>p.kind==='variational'?'1s':s;
+  function systemAmplitude(s,x,y,z,id='H',massMode='finite'){
+    const p=parameters(id,massMode),k=p.scale;
+    return k**1.5*amplitude(shape(s,p),x*k,y*k,z*k);
+  }
+  function systemDensity(s,x,y,z,id='H',massMode='finite'){
+    const p=parameters(id,massMode),a=systemAmplitude(s,x,y,z,id,massMode);
+    return p.N*a*a;
+  }
+  function systemRadial(s,r,id='H',massMode='finite'){
+    const p=parameters(id,massMode);return p.scale*radial(shape(s,p),r*p.scale);
+  }
+  function systemCdf(s,r,id='H',massMode='finite'){
+    const p=parameters(id,massMode);return cdf(shape(s,p),r*p.scale);
+  }
+  function systemSamples(s,trials,seed=1931,id='H',massMode='finite'){
+    const p=parameters(id,massMode);
+    return samples(shape(s,p),trials*p.N,seed).map(q=>({x:q.x/p.scale,y:q.y/p.scale,z:q.z/p.scale,r:q.r/p.scale}));
+  }
+  function systemSlice(s,u,v,offset,plane,id='H',massMode='finite'){
+    return systemDensity(s,...planePoint(u,v,offset,plane),id,massMode);
+  }
+  function systemMarginal(s,u,v,plane,id='H',massMode='finite',steps=160){
+    const p=parameters(id,massMode),k=p.scale;
+    return p.N*k*k*marginal(shape(s,p),u*k,v*k,plane,steps);
+  }
+  function heliumEnergy(zeta=27/16){return (zeta*zeta-4*zeta+5*zeta/8)*2*constants.rydbergEV;}
+  function systemEnergy(s,id='H',massMode='finite'){
+    const p=parameters(id,massMode);
+    return p.kind==='variational'?heliumEnergy(p.scale):-constants.rydbergEV*p.eta*p.Z*p.Z/states[s].n**2;
+  }
+  const api={states,amplitude,density,radial,cdf,quantile,random,samples,planePoint,slice,marginal,energy:s=>-13.6/states[s].n**2,
+    constants,species,parameters,systemAmplitude,systemDensity,systemRadial,systemCdf,systemSamples,systemSlice,systemMarginal,heliumEnergy,systemEnergy};
   if(typeof module==='object'&&module.exports)module.exports=api;else root.AtomicProbability=api;
 })(typeof window==='object'?window:globalThis);
