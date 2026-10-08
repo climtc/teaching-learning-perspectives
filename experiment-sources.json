@@ -1,0 +1,67 @@
+{
+  "schema": "experiment-sources/1",
+  "review_date": "2026-10-08",
+  "datasets": {
+    "repository": "open-numbers/ddf--gapminder--systema_globalis",
+    "commit": "ee190605fdec9d1c35c38e18e869a400a5818fe6",
+    "license": "CC BY 4.0",
+    "attribution": "Free data from Gapminder; GDP: World Bank WDI, life expectancy: IHME, population: Gapminder/UN series. Regional grouping authored for this exhibit.",
+    "selection": "12 illustrative countries, complete 1990–2010 series; not representative sampling; no interpolation or projections after 2010",
+    "country_year_rows": 252,
+    "downloads": [
+      {
+        "indicator": "gdppercapita_us_inflation_adjusted",
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/countries-etc-datapoints/ddf--datapoints--gdppercapita_us_inflation_adjusted--by--geo--time.csv",
+        "sha256": "f9a73ce1aa5345ee4b53b059a2d4fa30a87207723080afd94522bee436da08c8",
+        "bytes": 225615
+      },
+      {
+        "indicator": "life_expectancy_at_birth_data_from_ihme",
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/countries-etc-datapoints/ddf--datapoints--life_expectancy_at_birth_data_from_ihme--by--geo--time.csv",
+        "sha256": "779c7bfecf05d0f3fef9ffaf6eae475ee4da4b1ea056568d76fafe9d51b2fd62",
+        "bytes": 62343
+      },
+      {
+        "indicator": "total_population_with_projections",
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/countries-etc-datapoints/ddf--datapoints--total_population_with_projections--by--geo--time.csv",
+        "sha256": "18a043e8b3c2563212988e2672f94421ea4e842ccca4602e10de329300f9831b",
+        "bytes": 372471
+      }
+    ],
+    "metadata": [
+      {
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/ddf--concepts.csv",
+        "sha256": "3ad2ab0754bca3db0973ff3e94dd4d4d14491572f03b779691df8ccd6f2a364e"
+      },
+      {
+        "url": "https://raw.githubusercontent.com/open-numbers/ddf--gapminder--systema_globalis/ee190605fdec9d1c35c38e18e869a400a5818fe6/ddf--entities--geo--country.csv",
+        "sha256": "eb9428941f8a2d7b6ce10feada30d723f8b5284fcb47e566128851a1637a4e35"
+      }
+    ]
+  },
+  "external_sources": [
+    {
+      "url": "https://www.gapminder.org/data/",
+      "supports": "Data use and attribution"
+    },
+    {
+      "url": "https://math.ucla.edu/~robjohn/math/spheretrig.pdf",
+      "author": "Rob Johnson, West Hills Institute of Mathematics; hosted at UCLA",
+      "locator": "Introduction; §8, Theorem 8.2",
+      "supports": "Great-circle sides, tangent angles, spherical excess and area"
+    },
+    {
+      "url": "https://ocw.mit.edu/courses/res-6-007-signals-and-systems-spring-2011/resources/lecture-16-sampling/",
+      "supports": "Sampling and aliasing"
+    },
+    {
+      "url": "https://ocw.mit.edu/courses/hst-582j-biomedical-signal-and-image-processing-spring-2007/54ae74896b15e34e9e7fea0d94c17777_ch5_samp.pdf",
+      "locator": "§5.1.3",
+      "supports": "Strict bandlimit condition and ideal infinite-sample reconstruction"
+    },
+    {
+      "url": "https://help.medium.com/hc/en-us/articles/214981378-Using-embeds",
+      "supports": "URL embed; unsupported providers use preview cards; arbitrary scripts and embed code unsupported"
+    }
+  ]
+}
