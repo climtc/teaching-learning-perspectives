@@ -1,0 +1,17 @@
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.LagrangeModel=api;})(typeof globalThis!=='undefined'?globalThis:this,function(){
+'use strict';
+function potential(p,mu){const[x,y,z]=p,r1=Math.hypot(x+mu,y,z),r2=Math.hypot(x-1+mu,y,z);return .5*(x*x+y*y)+(1-mu)/r1+mu/r2;}
+function gradient(p,mu){const[x,y,z]=p,a=(1-mu)/Math.hypot(x+mu,y,z)**3,b=mu/Math.hypot(x-1+mu,y,z)**3;return[x-a*(x+mu)-b*(x-1+mu),y-(a+b)*y,-(a+b)*z];}
+function dynamics(q,mu){const g=gradient(q,mu);return[q[3],q[4],q[5],2*q[4]+g[0],-2*q[3]+g[1],g[2]];}
+function jacobi(q,mu){return 2*potential(q,mu)-q[3]**2-q[4]**2-q[5]**2;}
+function rotate(p,t){const c=Math.cos(t),s=Math.sin(t);return[c*p[0]-s*p[1],s*p[0]+c*p[1],p[2]];}
+function inertialState(q,t){const p=rotate(q,t),v=rotate([q[3]-q[1],q[4]+q[0],q[5]],t);return[...p,...v];}
+function state(orbit,fraction){const a=orbit.states,u=Math.max(0,Math.min(1,fraction))*(a.length-1),i=Math.min(a.length-2,Math.floor(u)),v=u-i,p=a[i],q=a[i+1],h=q[0]-p[0],v2=v*v,v3=v2*v,out=[];
+ for(let j=1;j<=3;j++)out.push((2*v3-3*v2+1)*p[j]+(v3-2*v2+v)*h*p[j+3]+(-2*v3+3*v2)*q[j]+(v3-v2)*h*q[j+3]);
+ for(let j=1;j<=3;j++)out.push(((6*v2-6*v)*p[j]+(3*v2-4*v+1)*h*p[j+3]+(-6*v2+6*v)*q[j]+(3*v2-2*v)*h*q[j+3])/h);
+ return out;
+}
+function stableTriangular(mu){return 27*mu*(1-mu)<1;}
+function distance(a,b){return Math.hypot(...a.slice(0,3).map((x,i)=>x-b[i]));}
+return{potential,gradient,dynamics,jacobi,rotate,inertialState,state,stableTriangular,distance};
+});
