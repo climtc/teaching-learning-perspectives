@@ -106,3 +106,17 @@
 세잔을 큐비즘 창시자로 기술하지 않는다. 물감 모형은 원작 높이의 복원이 아니다. 물리 차원, 내재 차원, 변수 수와 관찰 자유도를 구별한다. 각 페이지에 원작 또는 재도식, 조작에 따른 보존 성질과 손실, 출처와 범위를 기록했다. 와인 데이터는 CC BY 4.0이며, 단어 데모는 원시 벡터를 재배포하지 않고 계산한 좌표와 선정 표본 간 거리만 포함한다. 외부 실행 코드 없이 기존 CSP와 iframe sandbox를 유지한다.
 
 [선정과 실행 계획](DIMENSION_HISTORY_PLAN.md) · [출처와 해시](dimension-history-sources.json). 기존 URL과 라캉 연구 원고는 계속 사용할 수 있다.
+
+## 원고에서 찾은 추가 실험
+
+미출간 「교육콘텐츠에 차원을 추가하는 방법」(2024년 3월 작업본)과 『계산하는 개념공간』(2025년 7월 8일 보관본)에 직접 연결되는 다섯 사례를 구현했다. 원고 개고에 앞서 실행한 사례 단계이며, 미출간 원본과 원고 안의 생성 초안은 공개 저장소에 올리지 않았다.
+
+- [국가 지표 — 시간축을 펼치기](https://climtc.github.io/teaching-learning-perspectives/gapminder-time.html)
+- [교실 창문 — 시선의 높이와 방향](https://climtc.github.io/teaching-learning-perspectives/classroom-window.html)
+- [개념공간 — 축과 관점의 선택](https://climtc.github.io/teaching-learning-perspectives/conceptual-lenses.html)
+- [구면 삼각형 — 안에서 측정하는 곡률](https://climtc.github.io/teaching-learning-perspectives/spherical-triangle.html)
+- [연속과 표본 — 같아 보이는 다른 신호](https://climtc.github.io/teaching-learning-perspectives/sampling-aliasing.html)
+
+Gapminder의 12개국·1990–2010년 252행을 고정 버전에서 결합했다. GDP는 2015년 고정 US$, 기대수명은 IHME 보관 지표이며 최신 통계와 구별한다. 창문 모형은 경로의 대칭과 바라보는 방향을 분리한다. 개념공간의 점수는 가상 값이다. 구면의 수학적 곡률은 사회적 비유와 구별하고, 코사인 별칭 비교를 일반 신호의 유한 표본 복원으로 설명하지 않는다.
+
+[원고 연결과 구현 계획](MANUSCRIPT_CASES_PLAN.md) · [출처와 해시](manuscript-cases-sources.json) · [실험 자료](manuscript-case-data.json) · [GitHub–Medium 작업 흐름](MEDIUM_WORKFLOW.md). GitHub를 코드·자료·실험의 1차 저장소로, Medium을 향후 원고와 사례 링크의 게시 공간으로 사용한다. 현재 Medium 편집기에서 GitHub Pages는 링크 카드로 변환되는 것을 확인했다. 임의 iframe·스크립트의 직접 삽입은 지원하지 않는다.
