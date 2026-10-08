@@ -2,7 +2,7 @@
 
 그림과 도식, 수학 공식은 무엇을 압축하고, 조작할 수 있는 표현은 무엇을 펼쳐 보여 주는가. 평면 기록과 디지털 모형을 나란히 놓고 시점, 관계와 조건을 바꾸어 비교한다.
 
-[37개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[38개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 임완철의 **차원증감법**을 바탕으로 원근법과 회화, 곡면과 매듭, 수학 공식과 물리 법칙, 상태와 데이터의 표현을 살핀다. 물리 공간의 차원, 표면 자체의 차원, 데이터의 변수 수와 관찰의 자유도는 서로 구별한다. 디지털 화면도 평면이지만, 좌표와 변환 규칙을 조작하면 한 장에서 생략한 조건을 비교할 수 있다.
 
@@ -10,6 +10,7 @@
 
 **재생**, **일시정지**, **처음으로**, **속도**를 사용해 변화를 따라갈 수 있다. 재생 설명에는 시간 전개, 경로 추적, 조건 비교 또는 단계 전환 중 무엇을 보여 주는지 표시한다. 눈의 위치나 기준계 속도를 순서대로 바꾸는 것은 실제 시간의 흐름과 구별한다. 재생 위치를 직접 고르거나 다른 조건을 수동 조작하면 멈춘다.
 
+- [분자식과 분자구조 — 같은 식, 다른 분자](https://climtc.github.io/teaching-learning-perspectives/molecular-structures.html): 에탄올과 에터의 연결, cis/trans-2-뷰텐의 배치, R/S 젖산의 거울상 관계를 PubChem 계산 구조와 평면 표기로 비교한다. 재생은 관찰각의 변화다.
 - [DNA — 서열에서 입체 구조로](https://climtc.github.io/teaching-learning-perspectives/dna-double-helix.html): PDB 1BNA의 12개 염기쌍과 486개 비수소 원자 좌표를 사용해 서열, 골격, 염기의 쌓임과 홈 쪽의 방향을 비교한다. 재생은 염기쌍 관찰 순회다.
 - [원자와 전자구름](https://climtc.github.io/teaching-learning-perspectives/atomic-orbitals.html): 수소·중수소·He⁺와 중성 He의 분포를 같은 척도로 비교한다. 핵 전하, 환산질량과 전자 수를 구별하며 중성 He에는 1s² 변분 근사를 사용한다.
 - [기술적 특이점 — 한 점에서 조건의 경계로](https://climtc.github.io/teaching-learning-perspectives/singularity-frontiers.html): 과제별 임계 통과와 연속 조건의 경계선·경계면을 비교한다. 화면의 함수는 설명용 가정이며 성능 교점과 기술적 특이점은 구별한다.
