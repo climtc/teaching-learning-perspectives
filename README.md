@@ -2,7 +2,7 @@
 
 그림과 도식, 수학 공식은 무엇을 압축하고, 조작할 수 있는 표현은 무엇을 펼쳐 보여 주는가. 평면 기록과 디지털 모형을 나란히 놓고 시점, 관계와 조건을 바꾸어 비교한다.
 
-[57개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[59개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 임완철의 **차원증감법**을 바탕으로 원근법과 회화, 곡면과 매듭, 수학 공식과 물리 법칙, 상태와 데이터의 표현을 살핀다. 물리 공간의 차원, 표면 자체의 차원, 데이터의 변수 수와 관찰의 자유도는 서로 구별한다. 디지털 화면도 평면이지만, 좌표와 변환 규칙을 조작하면 한 장에서 생략한 조건을 비교할 수 있다.
 
@@ -10,6 +10,8 @@
 
 **재생**, **일시정지**, **처음으로**, **속도**를 사용해 변화를 따라갈 수 있다. 재생 설명에는 시간 전개, 경로 추적, 조건 비교 또는 단계 전환 중 무엇을 보여 주는지 표시한다. 눈의 위치나 기준계 속도를 순서대로 바꾸는 것은 실제 시간의 흐름과 구별한다. 재생 위치를 직접 고르거나 다른 조건을 수동 조작하면 멈춘다.
 
+- [시계의 동기화 — 철도와 특허국, 동시성의 만남](https://climtc.github.io/teaching-learning-perspectives/galison-clocks.html): 갤리슨의 역사적 접점을 시공간에 배치하고, 시계 오차·교차 시간표·상대론적 동시성을 구별한다.
+- [별뜨기 — 카시오페아가 보이는 자리와 때](https://climtc.github.io/teaching-learning-perspectives/cassiopeia-viewpoints.html): 카시오페아 다섯 별의 실제 좌표와 운동으로, W의 방향 그림과 관찰 위치·시점 조건을 비교한다.
 - [야코비 경계 — 라그랑주점에서 열리는 통로](https://climtc.github.io/teaching-learning-perspectives/jacobi-regions.html): 야코비 상수와 높이 단면을 바꾸어, 지구–달 회전 좌표에서 운동이 허용되는 영역을 비교한다.
 - [중력 도움 — 어느 기준계에서 빨라지는가](https://climtc.github.io/teaching-learning-perspectives/gravity-assist.html): 행성 기준에서 보존되는 점근 속력과 바깥 기준에서 달라지는 에너지를 비교한다.
 - [달의 위상과 식 — 정렬에 숨어 있는 기울기](https://climtc.github.io/teaching-learning-perspectives/moon-phases-eclipses.html): 달의 위상 그림에 생략되기 쉬운 궤도 기울기와 교점을 펼쳐, 매달 식이 일어나지 않는 이유를 비교한다.
