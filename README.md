@@ -2,7 +2,7 @@
 
 그림과 도식, 수학 공식은 무엇을 압축하고, 조작할 수 있는 표현은 무엇을 펼쳐 보여 주는가. 평면 기록과 디지털 모형을 나란히 놓고 시점, 관계와 조건을 바꾸어 비교한다.
 
-[64개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[63개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 임완철의 **차원증감법**을 바탕으로 원근법과 회화, 곡면과 매듭, 수학 공식과 물리 법칙, 상태와 데이터의 표현을 살핀다. 물리 공간의 차원, 표면 자체의 차원, 데이터의 변수 수와 관찰의 자유도는 서로 구별한다. 디지털 화면도 평면이지만, 좌표와 변환 규칙을 조작하면 한 장에서 생략한 조건을 비교할 수 있다.
 
@@ -15,8 +15,7 @@
 - [회전체 — 단면의 넓이에서 부피로](https://climtc.github.io/teaching-learning-perspectives/integral-slices.html): 평면의 반지름 함수와 공간의 회전체를 비교하고, 원판 분할의 근사 오차를 확인한다.
 - [볼록렌즈 — 대표 광선에서 광선 다발로](https://climtc.github.io/teaching-learning-perspectives/convex-lens.html): 평면의 대표 광선과 원형 개구를 지나는 공간 광선 다발을 비교하고 화면의 초점을 맞춘다.
 - [지층 — 잘라 보는 방향이 만드는 단면](https://climtc.github.io/teaching-learning-perspectives/strata-sections.html): 같은 기울어진 지층을 다른 방향과 위치에서 잘라 겉보기 경사와 단층의 높이 차이를 비교한다.
-- [시계의 동기화 — 교차로를 통과하는 두 기차](https://climtc.github.io/teaching-learning-perspectives/galison-clocks.html): 왕복 신호로 원격 시계를 맞추고, 두 기차의 교차로 점유 시간이 어떻게 달라지는지 비교한다.
-- [별뜨기 — 카시오페아가 보이는 자리와 때](https://climtc.github.io/teaching-learning-perspectives/cassiopeia-viewpoints.html): 큰 하늘 방향 그림과 실제 거리의 공간 배치를 전환하며, 관찰점에 따라 카시오페아의 모양이 달라지는 조건을 비교한다.
+- [시계의 동기화 — 복잡한 철도망을 함께 움직이는 시간](https://climtc.github.io/teaching-learning-perspectives/galison-clocks.html): 1888년 중부유럽 철도 지도와 60개 도시의 지리 모형을 비교하며, 시계 오차·열차 시간표·분기점 점유를 살핀다.
 - [야코비 경계 — 라그랑주점에서 열리는 통로](https://climtc.github.io/teaching-learning-perspectives/jacobi-regions.html): 야코비 상수와 높이 단면을 바꾸어, 지구–달 회전 좌표에서 운동이 허용되는 영역을 비교한다.
 - [중력 도움 — 어느 기준계에서 빨라지는가](https://climtc.github.io/teaching-learning-perspectives/gravity-assist.html): 행성 기준에서 보존되는 점근 속력과 바깥 기준에서 달라지는 에너지를 비교한다.
 - [달의 위상과 식 — 정렬에 숨어 있는 기울기](https://climtc.github.io/teaching-learning-perspectives/moon-phases-eclipses.html): 달의 위상 그림에 생략되기 쉬운 궤도 기울기와 교점을 펼쳐, 매달 식이 일어나지 않는 이유를 비교한다.
