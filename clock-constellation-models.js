@@ -13,6 +13,9 @@ function altitude(ra,dec,latitude,siderealHour){const h=(siderealHour*15-ra)*rad
 function railway(offset=2,departure=2,speed=1,time=6,occupancy=.7){const arrivalA=6,startB=departure-offset,arrivalB=startB+6/speed,delta=arrivalB-arrivalA,intervalA=[arrivalA-occupancy/2,arrivalA+occupancy/2],intervalB=[arrivalB-occupancy/2,arrivalB+occupancy/2];return {arrivalA,arrivalB,startB,delta,clockA:time,clockB:time+offset,localArrivalB:departure+6/speed,risk:Math.abs(delta)<occupancy,intervalA,intervalB,A:[Math.max(-6,Math.min(6,time-6)),0],B:[0,Math.max(-6,Math.min(6,speed*(time-startB)-6))]};}
 function lorentz(x,t,beta){const gamma=1/Math.sqrt(1-beta*beta);return {x:gamma*(x-beta*t),t:gamma*(t-beta*x),gamma};}
 function lightSync(beta=0){const out=lorentz(-1,0,beta),bounce=lorentz(1,2,beta),back=lorentz(-1,4,beta),left=lorentz(-1,2,beta),right=lorentz(1,2,beta);return {out,bounce,back,stationMidpoint:2,deltaMoving:right.t-left.t,left,right};}
-const api={pi,rad,mas,pcKm,yearSeconds,dot,add,sub,mul,norm,unit,basis,local,stellarState,angles,angular,shapeDifference,altitude,railway,lorentz,lightSync};
+function roundTripSync(offset=2,outbound=.4,inbound=outbound,sent=0){const aSend=sent,bReflect=sent+outbound+offset,aReturn=sent+outbound+inbound,targetMid=(aSend+aReturn)/2,correction=targetMid-bReflect;return {aSend,bReflect,aReturn,targetMid,correction,residual:offset+correction};}
+const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+function skyProjection(vectors){const forward=unit(vectors.map(unit).reduce((a,b)=>add(a,b),[0,0,0])),east=unit(cross([0,1,0],forward)),north=cross(forward,east);return vectors.map(v=>angles([dot(v,east),dot(v,north),dot(v,forward)]));}
+const api={pi,rad,mas,pcKm,yearSeconds,dot,add,sub,mul,norm,unit,basis,local,stellarState,angles,angular,shapeDifference,altitude,railway,lorentz,lightSync,roundTripSync,cross,skyProjection};
 if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.ClockConstellation=api;
 })(typeof window!=='undefined'?window:globalThis);

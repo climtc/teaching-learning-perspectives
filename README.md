@@ -10,13 +10,13 @@
 
 **재생**, **일시정지**, **처음으로**, **속도**를 사용해 변화를 따라갈 수 있다. 재생 설명에는 시간 전개, 경로 추적, 조건 비교 또는 단계 전환 중 무엇을 보여 주는지 표시한다. 눈의 위치나 기준계 속도를 순서대로 바꾸는 것은 실제 시간의 흐름과 구별한다. 재생 위치를 직접 고르거나 다른 조건을 수동 조작하면 멈춘다.
 
-- [시계의 동기화 — 철도와 특허국, 동시성의 만남](https://climtc.github.io/teaching-learning-perspectives/galison-clocks.html): 갤리슨의 역사적 접점을 시공간에 배치하고, 시계 오차·교차 시간표·상대론적 동시성을 구별한다.
-- [별뜨기 — 카시오페아가 보이는 자리와 때](https://climtc.github.io/teaching-learning-perspectives/cassiopeia-viewpoints.html): 카시오페아 다섯 별의 실제 좌표와 운동으로, W의 방향 그림과 관찰 위치·시점 조건을 비교한다.
 - [이차함수 — 계수에 따라 달라지는 근](https://climtc.github.io/teaching-learning-perspectives/quadratic-family.html): 한 포물선에서 생략되는 계수 조건을 펼치고, 두 실근·중근·실근 없음의 경계를 비교한다.
 - [함수의 합성 — 입력, 중간값, 출력](https://climtc.github.io/teaching-learning-perspectives/function-composition.html): 합성의 순서를 바꾸며 입력·중간값·출력이 달라지는 과정을 관계 곡선으로 비교한다.
 - [회전체 — 단면의 넓이에서 부피로](https://climtc.github.io/teaching-learning-perspectives/integral-slices.html): 평면의 반지름 함수와 공간의 회전체를 비교하고, 원판 분할의 근사 오차를 확인한다.
 - [볼록렌즈 — 대표 광선에서 광선 다발로](https://climtc.github.io/teaching-learning-perspectives/convex-lens.html): 평면의 대표 광선과 원형 개구를 지나는 공간 광선 다발을 비교하고 화면의 초점을 맞춘다.
 - [지층 — 잘라 보는 방향이 만드는 단면](https://climtc.github.io/teaching-learning-perspectives/strata-sections.html): 같은 기울어진 지층을 다른 방향과 위치에서 잘라 겉보기 경사와 단층의 높이 차이를 비교한다.
+- [시계의 동기화 — 교차로를 통과하는 두 기차](https://climtc.github.io/teaching-learning-perspectives/galison-clocks.html): 왕복 신호로 원격 시계를 맞추고, 두 기차의 교차로 점유 시간이 어떻게 달라지는지 비교한다.
+- [별뜨기 — 카시오페아가 보이는 자리와 때](https://climtc.github.io/teaching-learning-perspectives/cassiopeia-viewpoints.html): 큰 하늘 방향 그림과 실제 거리의 공간 배치를 전환하며, 관찰점에 따라 카시오페아의 모양이 달라지는 조건을 비교한다.
 - [야코비 경계 — 라그랑주점에서 열리는 통로](https://climtc.github.io/teaching-learning-perspectives/jacobi-regions.html): 야코비 상수와 높이 단면을 바꾸어, 지구–달 회전 좌표에서 운동이 허용되는 영역을 비교한다.
 - [중력 도움 — 어느 기준계에서 빨라지는가](https://climtc.github.io/teaching-learning-perspectives/gravity-assist.html): 행성 기준에서 보존되는 점근 속력과 바깥 기준에서 달라지는 에너지를 비교한다.
 - [달의 위상과 식 — 정렬에 숨어 있는 기울기](https://climtc.github.io/teaching-learning-perspectives/moon-phases-eclipses.html): 달의 위상 그림에 생략되기 쉬운 궤도 기울기와 교점을 펼쳐, 매달 식이 일어나지 않는 이유를 비교한다.
