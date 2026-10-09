@@ -1,0 +1,404 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>같은 해, 다른 시간 — 사건·국면·장기지속 — 차원 압축과 펼침 실험</title><style>
+:root { color-scheme: light dark; --paper: light-dark(#fff, #181818); --ink: light-dark(#23262b, #f1f1f1); --quiet: light-dark(#616772, #aab0ba); --line: light-dark(#dce1e7, #3a3e45); background: var(--paper); color: var(--ink); }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+a { color: light-dark(#21669e, #88c6f5); text-underline-offset: 3px; }
+.page { position: fixed; inset: 0; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; overflow: clip; display: flex; flex-direction: column; max-width: 1120px; margin: 0 auto; }
+.visualization { display: flex; flex-direction: column; flex: 0 0 clamp(480px, 63dvh, 690px); min-height: 0; padding: 12px 20px 10px; gap: 10px; }
+.comparison-heading { flex: 0 0 auto; }
+.comparison-heading h1 { margin: 0; font-size: 20px; font-weight: 650; letter-spacing: -.03em; line-height: 1.4; }
+.comparison-heading p { margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: var(--quiet); }
+.comparison-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.35fr); gap: 22px; flex: 1 1 0; min-height: 0; }
+.paper-panel, .digital-panel { min-width: 0; min-height: 0; }
+.panel-label { margin: 0 0 6px; font-size: 12px; line-height: 1.5; font-weight: 600; color: var(--quiet); }
+.paper-panel { display: flex; flex-direction: column; }
+.paper-panel figure { display: flex; flex-direction: column; margin: 0; flex: 1 1 0; min-height: 0; }
+.paper-diagrams { display: block; width: 100%; min-height: 0; flex: 1 1 0; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.paper-panel figcaption { margin-top: 8px; font-size: 13px; line-height: 1.65; }
+.paper-panel figcaption span { display: block; color: var(--quiet); font-size: 12px; }
+.paper-panel button { align-self: flex-start; margin-top: 8px; }
+button { font: inherit; color: var(--ink); background: light-dark(#f3f6f9, #282d33); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font-size: 12px; line-height: 1.5; cursor: pointer; }
+button:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: 2px; }
+.digital-panel { display: flex; flex-direction: column; }
+#codex-visualization { display: block; width: 100%; flex: 1 1 0; min-height: 0; height: 100% !important; max-height: 100% !important; margin: 0; border: 0; }
+.reading { display: flex; flex: 1 1 0; flex-direction: column; min-height: 0; border-top: 1px solid var(--line); }
+.reading-heading { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 0; padding: 10px 20px 9px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.reading-heading .reading-kicker { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--quiet); }
+.reading-heading h2 { margin: 0; font-size: 19px; line-height: 1.4; letter-spacing: -.025em; font-weight: 650; }
+.reading-scroll { width: 100%; flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; scrollbar-gutter: stable; scroll-padding-top: 16px; }
+.reading-scroll:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: -3px; }
+.article { width: 100%; max-width: 54rem; padding: 16px 20px 48px; margin: 0; font-size: 17px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+.article h2 { margin: 28px 0 10px; font-size: 20px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; text-wrap: balance; }
+.article h3 { margin: 28px 0 10px; font-size: 19px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; text-wrap: balance; }
+.article p { margin: 0 0 20px; }
+.article .intro { color: var(--quiet); }
+.article sup { font-size: .75em; }
+.article .experiment { padding: 16px 20px 1px; margin: 20px 0; border-left: 3px solid light-dark(#438dc3, #78b7e7); background: light-dark(#f4f7fa, #23272d); }
+.article .sources { margin-top: 28px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.8; }
+.article .sources h2 { margin-top: 18px; font-size: 17px; }
+.article .sources .note { color: var(--quiet); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+.register-table { margin: 20px 0; }
+.register-table table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.75; }
+.register-table th, .register-table td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.register-table thead { color: var(--quiet); font-size: 13px; }
+.register-table tbody th { width: 22%; white-space: nowrap; font-weight: 600; }
+.source-page-dialog { width: min(800px, 95vw); max-height: 92dvh; margin: auto; padding: 0; overflow: auto; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 10px; }
+.source-page-dialog::backdrop { background: #000b; }
+.dialog-heading { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.dialog-heading h2 { margin: 0; font-size: 16px; line-height: 1.5; }
+.source-page-dialog img { display: block; width: 100%; height: auto; background: #fff; }
+.source-page-dialog .source-caption { margin: 0; padding: 12px 16px; font-size: 13px; line-height: 1.7; }
+@media (max-width: 680px) {
+  .visualization { padding: 8px 12px; gap: 8px; flex-basis: clamp(430px, 60dvh, 540px); }
+  .comparison-heading h1 { font-size: 17px; }
+  .comparison-heading p { display: none; }
+  .comparison-grid { display: flex; flex-direction: column; gap: 8px; }
+  .paper-panel { display: grid; grid-template-columns: 100px minmax(0, 1fr); grid-template-rows: auto auto; gap: 3px 10px; flex: 0 0 auto; }
+  .paper-panel .panel-label { grid-column: 2; grid-row: 1; margin: 0; font-size: 11px; }
+  .paper-panel figure { display: contents; }
+  .paper-diagrams { grid-column: 1; grid-row: 1 / 4; width: 100%; height: 64px; padding: 3px; }
+  .paper-panel figcaption { grid-column: 2; grid-row: 2; margin: 0; font-size: 11px; line-height: 1.4; }
+  .paper-panel figcaption span { display: none; }
+  .paper-panel button { grid-column: 2; grid-row: 3; justify-self: start; margin: 0; padding: 2px 6px; font-size: 11px; }
+  .digital-panel { flex: 1 1 0; }
+  .digital-panel > .panel-label { display: none; }
+  .reading-heading { padding: 8px 16px; gap: 4px 8px; }
+  .reading-heading h2 { font-size: 17px; }
+  .article { padding: 12px 16px 36px; font-size: 16px; line-height: 1.85; }
+  .article h2 { font-size: 19px; }
+  .article h3 { font-size: 18px; }
+  .article .experiment { padding: 12px 14px 1px; }
+  .register-table table { font-size: 14px; }
+  .register-table th, .register-table td { padding: 10px 8px; }
+}
+@media (max-height: 500px) and (min-width: 681px) {
+  .visualization { flex-basis: 320px; padding-top: 6px; gap: 6px; }
+  .comparison-heading h1 { font-size: 16px; }
+  .comparison-heading p { display: none; }
+  .paper-panel figcaption span { display: none; }
+  .reading-heading { padding-top: 6px; padding-bottom: 6px; }
+  .reading-heading h2 { font-size: 16px; }
+}
+@media (pointer: coarse) and (max-width: 680px) {
+  .visualization { flex-basis: clamp(480px, 60dvh, 540px); }
+}
+@media (pointer: coarse) and (max-height: 500px) and (min-width: 681px) {
+  .comparison-heading, .digital-panel > .panel-label { display: none; }
+}
+@media (max-width: 359px) {
+  .reading-heading, .article { padding-left: 12px; padding-right: 12px; }
+  .reading-heading h2 { font-size: 15px; }
+}
+
+.atlas-nav { display:flex; align-items:center; flex-wrap:wrap; gap:4px 12px; font-size:12px; line-height:1.5; margin-bottom:6px; }
+.atlas-nav a { text-decoration:none; }
+.atlas-nav a:hover { text-decoration:underline; }
+.article li { margin-bottom:8px; }
+.article .next { display:flex; flex-wrap:wrap; gap:12px; margin:24px 0; }
+@media(max-width:680px){.atlas-nav{margin-bottom:4px;font-size:11px;gap:4px 9px}.visualization{flex-basis:clamp(450px,62dvh,560px)}}
+@media(pointer:coarse) and (max-width:680px){.visualization{flex-basis:clamp(480px,62dvh,560px)}}
+@media(max-height:500px) and (min-width:681px){.atlas-nav a:not(:first-child){display:none}.atlas-nav{margin:0;font-size:11px}.visualization{flex-basis:310px}.comparison-heading p{display:none}}
+
+.formula-table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.7;margin:16px 0 22px}.formula-table th,.formula-table td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.formula-table code{white-space:normal}.formula-table th:first-child{width:17%}.math-block{padding:12px 16px;border-left:3px solid #83baff;background:light-dark(#f2f6fb,#242b35);font-size:16px;line-height:1.8}.article code{font-size:.92em}@media(max-width:680px){.formula-table{font-size:12px}.formula-table th,.formula-table td{padding:7px 5px}}
+.page{max-width:1480px}.visualization{flex-basis:clamp(540px,68dvh,790px)}.comparison-grid{grid-template-columns:minmax(210px,.65fr) minmax(0,2fr);gap:18px}.article{max-width:64rem;margin:0 auto;font-size:18px;line-height:1.95}.reading-heading{padding-left:24px}.atlas-nav{font-size:13px}.comparison-heading p{font-size:14px}.panel-label{font-size:13px}.paper-diagrams{padding:4px}.image-selector{font:inherit;color:var(--ink);background:var(--paper);max-width:100%;border:1px solid var(--line);padding:6px;border-radius:6px;margin:0 0 8px}.asset-credit{font-size:12px;line-height:1.5;margin:6px 0}.sky-assets .paper-diagrams{background:#070c14;padding:0}.sky-assets figure{flex:1;min-height:0}
+@media(max-width:680px){.visualization{flex-basis:clamp(480px,70dvh,640px)}.article{font-size:16px}.atlas-nav a:nth-child(3){display:none}.paper-panel figcaption{display:none}.paper-panel{grid-template-columns:68px minmax(0,1fr)}.paper-diagrams{height:42px}.paper-panel .panel-label{font-size:12px}.paper-panel button{font-size:12px;padding:3px 8px}.reading-heading{padding-left:16px}.sky-assets{grid-template-columns:68px minmax(0,1fr) auto;grid-template-rows:auto auto}.sky-assets .image-selector{grid-column:2;grid-row:1;margin:0;font-size:11px;padding:3px}.sky-assets .panel-label{display:none}.sky-assets button{grid-column:3;grid-row:1}.sky-assets .asset-credit{grid-column:2/4;grid-row:2;font-size:10px;margin:0}.sky-assets .paper-diagrams{grid-row:1/3}}
+@media(max-height:540px) and (min-width:681px){.visualization{flex-basis:340px}.article{font-size:16px}}
+</style><style id="model-expansion-v1">/* In-place expansion: the iframe is never moved or reloaded. */
+.model-view-toolbar { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
+.model-view-toolbar span { font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-view-toolbar button { flex-shrink:0; font:inherit; font-size:12px; padding:4px 9px; border:1px solid var(--line, #888); border-radius:6px; color:var(--ink, CanvasText); background:var(--paper, Canvas); cursor:pointer; }
+.model-focus-guard { display:none; }
+body.model-expanded .page::before { content:''; position:fixed; inset:0; background:#0009; z-index:9998; }
+.is-model-expanded { position:fixed !important; inset:12px !important; z-index:9999 !important; width:auto !important; max-width:none !important; height:calc(100dvh - 24px) !important; min-height:0 !important; max-height:none !important; margin:0 !important; padding:12px !important; display:flex !important; flex-direction:column !important; flex-basis:auto !important; gap:0 !important; border:1px solid var(--line, #888); border-radius:10px; background:var(--paper, Canvas); box-shadow:0 10px 50px #0005; }
+.is-model-expanded > :not(#codex-visualization):not(.model-view-toolbar):not(.model-focus-guard) { display:none !important; }
+.is-model-expanded #codex-visualization { flex:1 1 0 !important; width:100% !important; height:100% !important; min-height:0 !important; max-height:none !important; }
+.is-model-expanded .model-view-toolbar { margin-bottom:8px; }
+.is-model-expanded .model-view-toolbar span { font-size:14px; color:var(--ink, CanvasText); }
+.is-model-expanded .model-focus-guard { display:block; width:0; height:0; overflow:hidden; }
+@media(max-width:680px) { .is-model-expanded { inset:4px !important; height:calc(100dvh - 8px) !important; padding:8px !important; } .model-view-toolbar span { font-size:11px; } }
+
+.digital-panel > .panel-label[hidden] { display:none !important; }
+@media(max-width:680px) {
+  .visualization { overflow-y:auto; overscroll-behavior-y:contain; }
+}
+</style></head><body><main class="page"><section class="visualization" aria-labelledby="comparison-title"><header class="comparison-heading"><nav class="atlas-nav" aria-label="사례 탐색"><a href="geometry-lab.html">← 전체 사례</a><a href="historical-series.html">역사는 언제 바뀌는가</a><a href="enunciative-context.html">같은 기호, 다른 진술</a></nav><h1 id="comparison-title">같은 해, 다른 시간 — 사건·국면·장기지속</h1><p>1815년의 며칠과 유럽 물가의 수십 년 국면을 같은 달력 위에 펼치고, 시간 창과 집계 단위를 바꾸세요.</p></header><div class="comparison-grid"><section class="paper-panel " aria-labelledby="paper-label"><h2 class="panel-label" id="paper-label">01 · 한 해의 점 / 여러 길이의 시간</h2><figure><img class="paper-diagrams" id="flat-image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgNjAwIDYwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9IiNmMWY2ZmMiLz48ZyBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzI2M2M1NCI+PHRleHQgeD0iMjUiIHk9IjQ1IiBmb250LXNpemU9IjIzIj7sl6zrn6wg67OA7ZmU64qUIOqwmeydgCDsho3rj4TroZwg7JuA7KeB7J207KeAIOyViuuKlOuLpDwvdGV4dD48cGF0aCBkPSJNNzAgMTMwTDU0MCAxMzAiIHN0cm9rZT0iIzRiOWNkYSIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+PGNpcmNsZSBjeD0iMjgwIiBjeT0iMTMwIiByPSI2IiBmaWxsPSIjZTQ5YTQwIi8+PHRleHQgeD0iMjYwIiB5PSIxMTAiIGZvbnQtc2l6ZT0iMTgiPjE4MTU8L3RleHQ+PHBhdGggZD0iTTcwIDIzNUwzMjAgMjM1IiBzdHJva2U9IiNlNDlhNDAiIHN0cm9rZS13aWR0aD0iOSIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0zMjAgMjM1TDU0MCAyMzUiIHN0cm9rZT0iI2JhODNjZiIgc3Ryb2tlLXdpZHRoPSI5IiBmaWxsPSJub25lIi8+PHRleHQgeD0iNzAiIHk9IjIxMCIgZm9udC1zaXplPSIxOCI+MTc5MTwvdGV4dD48dGV4dCB4PSIyOTAiIHk9IjIxMCIgZm9udC1zaXplPSIxOCI+MTgxNzwvdGV4dD48dGV4dCB4PSI0ODAiIHk9IjIxMCIgZm9udC1zaXplPSIxOCI+MTg1MjwvdGV4dD48cGF0aCBkPSJNNjAgMzQwTDU1MCAzNDAiIHN0cm9rZT0iIzY1Yjg4YSIgc3Ryb2tlLXdpZHRoPSIxMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjcwIiB5PSIzODAiIGZvbnQtc2l6ZT0iMTgiPuyngOumrOyggSDsobDqsbQ6IOyLnOqwhCDssL0g67CW7Jy866Gc64+EIOyngOyGjTwvdGV4dD48dGV4dCB4PSIyNSIgeT0iNDI1IiBmb250LXNpemU9IjE4Ij7sp6fsnYAg7IKs6rG06rO8IOq4tCDqta3rqbTsnYQg6rCZ7J2AIOuLrOugpeyXkCDrhpPquLA8L3RleHQ+PHRleHQgeD0iMjUiIHk9IjQ1NyIgZm9udC1zaXplPSIxOCI+6rWt66m07J2YIOuwqe2WpSDiiaAg7Lih7KCV65CcIOqwgOqyqSDqs6HshKA8L3RleHQ+PHRleHQgeD0iMjUiIHk9IjQ4OSIgZm9udC1zaXplPSIxOCI+7KeA66asIOyhsOqxtOydmCDsuLXsnYAg7ISk66qF7JqpLCDsnKDtlZwg6rWs6rCE7J20IOyVhOuLmDwvdGV4dD48L2c+PC9zdmc+" alt="한 해의 점 / 여러 길이의 시간"><figcaption id="asset-caption">조건과 관계를 다시 그린 설명용 평면 도식</figcaption></figure><button id="open-source-page" aria-haspopup="dialog" aria-controls="source-page">평면 도식 크게 보기</button></section><section class="digital-panel" aria-labelledby="digital-label"><h2 class="panel-label" id="digital-label">02 · 사건 날짜 · 국면 구간 · 지속 조건</h2><iframe id="codex-visualization" sandbox="allow-scripts" scrolling="no" referrerpolicy="no-referrer" title="같은 해, 다른 시간 — 사건·국면·장기지속의 상호작용 비교" data-srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;ko&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;&lt;style&gt;
+:root{color-scheme:light dark;--bg:light-dark(#f8fbff,#17212f);--ink:light-dark(#263c54,#e7edf6);--quiet:light-dark(#60758b,#aab7c8);--line:light-dark(#d9e3ee,#384a60)}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;color:var(--ink);background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,sans-serif;overflow:hidden}button,select,input{font:inherit}button,select{color:var(--ink);background:light-dark(#edf3fa,#263449);border:1px solid var(--line);border-radius:7px;padding:7px 9px;cursor:pointer;font-size:13px}button:disabled,select:disabled,input:disabled{opacity:.45;cursor:default}button:focus-visible,select:focus-visible,input:focus-visible,canvas:focus-visible{outline:2px solid #4b9cda;outline-offset:2px}.widget{position:relative;height:100%;display:grid;grid-template-columns:minmax(0,1fr) 248px;gap:9px;padding:5px}.stage{min-width:0;min-height:0;display:flex;flex-direction:column;gap:5px}#scene-title{margin:0;font-size:13px;line-height:1.45;min-height:27px;padding:4px 74px 0 8px}.canvas-wrap{position:relative;flex:1 1 0;min-height:90px}#model{width:100%;height:100%;display:block;touch-action:none;cursor:grab}.plots{display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:1fr 1fr;gap:6px;height:174px;min-height:126px;flex:0 0 35%}.plots canvas{display:block;width:100%;height:100%;min-width:0;min-height:0;border:1px solid var(--line);border-radius:7px;background:light-dark(#fff,#1b293b)}.controls{min-height:0;overflow:auto;border-left:1px solid var(--line);padding:7px 10px 25px;font-size:13px;line-height:1.55;scrollbar-gutter:stable}label{display:block;margin-bottom:10px}label&gt;span{float:right;color:var(--quiet)}input[type=range]{width:100%;display:block;margin:6px 0 0;accent-color:#4b9cda}select{display:block;width:100%;margin-top:4px}.check-label{display:flex;align-items:center;gap:7px}.row{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.hint{font-size:12px;line-height:1.6;color:var(--quiet)}#metrics{margin:10px 0;padding-top:8px;border-top:1px solid var(--line)}.mobile-jump{display:none}.controls-head{font-size:14px;margin:0 0 12px}.legend{font-size:12px;color:var(--quiet);margin:2px 0 6px}
+@media(max-width:680px){.widget{display:block;padding:4px}.stage{height:100%}#scene-title{font-size:12px;padding:37px 8px 0;min-height:56px}.plots{height:148px;min-height:136px;flex-basis:43%}.controls{display:none;position:absolute;inset:0;z-index:8;background:var(--bg);padding:12px 16px 24px;overflow:auto;border:0}.controls.open{display:block}.controls-head{margin-top:12px}.mobile-jump{display:block}#show-controls{position:absolute;left:8px;top:8px;z-index:4;padding:5px 9px}#back-model{position:sticky;top:0;z-index:2;margin-bottom:12px}.canvas-wrap{min-height:85px}}
+#detail{overflow-wrap:anywhere;border-top:1px solid var(--line);padding-top:8px} .plots canvas{font-size:12px}&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;widget&quot;&gt;&lt;div class=&quot;stage&quot;&gt;&lt;p id=&quot;scene-title&quot;&gt;&lt;/p&gt;&lt;div class=&quot;canvas-wrap&quot;&gt;&lt;canvas id=&quot;model&quot; tabindex=&quot;0&quot; aria-label=&quot;사건 날짜 · 국면 구간 · 지속 조건 조작 모형. 드래그와 방향키로 회전, 휠과 + 또는 -로 확대&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;div class=&quot;plots&quot;&gt;&lt;canvas id=&quot;plot-a&quot; role=&quot;img&quot; aria-label=&quot;연결된 첫 번째 평면 기록&quot;&gt;&lt;/canvas&gt;&lt;canvas id=&quot;plot-b&quot; role=&quot;img&quot; aria-label=&quot;연결된 두 번째 평면 기록&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;/div&gt;&lt;section class=&quot;controls&quot; id=&quot;controls&quot; aria-label=&quot;조건과 수치&quot;&gt;&lt;button id=&quot;back-model&quot; class=&quot;mobile-jump&quot;&gt;모형으로 돌아가기 ↑&lt;/button&gt;&lt;h2 class=&quot;controls-head&quot;&gt;조건을 바꾸어 비교하기&lt;/h2&gt;&lt;p id=&quot;metrics&quot; class=&quot;hint&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;&lt;label for=&quot;year&quot;&gt;시간 창의 중심 (년)&lt;span id=&quot;year-value&quot;&gt;&lt;/span&gt;&lt;input id=&quot;year&quot; type=&quot;range&quot; min=&quot;1791&quot; max=&quot;1852&quot; step=&quot;0.001&quot; value=&quot;1815.46&quot;&gt;&lt;/label&gt;&lt;label for=&quot;window&quot;&gt;시간 창의 폭 (년)&lt;span id=&quot;window-value&quot;&gt;&lt;/span&gt;&lt;input id=&quot;window&quot; type=&quot;range&quot; min=&quot;0.04&quot; max=&quot;61&quot; step=&quot;0.01&quot; value=&quot;61&quot;&gt;&lt;/label&gt;&lt;label for=&quot;bin&quot;&gt;사건 집계 단위&lt;select id=&quot;bin&quot;&gt;&lt;option value=&quot;0.0027397260273972603&quot;&gt;약 하루&lt;/option&gt;&lt;option value=&quot;0.08333333333333333&quot;&gt;약 한 달&lt;/option&gt;&lt;option value=&quot;1&quot; selected&gt;한 해&lt;/option&gt;&lt;option value=&quot;10&quot;&gt;10년&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;div class=&quot;row&quot;&gt;&lt;button data-preset data-values=&quot;{&amp;quot;year&amp;quot;: 1815.46, &amp;quot;window&amp;quot;: 0.04, &amp;quot;bin&amp;quot;: 0.0027397260273972603}&quot;&gt;1815년 며칠&lt;/button&gt;&lt;button data-preset data-values=&quot;{&amp;quot;year&amp;quot;: 1815.5, &amp;quot;window&amp;quot;: 1, &amp;quot;bin&amp;quot;: 1}&quot;&gt;1815년 한 해&lt;/button&gt;&lt;button data-preset data-values=&quot;{&amp;quot;year&amp;quot;: 1821.5, &amp;quot;window&amp;quot;: 61, &amp;quot;bin&amp;quot;: 10}&quot;&gt;국면 전체&lt;/button&gt;&lt;/div&gt;&lt;p id=&quot;detail&quot; class=&quot;hint&quot;&gt;&lt;/p&gt;&lt;div class=&quot;row&quot;&gt;&lt;button id=&quot;front&quot;&gt;정면 보기&lt;/button&gt;&lt;button id=&quot;oblique&quot;&gt;비스듬히 보기&lt;/button&gt;&lt;/div&gt;&lt;p class=&quot;hint&quot;&gt;드래그·방향키로 화면 회전, + / − 또는 휠로 확대. 배율 &lt;span id=&quot;zoom-info&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;button id=&quot;reset&quot;&gt;초기화&lt;/button&gt;&lt;/section&gt;&lt;/div&gt;&lt;button id=&quot;show-controls&quot; class=&quot;mobile-jump&quot;&gt;조건 선택&lt;/button&gt;&lt;script&gt;window.CaseSpec={&quot;kind&quot;: &quot;temporalities&quot;, &quot;defaults&quot;: {&quot;year&quot;: 1815.46, &quot;window&quot;: 61, &quot;bin&quot;: 1}, &quot;target&quot;: &quot;year&quot;};&lt;/script&gt;&lt;script&gt;(function(root){
+ &#x27;use strict&#x27;;
+ const rad=Math.PI/180,add=(a,b)=&gt;a.map((v,i)=&gt;v+b[i]),sub=(a,b)=&gt;a.map((v,i)=&gt;v-b[i]),scale=(a,s)=&gt;a.map(v=&gt;v*s),dot=(a,b)=&gt;a.reduce((s,v,i)=&gt;s+v*b[i],0),norm=a=&gt;Math.sqrt(dot(a,a)),unit=a=&gt;scale(a,1/norm(a));
+ const documents=[
+  {id:&#x27;grammar&#x27;,year:1660,field:0,short:&#x27;일반·이성 문법&#x27;,author:&#x27;Arnauld · Lancelot&#x27;,title:&#x27;Grammaire générale et raisonnée&#x27;,note:&#x27;1660년 출판. 일반 문법의 분석 계열로 선택한 서지 기록.&#x27;},
+  {id:&#x27;linnaeus&#x27;,year:1735,field:1,short:&#x27;자연의 체계&#x27;,author:&#x27;Linnaeus&#x27;,title:&#x27;Systema Naturae&#x27;,note:&#x27;1735년 초판. 이후 판본의 명명법을 이 초판에 소급하지 않는다.&#x27;},
+  {id:&#x27;buffon&#x27;,year:1749,field:1,short:&#x27;자연사&#x27;,author:&#x27;Buffon · Daubenton&#x27;,title:&#x27;Histoire naturelle&#x27;,note:&#x27;1749년 출판 시작. 단일 완결권의 연도가 아니라 여러 권으로 이어지는 저술의 시작.&#x27;},
+  {id:&#x27;cantillon&#x27;,year:1755,field:2,short:&#x27;상업의 본성&#x27;,author:&#x27;Cantillon&#x27;,title:&#x27;Essai sur la nature du commerce en général&#x27;,note:&#x27;1755년 출판. 집필 시점과 출판 시점은 다를 수 있다.&#x27;},
+  {id:&#x27;quesnay&#x27;,year:1758,field:2,short:&#x27;경제표&#x27;,author:&#x27;Quesnay&#x27;,title:&#x27;Tableau économique&#x27;,note:&#x27;1758년 첫 경제표. 1758–1759년에 여러 판본이 있으며 연결된 공개 자료는 그 판본 차이를 설명한다.&#x27;}
+ ];
+ const fields=[&#x27;일반 문법&#x27;,&#x27;자연사&#x27;,&#x27;부의 분석&#x27;];
+ function group(d,mode,boundary){return mode===&#x27;field&#x27;?d.field:mode===&#x27;period&#x27;?(d.year&lt;boundary?0:1):documents.indexOf(d);}
+ function groups(mode,boundary){return documents.map(d=&gt;({...d,group:group(d,mode,boundary)}));}
+ function decimal(date){let d=new Date(date+&#x27;T00:00:00Z&#x27;),y=d.getUTCFullYear(),s=Date.UTC(y,0,1),e=Date.UTC(y+1,0,1);return y+(d.getTime()-s)/(e-s);}
+ const events=[[&#x27;1815-06-15&#x27;,&#x27;벨기에 진입&#x27;],[&#x27;1815-06-16&#x27;,&#x27;리니·카트르브라&#x27;],[&#x27;1815-06-17&#x27;,&#x27;워털루로 후퇴&#x27;],[&#x27;1815-06-18&#x27;,&#x27;워털루 전투&#x27;],[&#x27;1815-07-07&#x27;,&#x27;파리 점령&#x27;]].map(([date,title])=&gt;({date,title,year:decimal(date)}));
+ const phases=[{lo:1791,hi:1817,title:&#x27;유럽 물가 상승 국면&#x27;,sign:1},{lo:1817,hi:1852,title:&#x27;유럽 물가 하락 국면&#x27;,sign:-1}];
+ function bins(width,origin=1791){let b={};for(let e of events){let k=Math.floor((e.year-origin)/width);if(!b[k])b[k]={lo:origin+k*width,count:0,events:[]};b[k].count++;b[k].events.push(e);}return Object.values(b).sort((a,b)=&gt;a.lo-b.lo);}
+ function visibleEvents(center,width){return events.filter(e=&gt;Math.abs(e.year-center)&lt;=width/2);}
+ function statement(example,context,scaleName){
+  if(example===&#x27;keyboard&#x27;)return {form:&#x27;A Z E R T&#x27;,left:&#x27;타자기 자판&#x27;,right:&#x27;타자 교본&#x27;,count:context===&#x27;both&#x27;?2:1,conditions:context===&#x27;keyboard&#x27;?[&#x27;타이핑 장치&#x27;,&#x27;키의 공간 배열&#x27;,&#x27;입력하는 사용자&#x27;,&#x27;문자를 입력하기&#x27;]:context===&#x27;manual&#x27;?[&#x27;교육용 교본&#x27;,&#x27;배열을 설명하는 문장&#x27;,&#x27;설명자의 위치&#x27;,&#x27;프랑스 자판 순서&#x27;]:[&#x27;타자기 자판&#x27;,&#x27;타자 교본&#x27;,&#x27;서로 다른 사용 목적&#x27;,&#x27;배열 / 배열에 관한 설명&#x27;],verdict:context===&#x27;both&#x27;?&#x27;같은 배열 · 다른 기능&#x27;:context===&#x27;keyboard&#x27;?&#x27;자판의 배열 자체는 진술이 아니다&#x27;:&#x27;교본에서 배열을 서술하면 진술이 된다&#x27;};
+  return {form:&#x27;종은 진화한다&#x27;,left:&#x27;Darwin의 논의&#x27;,right:&#x27;Simpson의 논의&#x27;,count:scaleName===&#x27;broad&#x27;?1:2,conditions:[&#x27;담론의 역사적 맥락&#x27;,&#x27;주변의 다른 진술&#x27;,&#x27;사용·반복의 조건&#x27;,&#x27;선택한 분석 규모&#x27;],verdict:scaleName===&#x27;broad&#x27;?&#x27;큰 역사 구분: 같은 진술로 묶기&#x27;:&#x27;세밀한 담론 구분: 다른 진술로 분석&#x27;};
+ }
+ function rayDisk(o,d,R=1,h=.01){
+  let A=d[0]**2+d[1]**2,B=2*(o[0]*d[0]+o[1]*d[1]),C=o[0]**2+o[1]**2-R*R,lo=-Infinity,hi=Infinity;
+  if(A&lt;1e-15){if(C&gt;0)return null;}else{let q=B*B-4*A*C;if(q&lt;0)return null;let s=Math.sqrt(q);lo=(-B-s)/(2*A);hi=(-B+s)/(2*A);}
+  if(Math.abs(d[2])&lt;1e-15){if(Math.abs(o[2])&gt;h)return null;}else{let a=(-h-o[2])/d[2],b=(h-o[2])/d[2];lo=Math.max(lo,Math.min(a,b));hi=Math.min(hi,Math.max(a,b));}
+  lo=Math.max(0,lo);return hi&gt;lo?[lo,hi]:null;
+ }
+ function rayBulge(o,d){let radii=[.18,.12,.08],a=o.map((v,i)=&gt;v/radii[i]),b=d.map((v,i)=&gt;v/radii[i]),A=dot(b,b),B=2*dot(a,b),C=dot(a,a)-1,q=B*B-4*A*C;if(q&lt;0)return null;let s=Math.sqrt(q),lo=Math.max(0,(-B-s)/(2*A)),hi=(-B+s)/(2*A);return hi&gt;lo?[lo,hi]:null;}
+ function opticalLength(s,interval){return interval?Math.max(0,Math.min(s,interval[1])-interval[0]):0;}
+ function integrate(interval,disk,alpha){
+  if(!interval)return 0;let [lo,hi]=interval,cuts=[lo,hi];if(disk)for(let b of disk)if(b&gt;lo&amp;&amp;b&lt;hi)cuts.push(b);cuts.sort((a,b)=&gt;a-b);let I=0;
+  for(let i=1;i&lt;cuts.length;i++){let a=cuts[i-1],b=cuts[i],mid=(a+b)/2,trans=Math.exp(-alpha*opticalLength(a,disk));I+=disk&amp;&amp;mid&gt;=disk[0]&amp;&amp;mid&lt;=disk[1]&amp;&amp;alpha&gt;1e-12?trans*(-Math.expm1(-alpha*(b-a)))/alpha:trans*(b-a);}
+  return I;
+ }
+ function ray(l,b){l*=rad;b*=rad;return [-Math.cos(b)*Math.cos(l),Math.cos(b)*Math.sin(l),Math.sin(b)];}
+ function bearing(d){return [Math.atan2(d[1],-d[0])/rad,Math.asin(d[2]/norm(d))/rad];}
+ function radiance(o,d,alpha=0){let disk=rayDisk(o,d),bulge=rayBulge(o,d);return {disk,bulge,I:integrate(disk,disk,alpha)+2*integrate(bulge,disk,alpha)};}
+ function perspective(l,b,fov,x,y,aspect){let f=ray(l,b),right=[Math.sin(l*rad),Math.cos(l*rad),0],up=[Math.sin(b*rad)*Math.cos(l*rad),-Math.sin(b*rad)*Math.sin(l*rad),Math.cos(b*rad)],t=Math.tan(fov*rad/2);return unit(add(f,add(scale(right,x*t),scale(up,y*t/aspect))));}
+ function observer(name){return name===&#x27;solar&#x27;?[.52,0,0]:name===&#x27;center&#x27;?[0,0,0]:[.52,0,.2];}
+ function samples(){let out=[];for(let i=0;i&lt;1700;i++){let r=Math.sqrt((i+.5)/1700),t=i*2.399963229728653;out.push({p:[r*Math.cos(t),r*Math.sin(t),.01*(2*((i*137%1700)/1699)-1)],bulge:false});}for(let i=0;i&lt;320;i++){let z=1-2*(i+.5)/320,t=i*2.399963229728653,r=Math.cbrt((i*73%320+.5)/320);out.push({p:[.18*r*Math.sqrt(1-z*z)*Math.cos(t),.12*r*Math.sqrt(1-z*z)*Math.sin(t),.08*r*z],bulge:true});}return out;}
+ const api={rad,add,sub,scale,dot,norm,unit,documents,fields,groups,decimal,events,phases,bins,visibleEvents,statement,rayDisk,rayBulge,opticalLength,integrate,ray,bearing,radiance,perspective,observer,samples};
+ if(typeof module===&#x27;object&#x27;&amp;&amp;module.exports)module.exports=api;else root.HistorySky=api;
+})(typeof window===&#x27;object&#x27;?window:globalThis);
+&lt;/script&gt;&lt;script&gt;(function(){
+ &#x27;use strict&#x27;;
+ const M=window.HistorySky,spec=window.CaseSpec,$=id=&gt;document.getElementById(id),cv=$(&#x27;model&#x27;),cx=cv.getContext(&#x27;2d&#x27;);
+ const colors=[&#x27;#4b9cda&#x27;,&#x27;#e49a40&#x27;,&#x27;#65b88a&#x27;,&#x27;#ba83cf&#x27;,&#x27;#dd7687&#x27;,&#x27;#849cbb&#x27;];
+ let yaw=-.55,pitch=.4,zoom=1,pending=false,cache={};
+ const value=id=&gt;Number($(id).value), choice=id=&gt;$(id).value, fmt=(x,n=2)=&gt;x===null?&#x27;—&#x27;:Number(x).toFixed(n);
+ let scene,plotJobs=[];
+ function newScene(bound=2){scene={bound,center:[0,0,0],items:[],labels:[]};plotJobs=[];}
+ function line(points,color=colors[0],width=2,dash=false){scene.items.push({points,color,width,dash,type:&#x27;line&#x27;});}
+ function face(points,color,alpha=.15){scene.items.push({points,color,alpha,type:&#x27;face&#x27;});}
+ function point(pos,color=colors[0],radius=3){scene.items.push({points:[pos],color,radius,type:&#x27;point&#x27;});}
+ function label(pos,text,color){scene.labels.push({pos,text,color});}
+ function arrow(a,b,color=colors[1]){scene.items.push({points:[a,b],color,width:2.5,type:&#x27;arrow&#x27;});}
+ function ring(center,a,b,color,r=1){line(Array.from({length:65},(_,i)=&gt;M.add(center,M.add(M.scale(a,r*Math.cos(i*Math.PI/32)),M.scale(b,r*Math.sin(i*Math.PI/32))))),color,2);}
+ function axes(names,length=1.5){let origin=[-length,-length,-length*.5];for(let i=0;i&lt;3;i++){let end=origin.slice();end[i]+=length*1.5;arrow(origin,end,colors[i]);label(end,names[i],colors[i]);}}
+ function info(head,metrics){$(&#x27;scene-title&#x27;).textContent=head;$(&#x27;metrics&#x27;).textContent=metrics;}
+ function plot(id,title,fn){$(id).setAttribute(&#x27;aria-label&#x27;,title);plotJobs.push(()=&gt;drawPlot(id,title,fn));}
+ function textLines(a,text,x,y,width,lineHeight=16){let line=&#x27;&#x27;;for(let ch of text){if(line&amp;&amp;a.ctx.measureText(line+ch).width&gt;width){a.ctx.fillText(line,x,y);line=ch;y+=lineHeight;}else line+=ch;}a.ctx.fillText(line,x,y);return y;}
+ function prepare(canvas){const r=canvas.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);let w=Math.max(2,r.width),h=Math.max(2,r.height);if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);}let ctx=canvas.getContext(&#x27;2d&#x27;);ctx.setTransform(d,0,0,d,0,0);let dark=matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).matches;ctx.clearRect(0,0,w,h);return {ctx,w,h,ink:dark?&#x27;#e7edf6&#x27;:&#x27;#263c54&#x27;,quiet:dark?&#x27;#aab7c8&#x27;:&#x27;#60758b&#x27;,grid:dark?&#x27;#384a60&#x27;:&#x27;#d9e3ee&#x27;,dark};}
+ function drawPlot(id,title,fn){let a=prepare($(id));a.ctx.font=&#x27;12px sans-serif&#x27;;a.ctx.fillStyle=a.ink;let t=title;while(t.length&amp;&amp;a.ctx.measureText(t).width&gt;a.w-20)t=t.slice(0,-1);a.ctx.fillText(t===title?t:t+&#x27;…&#x27;,10,17);fn(a);}
+ function chart(a,xlim,ylim,xname,yname){let {ctx,w,h,quiet,grid}=a,left=32,top=31,bottom=h-42,right=w-12;let X=x=&gt;left+(x-xlim[0])/(xlim[1]-xlim[0])*(right-left),Y=y=&gt;bottom-(y-ylim[0])/(ylim[1]-ylim[0])*(bottom-top);ctx.strokeStyle=grid;ctx.lineWidth=1;ctx.strokeRect(left,top,right-left,bottom-top);ctx.font=&#x27;10px sans-serif&#x27;;ctx.fillStyle=quiet;ctx.textAlign=&#x27;center&#x27;;ctx.fillText(xname,(left+right)/2,h-20);ctx.textAlign=&#x27;left&#x27;;if(yname)ctx.fillText(yname,left+4,top+12);for(let t of [0,.5,1]){ctx.textAlign=&#x27;right&#x27;;ctx.fillText(fmt(ylim[0]+t*(ylim[1]-ylim[0]),1),left-4,Y(ylim[0]+t*(ylim[1]-ylim[0]))+3);ctx.textAlign=t===0?&#x27;left&#x27;:t===1?&#x27;right&#x27;:&#x27;center&#x27;;ctx.fillText(fmt(xlim[0]+t*(xlim[1]-xlim[0]),xlim[1]-xlim[0]&gt;100?0:1),X(xlim[0]+t*(xlim[1]-xlim[0])),bottom+13);}ctx.textAlign=&#x27;left&#x27;;return {X,Y,left,right,top,bottom};}
+ function curve(a,points,X,Y,color,width=2){a.ctx.strokeStyle=color;a.ctx.lineWidth=width;a.ctx.beginPath();points.forEach(([x,y],i)=&gt;i?a.ctx.lineTo(X(x),Y(y)):a.ctx.moveTo(X(x),Y(y)));a.ctx.stroke();}
+ function image(a,data,n,x,y,w,h,max=1.2){let c=document.createElement(&#x27;canvas&#x27;);c.width=n;c.height=n;let g=c.getContext(&#x27;2d&#x27;),im=g.createImageData(n,n);data.forEach((v,i)=&gt;{let t=Math.max(0,Math.min(1,v/max));im.data[4*i]=Math.round(244*(1-t)+45*t);im.data[4*i+1]=Math.round(248*(1-t)+143*t);im.data[4*i+2]=Math.round(252*(1-t)+185*t);im.data[4*i+3]=255;});g.putImageData(im,0,0);a.ctx.imageSmoothingEnabled=false;a.ctx.drawImage(c,x,y,w,h);}
+ function series(){
+  let mode=choice(&#x27;grouping&#x27;),boundary=value(&#x27;boundary&#x27;),time=value(&#x27;year&#x27;),selected=choice(&#x27;document&#x27;),ds=M.groups(mode,boundary),names=mode===&#x27;field&#x27;?M.fields:mode===&#x27;period&#x27;?[`${boundary}년 이전`,`${boundary}년 이후`]:M.documents.map(d=&gt;d.short),x=y=&gt;(y-1720)/30,Y=g=&gt;(g-(names.length-1)/2)*.65;newScene(3);
+  for(let g=0;g&lt;names.length;g++){let same=ds.filter(d=&gt;d.group===g);line([[-2.1,Y(g),0],[2.1,Y(g),0]],colors[g%6],1);label([-2.1,Y(g),0],names[g],colors[g%6]);if($(&#x27;links&#x27;).checked&amp;&amp;mode===&#x27;field&#x27;&amp;&amp;same.length&gt;1)line(same.map(d=&gt;[x(d.year),Y(g),.25]),colors[g%6],2,true);}
+  for(let d of ds){let p=[x(d.year),Y(d.group),d.id===&#x27;quesnay&#x27;?.7:.25],col=d.year&gt;time?colors[5]:colors[d.group%6];line([[p[0],p[1],0],p],col,1);point(p,col,d.id===selected?7:4);label(p,`${d.year} ${d.short}`,col);}
+  line([[x(time),-1.6,-.15],[x(time),1.6,.8]],colors[1],2);if(mode===&#x27;period&#x27;)face([[x(boundary),-1.6,0],[x(boundary),1.6,0],[x(boundary),1.6,.9],[x(boundary),-1.6,.9]],colors[3],.12);
+  let d=M.documents.find(d=&gt;d.id===selected);info(`5개 출판 기록`+` · ${new Set(ds.map(d=&gt;d.group)).size}개 묶음 · ${fmt(time,0)}년까지 ${ds.filter(d=&gt;d.year&lt;=time).length}건`,`가로 = 출판 연도 / 줄 = 선택한 분류 / 높이 = 책(.25), 표(.7)의 배치. 간격과 높이는 분석용 좌표입니다. 점선은 출판 순서이며 영향 관계가 아닙니다.`);
+  $(&#x27;detail&#x27;).textContent=`${d.year} · ${d.author} · ${d.title}. ${d.note}`;
+  plot(&#x27;plot-a&#x27;,&#x27;평면 시간선 · 선택한 공통 경계&#x27;,a=&gt;{let c=chart(a,[1660,1780],[0,1],&#x27;출판 연도&#x27;,&#x27;&#x27;);curve(a,[[1660,.5],[1780,.5]],c.X,c.Y,colors[5]);curve(a,[[boundary,.05],[boundary,.95]],c.X,c.Y,colors[3]);for(let d of ds){a.ctx.fillStyle=colors[d.group%6];a.ctx.beginPath();a.ctx.arc(c.X(d.year),c.Y(.5),d.id===selected?6:4,0,2*Math.PI);a.ctx.fill();}a.ctx.fillStyle=a.ink;a.ctx.fillText(`경계 ${boundary}년 (독자가 선택)`,c.left,47);});
+  plot(&#x27;plot-b&#x27;,&#x27;같은 기록 · 묶는 기준의 차이&#x27;,a=&gt;{a.ctx.fillStyle=a.ink;let y=38;names.forEach((n,g)=&gt;{a.ctx.fillStyle=colors[g%6];a.ctx.fillText(`${n}: ${ds.filter(d=&gt;d.group===g).length}건`,12,y);y+=Math.min(22,(a.h-46)/names.length);});a.ctx.fillStyle=a.quiet;a.ctx.fillText(&#x27;5건 유지 · 대표 표본 아님&#x27;,10,a.h-7);});
+ }
+ function temporalities(){
+  let time=value(&#x27;year&#x27;),width=value(&#x27;window&#x27;),bin=Number(choice(&#x27;bin&#x27;)),lo=time-width/2,hi=time+width/2,x=y=&gt;(y-time)*4/width,visible=M.visibleEvents(time,width);newScene(3);scene.center=[0,0,.5];
+  for(let [y,z,name,col] of [[-.9,0,&#x27;사건 · 날짜&#x27;,colors[0]],[0,.3,&#x27;국면 · 물가의 방향&#x27;,colors[1]],[.9,.6,&#x27;장기 조건 · 지리&#x27;,colors[2]]]){line([[-2,y,z],[2,y,z]],col,2,y&gt;.5);label([-2,y,z],name,col);}
+  for(let phase of M.phases){let a=Math.max(lo,phase.lo),b=Math.min(hi,phase.hi);if(b&gt;a){line([[x(a),0,.3],[x(b),0,.3]],phase.sign&gt;0?colors[1]:colors[3],7);label([x((a+b)/2),0,.3],phase.sign&gt;0?&#x27;상승 국면&#x27;:&#x27;하락 국면&#x27;);}}
+  for(let e of visible){point([x(e.year),-.9,0],colors[0],5);line([[x(e.year),-.9,0],[x(e.year),-.9,.4]],colors[0]);label([x(e.year),-.9,.4],e.date.slice(5));}
+  face([[-2,.7,.5],[2,.7,.5],[2,1.1,.5],[-2,1.1,.5]],colors[2],.1);line([[0,-1.1,-.1],[0,1.1,.9]],colors[4],1);
+  info(`${fmt(time,3)}년을 중심으로 ${width&lt;1?fmt(width*365,1)+&#x27;일&#x27;:fmt(width,1)+&#x27;년&#x27;}의 창`,`창 안의 사건 ${visible.length}건. 주황·보라 = Braudel이 구분한 물가 국면, 측정 가격 곡선은 아닙니다. 초록 = 지속하는 지리 조건의 설명용 층; 시작·끝을 확정하지 않습니다.`);
+  $(&#x27;detail&#x27;).textContent=visible.map(e=&gt;`${e.date} ${e.title}`).join(&#x27; / &#x27;)||&#x27;이 시간 창에는 선택한 1815년 사건 기록이 없습니다.&#x27;;
+  plot(&#x27;plot-a&#x27;,&#x27;짧은 사건 · 시간 창을 넓히면 모인다&#x27;,a=&gt;{let day=width&lt;1,X=v=&gt;day?(v-lo)*365:v,c=chart(a,[X(lo),X(hi)],[0,1],day?&#x27;창 시작부터 약 일수&#x27;:&#x27;달력 연도&#x27;,&#x27;&#x27;);for(let e of visible){curve(a,[[X(e.year),.15],[X(e.year),.7]],c.X,c.Y,colors[0]);a.ctx.fillStyle=a.ink;a.ctx.fillText(e.date.slice(5),Math.min(c.right-31,c.X(X(e.year))+3),c.Y(.7)-4);}if(!visible.length){a.ctx.fillStyle=a.quiet;a.ctx.fillText(&#x27;선택한 사건이 없는 구간&#x27;,c.left,50);}});
+  plot(&#x27;plot-b&#x27;,`한 칸 ${bin&gt;=1?bin+&#x27;년&#x27;:bin&gt;=.08?&#x27;약 한 달&#x27;:&#x27;약 하루&#x27;} · 사건 수`,a=&gt;{let bs=M.bins(bin),low=Math.min(...bs.map(b=&gt;b.lo)),high=Math.max(...bs.map(b=&gt;b.lo))+bin,c=chart(a,[low,Math.max(low+bin,high)],[0,Math.max(...bs.map(b=&gt;b.count))+1],&#x27;집계 구간 시작 연도&#x27;,&#x27;건&#x27;);for(let b of bs){a.ctx.fillStyle=colors[0];a.ctx.fillRect(c.X(b.lo),c.Y(b.count),Math.max(3,(c.right-c.left)*bin/(high-low)*.8),c.Y(0)-c.Y(b.count));}a.ctx.fillStyle=a.quiet;a.ctx.fillText(&#x27;5건 유지 · 집계 단위만 변화&#x27;,9,a.h-7);});
+ }
+ function contexts(){
+  let example=choice(&#x27;example&#x27;),context=choice(&#x27;context&#x27;),scaleName=choice(&#x27;scale&#x27;),reveal=value(&#x27;reveal&#x27;),s=M.statement(example,context,scaleName);newScene(2.6);
+  $(&#x27;context&#x27;).disabled=example!==&#x27;keyboard&#x27;;$(&#x27;scale&#x27;).disabled=example!==&#x27;evolution&#x27;;
+  point([0,0,0],colors[0],8);label([0,0,.1],s.form,colors[0]);
+  let centers=context===&#x27;both&#x27;||example===&#x27;evolution&#x27;?[[-1.2,0,.35],[1.2,0,.35]]:[[0,0,.35]],labels=centers.length===2?[s.left,s.right]:[context===&#x27;keyboard&#x27;?s.left:s.right];
+  for(let [j,c] of centers.entries()){ring(c,[.68,0,0],[0,.68,0],colors[j+1]);label(M.add(c,[0,0,.2]),labels[j],colors[j+1]);for(let i=0;i&lt;4;i++){let p=M.add(c,[.68*Math.cos(i*Math.PI/2),.68*Math.sin(i*Math.PI/2),.9]);point(p,reveal&gt;i?colors[i+1]:colors[5],reveal&gt;i?5:2);line([c,p],reveal&gt;i?colors[i+1]:colors[5],1,reveal&lt;=i);if(reveal&gt;i&amp;&amp;j===0)label(p,s.conditions[i],colors[i+1]);}}
+  if(example===&#x27;evolution&#x27;&amp;&amp;scaleName===&#x27;broad&#x27;)line([centers[0],centers[1]],colors[2],4);info(s.verdict,`표시된 조건 ${reveal}/4 · ${example===&#x27;evolution&#x27;?s.count+&#x27;개 진술로 분석&#x27;:&#x27;배열의 모양과 사용 기능을 구별&#x27;}. 공간의 거리와 높이는 의미의 양을 측정하지 않는 설명용 배치입니다.`);
+  $(&#x27;detail&#x27;).textContent=example===&#x27;keyboard&#x27;?&#x27;Foucault, 『지식의 고고학』 영어판 p.86의 자판 / 타자 교본 비교.&#x27;:&#x27;Foucault, 같은 책 p.104의 Darwin / Simpson 비교. 두 저자의 원문 인용이나 영향 관계 측정이 아니다.&#x27;;
+  plot(&#x27;plot-a&#x27;,&#x27;같은 평면 기호&#x27;,a=&gt;{a.ctx.fillStyle=a.ink;a.ctx.font=example===&#x27;keyboard&#x27;?&#x27;24px monospace&#x27;:&#x27;24px sans-serif&#x27;;a.ctx.textAlign=&#x27;center&#x27;;a.ctx.fillText(s.form,a.w/2,76);a.ctx.font=&#x27;12px sans-serif&#x27;;a.ctx.fillText(&#x27;형태만으로 조건을 정할 수 없다&#x27;,a.w/2,110);a.ctx.textAlign=&#x27;left&#x27;;});
+  plot(&#x27;plot-b&#x27;,&#x27;조건을 펼친 기록&#x27;,a=&gt;{a.ctx.fillStyle=a.ink;let y=37;for(let i=0;i&lt;reveal;i++){a.ctx.fillStyle=colors[i+1];a.ctx.fillText(s.conditions[i],12,y);y+=21;}if(!reveal){a.ctx.fillStyle=a.quiet;a.ctx.fillText(&#x27;재생하거나 조건 표시 단계를 늘려 보세요&#x27;,12,y);}a.ctx.fillStyle=a.quiet;a.ctx.fillText(example===&#x27;evolution&#x27;?`${scaleName===&#x27;broad&#x27;?&#x27;큰&#x27;:&#x27;세밀한&#x27;} 규모: ${s.count}개 진술`:&#x27;자판 배열 / 배열에 관한 서술&#x27;,12,a.h-7);});
+ }
+ let texture=null,textureCanvas=document.createElement(&#x27;canvas&#x27;),stars=M.samples();
+ if(spec.texture){let img=new Image();img.onload=()=&gt;{textureCanvas.width=img.width;textureCanvas.height=img.height;let g=textureCanvas.getContext(&#x27;2d&#x27;,{willReadFrequently:true});g.drawImage(img,0,0);texture={w:img.width,h:img.height,data:g.getImageData(0,0,img.width,img.height).data};schedule();};img.src=spec.texture;}
+ function skyColor(d){let [l,b]=M.bearing(d),x=Math.min(texture.w-1,Math.max(0,Math.floor((180-l)/360*texture.w))),y=Math.min(texture.h-1,Math.max(0,Math.floor((90-b)/180*texture.h))),i=(y*texture.w+x)*4;return [texture.data[i],texture.data[i+1],texture.data[i+2]];}
+ function galaxy(){
+  let name=choice(&#x27;observer&#x27;),o=M.observer(name),l=value(&#x27;longitude&#x27;),b=value(&#x27;latitude&#x27;),fov=value(&#x27;fov&#x27;),exag=value(&#x27;thickness&#x27;),alpha=value(&#x27;dust&#x27;),d=M.ray(l,b),r=M.radiance(o,d,alpha),pos=p=&gt;[p[0],p[1],p[2]*exag],effective=name===&#x27;solar&#x27;?choice(&#x27;sky&#x27;):&#x27;model&#x27;;newScene(1.6);
+  $(&#x27;sky&#x27;).disabled=name!==&#x27;solar&#x27;;if(name!==&#x27;solar&#x27;)$(&#x27;sky&#x27;).value=&#x27;model&#x27;;for(let s of stars)point(pos(s.p),s.bulge?colors[1]+&#x27;aa&#x27;:colors[0]+&#x27;75&#x27;,s.bulge?1.6:1);
+  for(let z of [-.01,.01])ring([0,0,z*exag],[1,0,0],[0,1,0],colors[5]);ring([0,0,0],[.18,0,0],[0,0,.08*exag],colors[1]);
+  point(pos(o),&#x27;#f5c84a&#x27;,7);label(pos(M.add(o,[0,0,.035])),name===&#x27;solar&#x27;?&#x27;태양 부근 관측점&#x27;:name===&#x27;center&#x27;?&#x27;가상 관측점 · 중심&#x27;:&#x27;가상 관측점 · 원반 위&#x27;);point([0,0,0],colors[1],4);label([-.1,0,-.08*exag],&#x27;은하 중심&#x27;,colors[1]);
+  let end=Math.max(r.disk?r.disk[1]:0,r.bulge?r.bulge[1]:0,.4);arrow(pos(o),pos(M.add(o,M.scale(d,Math.min(1.8,end)))),colors[2]);
+  for(let [x,y] of [[-1,-.6],[-1,.6],[1,-.6],[1,.6]]){let q=M.perspective(l,b,fov,x,y,1.7);line([pos(o),pos(M.add(o,M.scale(q,.4)))],colors[2],.7,true);}
+  let length=r.disk?(r.disk[1]-r.disk[0])*15.33:0;info(`은하 내부 → 선택한 하늘 · l=${l}°, b=${b}°`,`원반 내 광선 길이 ${fmt(length,2)} kpc · 단순 모형 밝기 ${fmt(r.I,3)}. 세로 ${exag}× 과장 (계산은 원래 두께). 점은 합성 분포, 노란 관측점 크기는 축척과 무관합니다.`);
+  $(&#x27;detail&#x27;).textContent=effective===&#x27;gaia&#x27;?&#x27;하늘 창: Gaia EDR3 관측 합산 지도를 방향별로 다시 투영. ESA/Gaia/DPAC; A. Moitinho. 실제 태양 부근에서 얻은 방향 자료.&#x27;:&#x27;하늘 창: 균일 원반 + 타원체 중심부의 설명용 방출·감쇠 모형. 실제 관측이나 다른 위치에서 촬영한 은하수가 아니다.&#x27;;
+  plot(&#x27;plot-a&#x27;,effective===&#x27;gaia&#x27;?&#x27;관측 지도 · 선택한 시야&#x27;:&#x27;설명 모형 · 선택한 시야&#x27;,a=&gt;{let w=Math.min(effective===&#x27;gaia&#x27;?600:320,Math.max(200,Math.round(a.w-16))),h=Math.max(60,Math.round(w*(a.h-35)/(a.w-16))),c=document.createElement(&#x27;canvas&#x27;);c.width=w;c.height=h;let g=c.getContext(&#x27;2d&#x27;),im=g.createImageData(w,h),aspect=w/h;for(let y=0;y&lt;h;y++)for(let x=0;x&lt;w;x++){let q=M.perspective(l,b,fov,2*(x+.5)/w-1,1-2*(y+.5)/h,aspect),col;if(effective===&#x27;gaia&#x27;&amp;&amp;texture)col=skyColor(q);else{let I=M.radiance(o,q,alpha).I,t=1-Math.exp(-I*2);col=[8+235*t,13+199*t,24+125*t];}let j=4*(y*w+x);im.data[j]=col[0];im.data[j+1]=col[1];im.data[j+2]=col[2];im.data[j+3]=255;}g.putImageData(im,0,0);a.ctx.drawImage(c,8,27,a.w-16,a.h-35);a.ctx.strokeStyle=&#x27;#8ed2a1&#x27;;a.ctx.beginPath();a.ctx.moveTo(a.w/2-5,(a.h+27)/2);a.ctx.lineTo(a.w/2+5,(a.h+27)/2);a.ctx.stroke();});
+  plot(&#x27;plot-b&#x27;,&#x27;선택한 광선&#x27;+&#x27; · 모형의 깊이와 감쇠&#x27;,a=&gt;{let limit=Math.max(.5,end),ch=chart(a,[0,limit*15.33],[0,3.1],&#x27;관측점에서의 거리 (kpc)&#x27;,&#x27;방출 / 투과&#x27;);curve(a,Array.from({length:141},(_,i)=&gt;{let s=limit*i/140,j=(r.disk&amp;&amp;s&gt;=r.disk[0]&amp;&amp;s&lt;=r.disk[1]?1:0)+(r.bulge&amp;&amp;s&gt;=r.bulge[0]&amp;&amp;s&lt;=r.bulge[1]?2:0);return [s*15.33,j];}),ch.X,ch.Y,colors[1]);curve(a,Array.from({length:141},(_,i)=&gt;{let s=limit*i/140;return[s*15.33,Math.exp(-alpha*M.opticalLength(s,r.disk))];}),ch.X,ch.Y,colors[2]);a.ctx.fillStyle=a.quiet;a.ctx.fillText(&#x27;주황 방출 / 초록 투과율&#x27;,9,a.h-7);});
+ }
+ const builders={series,temporalities,contexts,galaxy};
+ function render(){pending=false;for(let id of Object.keys(spec.defaults)){let e=$(id),out=$(id+&#x27;-value&#x27;);if(out)out.textContent=e.type===&#x27;range&#x27;?fmt(Number(e.value),Number(e.step)&gt;=1?0:2):&#x27;&#x27;;}builders[spec.kind]();let a=prepare(cv),{ctx,w,h,ink}=a;
+  function rawProject(p){let [x,y,z]=M.sub(p,scene.center),u=x*Math.cos(yaw)-y*Math.sin(yaw),v=x*Math.sin(yaw)+y*Math.cos(yaw);return [u,v*Math.sin(pitch)-z*Math.cos(pitch),v*Math.cos(pitch)+z*Math.sin(pitch)];}
+  let vertices=scene.items.flatMap(it=&gt;it.points.map(rawProject)),xs=vertices.map(p=&gt;p[0]),ys=vertices.map(p=&gt;p[1]);
+  let xmin=Math.min(...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys),padding=w&lt;440?16:24;
+  let scale=Math.min((w-2*padding)/Math.max(.3,xmax-xmin),(h-2*padding)/Math.max(.3,ymax-ymin))*zoom,midX=(xmin+xmax)/2,midY=(ymin+ymax)/2;
+  function project(p){let [u,v,d]=rawProject(p);return [w/2+(u-midX)*scale,h/2+(v-midY)*scale,d];}
+  let items=scene.items.map(it=&gt;({...it,p:it.points.map(project)}));items.sort((a,b)=&gt;b.p.reduce((s,v)=&gt;s+v[2],0)/b.p.length-a.p.reduce((s,v)=&gt;s+v[2],0)/a.p.length);
+  for(let it of items){ctx.save();ctx.strokeStyle=it.color;ctx.fillStyle=it.color;ctx.lineWidth=it.width||1;if(it.dash)ctx.setLineDash([5,5]);if(it.type===&#x27;point&#x27;){let p=it.p[0];ctx.beginPath();ctx.arc(p[0],p[1],it.radius,0,2*Math.PI);ctx.fill();}else{ctx.beginPath();it.p.forEach((p,i)=&gt;i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));if(it.type===&#x27;face&#x27;){ctx.closePath();ctx.globalAlpha=it.alpha;ctx.fill();}else{ctx.stroke();if(it.type===&#x27;arrow&#x27;){let [u,v]=it.p,t=Math.atan2(v[1]-u[1],v[0]-u[0]);ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(v[0],v[1]);ctx.lineTo(v[0]-9*Math.cos(t-.4),v[1]-9*Math.sin(t-.4));ctx.lineTo(v[0]-9*Math.cos(t+.4),v[1]-9*Math.sin(t+.4));ctx.closePath();ctx.fill();}}}ctx.restore();}
+  ctx.font=&#x27;12px sans-serif&#x27;;let occupied=[[w-80,0,80,36]];for(let l of scene.labels){let p=project(l.pos),tw=ctx.measureText(l.text).width;if(p[0]&gt;2&amp;&amp;p[0]&lt;w-8&amp;&amp;p[1]&gt;10&amp;&amp;p[1]&lt;h-8){
+   let candidate=null;for(let [dx,dy] of [[5,-5],[5,17],[-tw-5,-5],[-tw-5,17],[5,32],[-tw-5,32],[5,-22]]){let x=Math.max(6,Math.min(p[0]+dx,w-tw-6)),y=Math.max(14,Math.min(p[1]+dy,h-6)),r=[x-2,y-12,tw+4,16];if(!occupied.some(b=&gt;r[0]&lt;b[0]+b[2]&amp;&amp;r[0]+r[2]&gt;b[0]&amp;&amp;r[1]&lt;b[1]+b[3]&amp;&amp;r[1]+r[3]&gt;b[1])){candidate=[x,y,r];break;}}
+   if(candidate){let [x,y,r]=candidate;occupied.push(r);ctx.fillStyle=l.color||ink;ctx.fillText(l.text,x,y);if(Math.abs(x-p[0])&gt;12||Math.abs(y-p[1])&gt;12){ctx.strokeStyle=(l.color||a.quiet);ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(x,y-6);ctx.stroke();}}
+  }}
+  plotJobs.forEach(fn=&gt;fn());$(&#x27;zoom-info&#x27;).textContent=fmt(zoom,2)+&#x27;×&#x27;;cv.dataset.zoom=String(zoom);cv.dataset.yaw=String(yaw);cv.dataset.pitch=String(pitch);window.SceneState={kind:spec.kind,zoom,yaw,pitch};
+ }
+ function schedule(){if(!pending){pending=true;requestAnimationFrame(render);}}
+ function pause(){let event=new Event(&#x27;input&#x27;,{bubbles:true});$(spec.target).dispatchEvent(event);}
+ for(let el of document.querySelectorAll(&#x27;input,select&#x27;)){el.addEventListener(&#x27;input&#x27;,schedule);el.addEventListener(&#x27;change&#x27;,schedule);}
+ for(let button of document.querySelectorAll(&#x27;[data-preset]&#x27;))button.addEventListener(&#x27;click&#x27;,()=&gt;{for(let [id,v] of Object.entries(JSON.parse(button.dataset.values))){let e=$(id);if(e.type===&#x27;checkbox&#x27;)e.checked=v;else e.value=v;}pause();schedule();});
+ $(&#x27;reset&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{for(let [id,v] of Object.entries(spec.defaults)){let e=$(id);if(e.type===&#x27;checkbox&#x27;)e.checked=v;else e.value=v;}yaw=-.55;pitch=.4;zoom=1;pause();schedule();});
+ $(&#x27;front&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{yaw=0;pitch=0;pause();schedule();});$(&#x27;oblique&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{yaw=-.55;pitch=.4;pause();schedule();});
+ let dragging=null;cv.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{dragging=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);pause();});cv.addEventListener(&#x27;pointermove&#x27;,e=&gt;{if(!dragging)return;yaw+=(e.clientX-dragging[0])*.01;pitch=Math.max(-1.4,Math.min(1.4,pitch+(e.clientY-dragging[1])*.01));dragging=[e.clientX,e.clientY];schedule();});for(let event of [&#x27;pointerup&#x27;,&#x27;pointercancel&#x27;])cv.addEventListener(event,()=&gt;dragging=null);
+ cv.addEventListener(&#x27;wheel&#x27;,e=&gt;{e.preventDefault();zoom=Math.max(.35,Math.min(5,zoom*Math.exp(-e.deltaY*.002)));pause();schedule();},{passive:false});
+ cv.addEventListener(&#x27;keydown&#x27;,e=&gt;{if(![&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowDown&#x27;,&#x27;+&#x27;,&#x27;=&#x27;,&#x27;-&#x27;].includes(e.key))return;e.preventDefault();if(e.key===&#x27;ArrowLeft&#x27;)yaw-=.1;if(e.key===&#x27;ArrowRight&#x27;)yaw+=.1;if(e.key===&#x27;ArrowUp&#x27;)pitch+=.1;if(e.key===&#x27;ArrowDown&#x27;)pitch-=.1;if(e.key===&#x27;+&#x27;||e.key===&#x27;=&#x27;)zoom=Math.min(5,zoom*1.12);if(e.key===&#x27;-&#x27;)zoom=Math.max(.35,zoom/1.12);pause();schedule();});
+ $(&#x27;show-controls&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{$(&#x27;controls&#x27;).classList.add(&#x27;open&#x27;);$(&#x27;back-model&#x27;).focus();});$(&#x27;back-model&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{$(&#x27;controls&#x27;).classList.remove(&#x27;open&#x27;);$(&#x27;show-controls&#x27;).focus();});
+ new ResizeObserver(schedule).observe(document.body);matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).addEventListener(&#x27;change&#x27;,schedule);schedule();
+})();
+&lt;/script&gt;&lt;script id=&quot;model-frame-tools-v1&quot;&gt;/* Added after the original model. Only invokes existing canvas zoom handlers. */
+(() =&gt; {
+  if (document.querySelector(&#x27;[data-model-zoom-tools]&#x27;)) return;
+  const canvas=document.querySelector(&#x27;canvas&#x27;);
+  if (!canvas) return;
+  const style=document.createElement(&#x27;style&#x27;);
+  style.textContent=&#x27;[data-model-zoom-tools]{position:fixed;right:8px;top:8px;z-index:10000;display:flex;gap:4px}[data-model-zoom-tools] button{font:600 13px system-ui;padding:5px 8px;border:1px solid #8b949e;border-radius:6px;background:Canvas;color:CanvasText;cursor:pointer;min-width:30px}[data-model-zoom-tools] button:focus-visible{outline:2px solid #368ce0;outline-offset:2px}&#x27;;
+  document.head.append(style);
+  const box=document.createElement(&#x27;div&#x27;); box.dataset.modelZoomTools=&#x27;v1&#x27;; box.setAttribute(&#x27;role&#x27;,&#x27;group&#x27;); box.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 배율&#x27;);
+  for(const [text,label,delta] of [[&#x27;−&#x27;,&#x27;모형 축소&#x27;,180],[&#x27;+&#x27;,&#x27;모형 확대&#x27;,-180]]) {
+    const b=document.createElement(&#x27;button&#x27;); b.type=&#x27;button&#x27;; b.textContent=text; b.setAttribute(&#x27;aria-label&#x27;,label);
+    b.addEventListener(&#x27;click&#x27;,()=&gt;canvas.dispatchEvent(new WheelEvent(&#x27;wheel&#x27;,{deltaY:delta,bubbles:true,cancelable:true})));
+    box.append(b);
+  }
+  document.body.append(box);
+  const place=()=&gt;{const r=canvas.getBoundingClientRect();box.style.right=Math.max(8,innerWidth-r.right+8)+&#x27;px&#x27;;box.style.top=Math.max(8,r.top+8)+&#x27;px&#x27;;};
+  new ResizeObserver(place).observe(canvas);window.addEventListener(&#x27;resize&#x27;,place);requestAnimationFrame(place);
+  window.addEventListener(&#x27;keydown&#x27;,e=&gt; { if(e.key===&#x27;Escape&#x27;) parent.postMessage({type:&#x27;geometry-model-close&#x27;},&#x27;*&#x27;); });
+})();
+&lt;/script&gt;&lt;script id=&quot;model-playback-config&quot; type=&quot;application/json&quot;&gt;{&quot;target&quot;: &quot;year&quot;, &quot;label&quot;: &quot;달력 시간의 순회 · 선택한 자료 범위 1791–1852년&quot;, &quot;duration&quot;: 18}&lt;/script&gt;&lt;script id=&quot;model-playback-v1&quot;&gt;(() =&gt; {
+  &#x27;use strict&#x27;;
+  const config = JSON.parse(document.getElementById(&#x27;model-playback-config&#x27;).textContent);
+  const style = document.createElement(&#x27;style&#x27;);
+  style.textContent = `html{overflow:hidden!important}body{height:calc(100% - 104px)!important;overflow:auto!important}.model-player{position:fixed;inset:auto 0 0;z-index:90;height:100px;padding:7px 10px;background:light-dark(#f5f8fc,#20242a);border-top:1px solid light-dark(#ccd5e0,#46505b);color:light-dark(#253044,#edf2f7);font:12px/1.4 system-ui;box-sizing:border-box}.player-heading{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px}.player-actions{display:flex;gap:6px;align-items:center}.model-player button,.model-player select{width:auto;min-height:30px;margin:0;font:inherit;padding:4px 8px;border:1px solid light-dark(#bcc9d8,#5a6878);border-radius:5px;background:light-dark(#fff,#303841);color:inherit}.model-player button{cursor:pointer}.model-player button[aria-pressed=true]{background:light-dark(#dbeaff,#314b66)}.model-player label{display:flex;align-items:center;gap:4px;font:inherit}.model-player input{width:100%;height:18px;margin:5px 0 0;accent-color:#72baff}.model-player :focus-visible{outline:2px solid #72baff;outline-offset:2px}#play{display:none!important}@media(max-width:350px){.model-player{padding:6px}.model-player button{padding:4px 6px}.player-heading{font-size:11px}}`;
+  document.head.append(style);
+  const player = document.createElement(&#x27;section&#x27;);
+  player.className = &#x27;model-player&#x27;;player.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 재생&#x27;);
+  player.innerHTML = `&lt;div class=&quot;player-heading&quot;&gt;&lt;span id=&quot;player-description&quot;&gt;&lt;/span&gt;&lt;output id=&quot;player-position&quot;&gt;&lt;/output&gt;&lt;/div&gt;&lt;div class=&quot;player-actions&quot;&gt;&lt;button id=&quot;player-toggle&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;▶ 재생&lt;/button&gt;&lt;button id=&quot;player-start&quot; type=&quot;button&quot;&gt;처음으로&lt;/button&gt;&lt;label&gt;속도&lt;select id=&quot;player-speed&quot; aria-label=&quot;재생 속도&quot;&gt;&lt;option value=&quot;0.5&quot;&gt;0.5×&lt;/option&gt;&lt;option value=&quot;1&quot; selected&gt;1×&lt;/option&gt;&lt;option value=&quot;2&quot;&gt;2×&lt;/option&gt;&lt;option value=&quot;4&quot;&gt;4×&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;/div&gt;&lt;input id=&quot;player-seek&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;1000&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;재생 위치&quot;&gt;`;
+  document.body.append(player);
+  const get = id =&gt; document.getElementById(id);
+  const target = config.target ? get(config.target) : null;
+  let progress = target &amp;&amp; target.type===&#x27;range&#x27; ? (Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min)) : 0;
+  let running = false, last=0, request=0, applying=false, previousStage=-1;
+  get(&#x27;player-description&#x27;).textContent=config.label;
+  function notify(el) {el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));}
+  function write(id,value) {const el=get(id);if(!el)return;const before=el.type===&#x27;checkbox&#x27;?el.checked:el.value;if(el.type===&#x27;checkbox&#x27;)el.checked=Boolean(value);else el.value=String(value);if(before!==(el.type===&#x27;checkbox&#x27;?el.checked:el.value))notify(el);}
+  function display() {
+    get(&#x27;player-seek&#x27;).value=String(Math.round(progress*1000));
+    get(&#x27;player-position&#x27;).textContent=Math.round(progress*100)+&#x27;%&#x27;;
+    player.dataset.progress=progress.toFixed(4);player.dataset.playing=String(running);
+    get(&#x27;player-toggle&#x27;).textContent=running?&#x27;Ⅱ 일시정지&#x27;:&#x27;▶ 재생&#x27;;get(&#x27;player-toggle&#x27;).setAttribute(&#x27;aria-pressed&#x27;,String(running));
+  }
+  function apply() {
+    applying=true;
+    if(config.stages) {
+      const n=config.stages.length;const stage=Math.max(0,Math.min(n-1,Math.floor(progress*n)));
+      if(stage!==previousStage) {for(const [id,value]of Object.entries(config.stages[stage]))write(id,value);previousStage=stage;}
+      if(config.stageTarget) {
+        const el=get(config.stageTarget),local=progress&gt;=1?1:(progress*n-stage);
+        write(config.stageTarget,Number(el.min)+(Number(el.max)-Number(el.min))*local);
+      }
+    } else if(target) {
+      if(target.type===&#x27;range&#x27;) {
+        const low=config.min??Number(target.min),high=config.max??Number(target.max),step=Number(target.step)||.001;
+        const value=low+(high-low)*progress;write(target.id,Math.max(low,Math.min(high,Math.round(value/step)*step)));
+      } else if(target.tagName===&#x27;SELECT&#x27;) {
+        const options=[...target.options].filter(o=&gt;!o.disabled);write(target.id,options[Math.min(options.length-1,Math.floor(progress*options.length))].value);
+      }
+    }
+    applying=false;display();
+  }
+  function pause() {running=false;cancelAnimationFrame(request);display();}
+  function tick(now) {
+    if(!running)return;const dt=Math.max(0,Math.min((now-last)/1000,.1));last=now;
+    progress=Math.min(1,progress+dt*Number(get(&#x27;player-speed&#x27;).value)/(config.duration||18));apply();
+    if(progress&gt;=1)pause();else request=requestAnimationFrame(tick);
+  }
+  get(&#x27;player-toggle&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{if(running){pause();return;}if(progress&gt;=.999){progress=0;previousStage=-1;}apply();running=true;last=performance.now();display();request=requestAnimationFrame(tick);});
+  get(&#x27;player-start&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{pause();progress=0;previousStage=-1;apply();});
+  get(&#x27;player-seek&#x27;).addEventListener(&#x27;input&#x27;,()=&gt;{const value=Number(get(&#x27;player-seek&#x27;).value)/1000;pause();progress=value;previousStage=-1;apply();});
+  for(const kind of [&#x27;input&#x27;,&#x27;change&#x27;,&#x27;click&#x27;])document.addEventListener(kind,event=&gt;{
+    if(applying||player.contains(event.target))return;
+    if(event.target.matches(&#x27;input,select,button&#x27;)){
+      pause();previousStage=-1;const sync=event.target===target||event.target.id===&#x27;reset&#x27;||event.target.hasAttribute(&#x27;data-preset&#x27;);if(config.stages&amp;&amp;event.target.id!==&#x27;model-zoom-in&#x27;&amp;&amp;event.target.id!==&#x27;model-zoom-out&#x27;&amp;&amp;(event.target.matches(&#x27;input,select&#x27;)||event.target.id===&#x27;reset&#x27;))progress=0;
+      if(sync &amp;&amp; target &amp;&amp; target.type===&#x27;range&#x27;)progress=(Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min));display();
+    }
+  });
+  document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;{if(document.hidden)pause();});
+  window.addEventListener(&#x27;pagehide&#x27;,pause);display();
+})();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></section></div></section><section class="reading" aria-labelledby="reading-title"><header class="reading-heading"><p class="reading-kicker">읽을 자료</p><h2 id="reading-title">시간을 담는 칸을 바꾸면 무엇이 남는가</h2></header><div class="reading-scroll" tabindex="0" role="region" aria-label="독립적으로 스크롤하는 읽을 자료"><article class="article"><h3>1815년이라는 한 칸</h3><p>워털루 전투를 1815년의 점 하나로 표시하면 앞뒤 사건이 같은 칸에 들어간다. 며칠의 창으로 좁히면 6월 15일 벨기에 진입, 16일 리니·카트르브라, 17일 후퇴, 18일 워털루 전투가 따로 드러난다. 7월 7일 파리 점령은 같은 해지만 이 짧은 창의 밖에 있다. 사건 날짜는 National Army Museum의 설명을 따른다. <a href="#s2">[2]</a></p><p>한 해나 10년으로 집계하면 사건 수는 남고 각각의 날짜는 한 칸으로 압축된다. 어떤 집계 단위가 좋은지는 설명하려는 문제에 달렸다. 한 해의 막대가 하나라는 이유로 그해에 하나의 변화만 있었다고 해석할 수 없다.</p><h3>서로 다른 시간의 길이</h3><p>Braudel은 짧은 사건의 시간, 수십 년의 국면, 오래 지속하는 구조적 조건을 구별하며 사회적 시간의 복수를 강조한다. 유럽 물가의 사례에서는 1791–1817년 상승 국면과 1817–1852년 하락 국면을 제시한다. 여기서는 그 기간과 방향만 띠로 표시한다. 연도별 가격을 확보한 곡선이 아니며, 1815년 사건이 이 국면을 일으켰다는 주장도 아니다. <a href="#s1">[1]</a></p><p>긴 녹색 층은 경로와 지형 같은 지속 조건을 생각하기 위한 배치다. 실제 지리 자료의 변동량을 측정하지 않았으며, 화면의 시작과 끝이 그 조건의 역사적 시작과 끝이라고 전제하지 않는다. 점선은 관측 창 밖에서도 조건을 검토해야 함을 표시한다.</p><h3>시간 창과 역사적 경계를 구별하기</h3><p>시간 창을 61년에서 약 15일로 좁히면 짧은 사건의 간격이 드러난다. 그러나 국면의 기간은 좁은 창으로 바꾸어도 유지된다. 같은 전투의 앞뒤에 걸친 상승 국면을 보면 사건의 경계와 경제적 변화의 경계가 자동으로 일치하지 않는다는 점을 확인할 수 있다. 서로 다른 지표를 택하면 국면의 구분 또한 다시 검토해야 한다. <a href="#s1">[1]</a></p><p>재생은 달력상의 창 중심을 움직인다. 집계 막대는 선택한 다섯 사건 전체에 대해 따로 계산한다. 약 하루와 약 한 달은 연도를 각각 365와 12로 나눈 비교 단위이며 정확한 달력 월의 길이는 아니다. 날짜의 연도 좌표는 해당 연도의 실제 일수를 사용한다.</p><h3>세 층이 모든 역사를 대신하지는 않는다</h3><p>세 층은 Braudel의 문제를 비교할 수 있게 만든 분석 배치다. 모든 사회 현상이 세 종류의 고정된 실체로 나뉜다는 뜻은 아니다. 높이는 시간의 빠르기나 역사적 중요도를 측정하지 않는다. 평면의 여러 축과 기간표로도 같은 구별을 보존할 수 있으며, 새로운 자료를 추가할 때는 그 자료가 어떤 시간 단위를 갖는지 먼저 확인해야 한다.</p><section class="sources"><h3>문헌과 자료</h3><ol><li id="s1"><a href="https://www.persee.fr/doc/ahess_0395-2649_1958_num_13_4_2781" target="_blank" rel="noopener noreferrer">Fernand Braudel (1958), Histoire et Sciences sociales: La longue durée</a>. Annales 13(4), pp.725–753, DOI:10.3406/ahess.1958.2781. 복수의 시간과 국면 구분: pp.726–727, 유럽 물가 시기: p.730.</li><li id="s2"><a href="https://www.nam.ac.uk/explore/battle-waterloo" target="_blank" rel="noopener noreferrer">National Army Museum, Battle of Waterloo</a>. 1815년 6월 15–18일 사건과 7월 7일 파리 점령을 확인하는 박물관 자료.</li></ol></section></article></div></section></main><dialog class="source-page-dialog" id="source-page" aria-labelledby="source-title"><header class="dialog-heading"><h2 id="source-title">한 해의 점 / 여러 길이의 시간</h2><button id="close-source-page">닫기</button></header><img id="dialog-image" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgNjAwIDYwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9IiNmMWY2ZmMiLz48ZyBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzI2M2M1NCI+PHRleHQgeD0iMjUiIHk9IjQ1IiBmb250LXNpemU9IjIzIj7sl6zrn6wg67OA7ZmU64qUIOqwmeydgCDsho3rj4TroZwg7JuA7KeB7J207KeAIOyViuuKlOuLpDwvdGV4dD48cGF0aCBkPSJNNzAgMTMwTDU0MCAxMzAiIHN0cm9rZT0iIzRiOWNkYSIgc3Ryb2tlLXdpZHRoPSIzIiBmaWxsPSJub25lIi8+PGNpcmNsZSBjeD0iMjgwIiBjeT0iMTMwIiByPSI2IiBmaWxsPSIjZTQ5YTQwIi8+PHRleHQgeD0iMjYwIiB5PSIxMTAiIGZvbnQtc2l6ZT0iMTgiPjE4MTU8L3RleHQ+PHBhdGggZD0iTTcwIDIzNUwzMjAgMjM1IiBzdHJva2U9IiNlNDlhNDAiIHN0cm9rZS13aWR0aD0iOSIgZmlsbD0ibm9uZSIvPjxwYXRoIGQ9Ik0zMjAgMjM1TDU0MCAyMzUiIHN0cm9rZT0iI2JhODNjZiIgc3Ryb2tlLXdpZHRoPSI5IiBmaWxsPSJub25lIi8+PHRleHQgeD0iNzAiIHk9IjIxMCIgZm9udC1zaXplPSIxOCI+MTc5MTwvdGV4dD48dGV4dCB4PSIyOTAiIHk9IjIxMCIgZm9udC1zaXplPSIxOCI+MTgxNzwvdGV4dD48dGV4dCB4PSI0ODAiIHk9IjIxMCIgZm9udC1zaXplPSIxOCI+MTg1MjwvdGV4dD48cGF0aCBkPSJNNjAgMzQwTDU1MCAzNDAiIHN0cm9rZT0iIzY1Yjg4YSIgc3Ryb2tlLXdpZHRoPSIxMiIgZmlsbD0ibm9uZSIvPjx0ZXh0IHg9IjcwIiB5PSIzODAiIGZvbnQtc2l6ZT0iMTgiPuyngOumrOyggSDsobDqsbQ6IOyLnOqwhCDssL0g67CW7Jy866Gc64+EIOyngOyGjTwvdGV4dD48dGV4dCB4PSIyNSIgeT0iNDI1IiBmb250LXNpemU9IjE4Ij7sp6fsnYAg7IKs6rG06rO8IOq4tCDqta3rqbTsnYQg6rCZ7J2AIOuLrOugpeyXkCDrhpPquLA8L3RleHQ+PHRleHQgeD0iMjUiIHk9IjQ1NyIgZm9udC1zaXplPSIxOCI+6rWt66m07J2YIOuwqe2WpSDiiaAg7Lih7KCV65CcIOqwgOqyqSDqs6HshKA8L3RleHQ+PHRleHQgeD0iMjUiIHk9IjQ4OSIgZm9udC1zaXplPSIxOCI+7KeA66asIOyhsOqxtOydmCDsuLXsnYAg7ISk66qF7JqpLCDsnKDtlZwg6rWs6rCE7J20IOyVhOuLmDwvdGV4dD48L2c+PC9zdmc+" alt="한 해의 점 / 여러 길이의 시간"><p class="source-caption" id="dialog-credit">조건과 관계를 다시 그린 설명용 평면 도식</p></dialog><script>(()=>{let f=document.getElementById("codex-visualization");f.srcdoc=f.dataset.srcdoc;delete f.dataset.srcdoc;let d=document.getElementById("source-page");document.getElementById("open-source-page").addEventListener("click",()=>d.showModal());document.getElementById("close-source-page").addEventListener("click",()=>d.close());})();</script><script id="model-expansion-v1">/* Public case contract v1. Works with allow-scripts-only sandboxed frames. */
+(() => {
+  const frame = document.getElementById('codex-visualization');
+  if (!frame || document.querySelector('.model-view-toolbar')) return;
+  const panel = frame.closest('.digital-panel') || frame.parentElement;
+  const label = panel.querySelector('.panel-label');
+  const bar = document.createElement('div');
+  bar.className = 'model-view-toolbar';
+  const title = document.createElement('span');
+  title.id = 'expanded-model-title';
+  title.textContent = label?.textContent || '조작 가능한 시각화';
+  if (label) label.hidden = true;
+  const toggle = document.createElement('button');
+  toggle.type = 'button'; toggle.className = 'model-expand-toggle';
+  toggle.textContent = '시각화 확대';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-controls', frame.id);
+  bar.append(title, toggle); panel.insertBefore(bar, frame);
+  const guards = [document.createElement('span'), document.createElement('span')];
+  guards.forEach(g => { g.className = 'model-focus-guard'; g.tabIndex = 0; });
+  panel.insertBefore(guards[0], bar); panel.append(guards[1]);
+  let expanded = false, inertRecords = [], savedAttributes = [];
+  function close() {
+    if (!expanded) return;
+    expanded = false;
+    panel.classList.remove('is-model-expanded');
+    document.body.classList.remove('model-expanded');
+    inertRecords.forEach(([el, value]) => { el.inert = value; });
+    savedAttributes.forEach(([key, value]) => { if(value===null) panel.removeAttribute(key); else panel.setAttribute(key,value); });
+    inertRecords = []; savedAttributes = [];
+    toggle.textContent = '시각화 확대'; toggle.setAttribute('aria-expanded', 'false');
+    toggle.focus();
+  }
+  toggle.addEventListener('click', () => {
+    if (expanded) { close(); return; }
+    expanded = true;
+    ['role','aria-modal','aria-labelledby'].forEach(key => savedAttributes.push([key,panel.getAttribute(key)]));
+    panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true'); panel.setAttribute('aria-labelledby',title.id);
+    let branch = panel;
+    while (branch.parentElement) {
+      for (const sibling of branch.parentElement.children) if(sibling!==branch) { inertRecords.push([sibling,sibling.inert]); sibling.inert=true; }
+      branch=branch.parentElement;
+      if(branch===document.body) break;
+    }
+    document.body.classList.add('model-expanded'); panel.classList.add('is-model-expanded');
+    toggle.textContent='확대 닫기'; toggle.setAttribute('aria-expanded','true'); toggle.focus();
+  });
+  guards[0].addEventListener('focus',()=> { if(expanded) frame.focus(); });
+  guards[1].addEventListener('focus',()=> { if(expanded) toggle.focus(); });
+  document.addEventListener('keydown',e=> { if(e.key==='Escape' && expanded) { e.preventDefault(); close(); } });
+  window.addEventListener('message',e=> {
+    if(e.source===frame.contentWindow && e.data?.type==='geometry-model-close' && Object.keys(e.data).length===1) close();
+  });
+})();
+</script></body></html>

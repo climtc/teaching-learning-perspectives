@@ -2,7 +2,7 @@
 
 그림과 도식, 수학 공식은 무엇을 압축하고, 조작할 수 있는 표현은 무엇을 펼쳐 보여 주는가. 평면 기록과 디지털 모형을 나란히 놓고 시점, 관계와 조건을 바꾸어 비교한다.
 
-[70개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[74개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 임완철의 **차원증감법**을 바탕으로 원근법과 회화, 곡면과 매듭, 수학 공식과 물리 법칙, 상태와 데이터의 표현을 살핀다. 물리 공간의 차원, 표면 자체의 차원, 데이터의 변수 수와 관찰의 자유도는 서로 구별한다. 디지털 화면도 평면이지만, 좌표와 변환 규칙을 조작하면 한 장에서 생략한 조건을 비교할 수 있다.
 
@@ -10,6 +10,10 @@
 
 **재생**, **일시정지**, **처음으로**, **속도**를 사용해 변화를 따라갈 수 있다. 재생 설명에는 시간 전개, 경로 추적, 조건 비교 또는 단계 전환 중 무엇을 보여 주는지 표시한다. 눈의 위치나 기준계 속도를 순서대로 바꾸는 것은 실제 시간의 흐름과 구별한다. 재생 위치를 직접 고르거나 다른 조건을 수동 조작하면 멈춘다.
 
+- [역사는 언제 바뀌는가 — 하나의 시대선과 여러 계열](https://climtc.github.io/teaching-learning-perspectives/historical-series.html): 다섯 출판 기록을 분야별 계열과 공통 시대 경계로 다시 묶어 역사적 단위와 연결의 조건을 비교한다.
+- [같은 해, 다른 시간 — 사건·국면·장기지속](https://climtc.github.io/teaching-learning-perspectives/historical-temporalities.html): 1815년 사건과 수십 년의 물가 국면을 나란히 놓고 시간 창과 집계 단위에 따른 정보 압축을 비교한다.
+- [같은 기호, 다른 진술 — 말이 성립하는 조건](https://climtc.github.io/teaching-learning-perspectives/enunciative-context.html): 같은 글자 배열의 다른 기능과 같은 말의 다른 분석 규모를 비교하여 기호에 생략된 진술의 조건을 펼친다.
+- [은하수 — 우리가 안에서 보는 은하](https://climtc.github.io/teaching-learning-perspectives/milky-way-inside.html): 하늘 사진·Gaia 방향 지도·외부 모습의 재구성을 구별하고 은하 안에서 시선·관측점·가림의 조건을 비교한다.
 - [단층촬영 — 같은 투영 뒤의 다른 내부](https://climtc.github.io/teaching-learning-perspectives/tomographic-projections.html): 한 방향에서 같은 투영을 만드는 두 내부를 비교하고 투영 수·각도 범위·잡음에 따른 단면 재구성을 살핀다.
 - [회전과 짐벌 잠김 — 좌표가 막히는 순간](https://climtc.github.io/teaching-learning-perspectives/rotation-coordinates.html): 오일러 각의 축 정렬과 비유일성을 물체의 자세와 구별한다. 회전행렬과 단위 사원수의 기록을 함께 비교한다.
 - [선별이 만든 관계 — 전체에서는 독립적인 두 변수](https://climtc.github.io/teaching-learning-perspectives/selection-collider.html): 공통 결과를 기준으로 표본을 선택할 때 독립적인 두 변수에 관계가 나타나는 조건을 비교한다.
