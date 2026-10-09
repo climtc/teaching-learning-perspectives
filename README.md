@@ -2,7 +2,7 @@
 
 그림과 도식, 수학 공식은 무엇을 압축하고, 조작할 수 있는 표현은 무엇을 펼쳐 보여 주는가. 평면 기록과 디지털 모형을 나란히 놓고 시점, 관계와 조건을 바꾸어 비교한다.
 
-[46개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[57개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 임완철의 **차원증감법**을 바탕으로 원근법과 회화, 곡면과 매듭, 수학 공식과 물리 법칙, 상태와 데이터의 표현을 살핀다. 물리 공간의 차원, 표면 자체의 차원, 데이터의 변수 수와 관찰의 자유도는 서로 구별한다. 디지털 화면도 평면이지만, 좌표와 변환 규칙을 조작하면 한 장에서 생략한 조건을 비교할 수 있다.
 
@@ -10,6 +10,17 @@
 
 **재생**, **일시정지**, **처음으로**, **속도**를 사용해 변화를 따라갈 수 있다. 재생 설명에는 시간 전개, 경로 추적, 조건 비교 또는 단계 전환 중 무엇을 보여 주는지 표시한다. 눈의 위치나 기준계 속도를 순서대로 바꾸는 것은 실제 시간의 흐름과 구별한다. 재생 위치를 직접 고르거나 다른 조건을 수동 조작하면 멈춘다.
 
+- [야코비 경계 — 라그랑주점에서 열리는 통로](https://climtc.github.io/teaching-learning-perspectives/jacobi-regions.html): 야코비 상수와 높이 단면을 바꾸어, 지구–달 회전 좌표에서 운동이 허용되는 영역을 비교한다.
+- [중력 도움 — 어느 기준계에서 빨라지는가](https://climtc.github.io/teaching-learning-perspectives/gravity-assist.html): 행성 기준에서 보존되는 점근 속력과 바깥 기준에서 달라지는 에너지를 비교한다.
+- [달의 위상과 식 — 정렬에 숨어 있는 기울기](https://climtc.github.io/teaching-learning-perspectives/moon-phases-eclipses.html): 달의 위상 그림에 생략되기 쉬운 궤도 기울기와 교점을 펼쳐, 매달 식이 일어나지 않는 이유를 비교한다.
+- [외계행성 — 한 궤도가 만드는 두 신호](https://climtc.github.io/teaching-learning-perspectives/exoplanet-signals.html): 궤도 경사각에 따라 나타나거나 사라지는 통과 신호와 시선 속도 진폭을 비교한다.
+- [별의 거리 — 하늘의 방향 뒤에 있는 깊이](https://climtc.github.io/teaching-learning-perspectives/stellar-parallax.html): Gaia DR3 관측값 120개를 하늘 방향과 거리 좌표로 비교한다. 가상 관측점 이동과 측정 오차를 구별한다.
+- [별의 분포와 진화 — 점들의 모임과 한 별의 시간](https://climtc.github.io/teaching-learning-perspectives/stellar-evolution.html): Gaia의 관측 분포와 MIST 1·2·5 태양질량 별의 진화 표를 비교한다. 개체들의 분포와 한 개체의 시간 경로를 구별한다.
+- [중력 렌즈 — 보이는 상과 빛이 출발한 곳](https://climtc.github.io/teaching-learning-perspectives/gravitational-lensing.html): 점질량 얇은 렌즈의 광원·렌즈·관찰자를 분리해 아인슈타인 고리와 두 상의 생성 조건을 비교한다.
+- [공전 공명 — 한 배치 뒤의 여러 주기](https://climtc.github.io/teaching-learning-perspectives/orbital-resonance.html): 이오·유로파·가니메데의 주기비 1:2:4와 위상 조합을 비교한다. 시간 층을 공간 궤적과 구별한다.
+- [호만 전이 — 궤도를 만나려면 언제 출발할까](https://climtc.github.io/teaching-learning-perspectives/hohmann-window.html): 호만 전이의 타원과 이동하는 목표를 동기화해 출발 위상, 전이 시간과 도착 오차를 비교한다.
+- [시간지리학 — 만날 수 있는 공간과 시간](https://climtc.github.io/teaching-learning-perspectives/time-geography.html): 지도와 시간표에 나뉘어 있던 두 사람의 접근 가능 공간을 시간 프리즘으로 비교한다.
+- [파놉티콘 — 중심의 시선과 보이지 않는 층](https://climtc.github.io/teaching-learning-perspectives/panopticon-visibility.html): 원형 배치의 중앙 시선이 모든 층을 동시에 보장하는지, 칸막이와 회랑·층 바닥의 가림을 비교한다.
 - [라그랑주점 — 고정된 다섯 점과 주변의 운동](https://climtc.github.io/teaching-learning-perspectives/lagrange-points.html): 두 천체의 계와 좌표계를 바꾸며 다섯 평형점과 주변 헤일로 궤도를 비교한다. 공간의 높이와 퍼텐셜 그래프의 높이를 구별한다.
 - [라그랑주점 — 이상 모형의 평형과 헤일로](https://climtc.github.io/teaching-learning-perspectives/lagrange-halo-model.html): 태양–지구와 지구–달의 이상 CR3BP 모형에서 L1–L5, 헤일로 궤도와 좌표계를 비교한다. 공간의 높이와 유효 퍼텐셜의 높이를 구별한다.
 - [에발트 구 — 회절 조건을 공간으로 펼치기](https://climtc.github.io/teaching-learning-perspectives/ewald-diffraction.html): 파장과 결정 방향을 바꾸며 역격자 점과 에발트 구의 교차를 확인한다. 실제 격자와 역격자, 회절 조건과 강도를 구별한다.

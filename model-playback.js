@@ -24,7 +24,7 @@
   function apply() {
     applying=true;
     if(config.stages) {
-      const n=config.stages.length;const stage=Math.min(n-1,Math.floor(progress*n));
+      const n=config.stages.length;const stage=Math.max(0,Math.min(n-1,Math.floor(progress*n)));
       if(stage!==previousStage) {for(const [id,value]of Object.entries(config.stages[stage]))write(id,value);previousStage=stage;}
       if(config.stageTarget) {
         const el=get(config.stageTarget),local=progress>=1?1:(progress*n-stage);
@@ -42,7 +42,7 @@
   }
   function pause() {running=false;cancelAnimationFrame(request);display();}
   function tick(now) {
-    if(!running)return;const dt=Math.min((now-last)/1000,.1);last=now;
+    if(!running)return;const dt=Math.max(0,Math.min((now-last)/1000,.1));last=now;
     progress=Math.min(1,progress+dt*Number(get('player-speed').value)/(config.duration||18));apply();
     if(progress>=1)pause();else request=requestAnimationFrame(tick);
   }
