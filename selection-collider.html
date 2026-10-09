@@ -1,0 +1,520 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"><title>선별이 만든 관계 — 전체에서는 독립적인 두 변수 — 차원 압축과 펼침 실험</title><style>
+:root { color-scheme: light dark; --paper: light-dark(#fff, #181818); --ink: light-dark(#23262b, #f1f1f1); --quiet: light-dark(#616772, #aab0ba); --line: light-dark(#dce1e7, #3a3e45); background: var(--paper); color: var(--ink); }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+a { color: light-dark(#21669e, #88c6f5); text-underline-offset: 3px; }
+.page { position: fixed; inset: 0; width: 100%; height: 100vh; height: 100dvh; overflow: hidden; overflow: clip; display: flex; flex-direction: column; max-width: 1120px; margin: 0 auto; }
+.visualization { display: flex; flex-direction: column; flex: 0 0 clamp(480px, 63dvh, 690px); min-height: 0; padding: 12px 20px 10px; gap: 10px; }
+.comparison-heading { flex: 0 0 auto; }
+.comparison-heading h1 { margin: 0; font-size: 20px; font-weight: 650; letter-spacing: -.03em; line-height: 1.4; }
+.comparison-heading p { margin: 4px 0 0; font-size: 13px; line-height: 1.5; color: var(--quiet); }
+.comparison-grid { display: grid; grid-template-columns: minmax(0, .85fr) minmax(0, 1.35fr); gap: 22px; flex: 1 1 0; min-height: 0; }
+.paper-panel, .digital-panel { min-width: 0; min-height: 0; }
+.panel-label { margin: 0 0 6px; font-size: 12px; line-height: 1.5; font-weight: 600; color: var(--quiet); }
+.paper-panel { display: flex; flex-direction: column; }
+.paper-panel figure { display: flex; flex-direction: column; margin: 0; flex: 1 1 0; min-height: 0; }
+.paper-diagrams { display: block; width: 100%; min-height: 0; flex: 1 1 0; object-fit: contain; background: #fff; border: 1px solid var(--line); border-radius: 8px; padding: 12px; }
+.paper-panel figcaption { margin-top: 8px; font-size: 13px; line-height: 1.65; }
+.paper-panel figcaption span { display: block; color: var(--quiet); font-size: 12px; }
+.paper-panel button { align-self: flex-start; margin-top: 8px; }
+button { font: inherit; color: var(--ink); background: light-dark(#f3f6f9, #282d33); border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font-size: 12px; line-height: 1.5; cursor: pointer; }
+button:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: 2px; }
+.digital-panel { display: flex; flex-direction: column; }
+#codex-visualization { display: block; width: 100%; flex: 1 1 0; min-height: 0; height: 100% !important; max-height: 100% !important; margin: 0; border: 0; }
+.reading { display: flex; flex: 1 1 0; flex-direction: column; min-height: 0; border-top: 1px solid var(--line); }
+.reading-heading { flex: 0 0 auto; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin: 0; padding: 10px 20px 9px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.reading-heading .reading-kicker { margin: 0; font-size: 12px; font-weight: 600; line-height: 1.4; color: var(--quiet); }
+.reading-heading h2 { margin: 0; font-size: 19px; line-height: 1.4; letter-spacing: -.025em; font-weight: 650; }
+.reading-scroll { width: 100%; flex: 1 1 0; min-height: 0; overflow-y: auto; overflow-x: hidden; overscroll-behavior-y: contain; scrollbar-gutter: stable; scroll-padding-top: 16px; }
+.reading-scroll:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-offset: -3px; }
+.article { width: 100%; max-width: 54rem; padding: 16px 20px 48px; margin: 0; font-size: 17px; line-height: 1.9; word-break: keep-all; overflow-wrap: anywhere; }
+.article h2 { margin: 28px 0 10px; font-size: 20px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; text-wrap: balance; }
+.article h3 { margin: 28px 0 10px; font-size: 19px; font-weight: 650; line-height: 1.5; letter-spacing: -.02em; text-wrap: balance; }
+.article p { margin: 0 0 20px; }
+.article .intro { color: var(--quiet); }
+.article sup { font-size: .75em; }
+.article .experiment { padding: 16px 20px 1px; margin: 20px 0; border-left: 3px solid light-dark(#438dc3, #78b7e7); background: light-dark(#f4f7fa, #23272d); }
+.article .sources { margin-top: 28px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.8; }
+.article .sources h2 { margin-top: 18px; font-size: 17px; }
+.article .sources .note { color: var(--quiet); }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+.register-table { margin: 20px 0; }
+.register-table table { width: 100%; border-collapse: collapse; font-size: 16px; line-height: 1.75; }
+.register-table th, .register-table td { padding: 12px 14px; text-align: left; vertical-align: top; border-bottom: 1px solid var(--line); }
+.register-table thead { color: var(--quiet); font-size: 13px; }
+.register-table tbody th { width: 22%; white-space: nowrap; font-weight: 600; }
+.source-page-dialog { width: min(800px, 95vw); max-height: 92dvh; margin: auto; padding: 0; overflow: auto; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 10px; }
+.source-page-dialog::backdrop { background: #000b; }
+.dialog-heading { position: sticky; top: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--line); background: var(--paper); }
+.dialog-heading h2 { margin: 0; font-size: 16px; line-height: 1.5; }
+.source-page-dialog img { display: block; width: 100%; height: auto; background: #fff; }
+.source-page-dialog .source-caption { margin: 0; padding: 12px 16px; font-size: 13px; line-height: 1.7; }
+@media (max-width: 680px) {
+  .visualization { padding: 8px 12px; gap: 8px; flex-basis: clamp(430px, 60dvh, 540px); }
+  .comparison-heading h1 { font-size: 17px; }
+  .comparison-heading p { display: none; }
+  .comparison-grid { display: flex; flex-direction: column; gap: 8px; }
+  .paper-panel { display: grid; grid-template-columns: 100px minmax(0, 1fr); grid-template-rows: auto auto; gap: 3px 10px; flex: 0 0 auto; }
+  .paper-panel .panel-label { grid-column: 2; grid-row: 1; margin: 0; font-size: 11px; }
+  .paper-panel figure { display: contents; }
+  .paper-diagrams { grid-column: 1; grid-row: 1 / 4; width: 100%; height: 64px; padding: 3px; }
+  .paper-panel figcaption { grid-column: 2; grid-row: 2; margin: 0; font-size: 11px; line-height: 1.4; }
+  .paper-panel figcaption span { display: none; }
+  .paper-panel button { grid-column: 2; grid-row: 3; justify-self: start; margin: 0; padding: 2px 6px; font-size: 11px; }
+  .digital-panel { flex: 1 1 0; }
+  .digital-panel > .panel-label { display: none; }
+  .reading-heading { padding: 8px 16px; gap: 4px 8px; }
+  .reading-heading h2 { font-size: 17px; }
+  .article { padding: 12px 16px 36px; font-size: 16px; line-height: 1.85; }
+  .article h2 { font-size: 19px; }
+  .article h3 { font-size: 18px; }
+  .article .experiment { padding: 12px 14px 1px; }
+  .register-table table { font-size: 14px; }
+  .register-table th, .register-table td { padding: 10px 8px; }
+}
+@media (max-height: 500px) and (min-width: 681px) {
+  .visualization { flex-basis: 320px; padding-top: 6px; gap: 6px; }
+  .comparison-heading h1 { font-size: 16px; }
+  .comparison-heading p { display: none; }
+  .paper-panel figcaption span { display: none; }
+  .reading-heading { padding-top: 6px; padding-bottom: 6px; }
+  .reading-heading h2 { font-size: 16px; }
+}
+@media (pointer: coarse) and (max-width: 680px) {
+  .visualization { flex-basis: clamp(480px, 60dvh, 540px); }
+}
+@media (pointer: coarse) and (max-height: 500px) and (min-width: 681px) {
+  .comparison-heading, .digital-panel > .panel-label { display: none; }
+}
+@media (max-width: 359px) {
+  .reading-heading, .article { padding-left: 12px; padding-right: 12px; }
+  .reading-heading h2 { font-size: 15px; }
+}
+
+.atlas-nav { display:flex; align-items:center; flex-wrap:wrap; gap:4px 12px; font-size:12px; line-height:1.5; margin-bottom:6px; }
+.atlas-nav a { text-decoration:none; }
+.atlas-nav a:hover { text-decoration:underline; }
+.article li { margin-bottom:8px; }
+.article .next { display:flex; flex-wrap:wrap; gap:12px; margin:24px 0; }
+@media(max-width:680px){.atlas-nav{margin-bottom:4px;font-size:11px;gap:4px 9px}.visualization{flex-basis:clamp(450px,62dvh,560px)}}
+@media(pointer:coarse) and (max-width:680px){.visualization{flex-basis:clamp(480px,62dvh,560px)}}
+@media(max-height:500px) and (min-width:681px){.atlas-nav a:not(:first-child){display:none}.atlas-nav{margin:0;font-size:11px}.visualization{flex-basis:310px}.comparison-heading p{display:none}}
+
+.formula-table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.7;margin:16px 0 22px}.formula-table th,.formula-table td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.formula-table code{white-space:normal}.formula-table th:first-child{width:17%}.math-block{padding:12px 16px;border-left:3px solid #83baff;background:light-dark(#f2f6fb,#242b35);font-size:16px;line-height:1.8}.article code{font-size:.92em}@media(max-width:680px){.formula-table{font-size:12px}.formula-table th,.formula-table td{padding:7px 5px}}
+.page{max-width:1480px}.visualization{flex-basis:clamp(540px,68dvh,790px)}.comparison-grid{grid-template-columns:minmax(210px,.65fr) minmax(0,2fr);gap:18px}.article{max-width:64rem;margin:0 auto;font-size:18px;line-height:1.95}.reading-heading{padding-left:24px}.atlas-nav{font-size:13px}.comparison-heading p{font-size:14px}.panel-label{font-size:13px}.paper-diagrams{padding:4px}
+@media(max-width:680px){.visualization{flex-basis:clamp(480px,70dvh,640px)}.comparison-grid{display:flex}.article{font-size:16px}.atlas-nav a:nth-child(3){display:none}.paper-panel figcaption{display:none}.paper-panel{grid-template-columns:68px minmax(0,1fr)}.paper-diagrams{height:42px}.paper-panel .panel-label{font-size:12px}.paper-panel button{font-size:12px;padding:3px 8px}.reading-heading{padding-left:16px}}
+@media(max-height:540px) and (min-width:681px){.visualization{flex-basis:340px}.article{font-size:16px}}
+</style><style id="model-expansion-v1">/* In-place expansion: the iframe is never moved or reloaded. */
+.model-view-toolbar { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
+.model-view-toolbar span { font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-view-toolbar button { flex-shrink:0; font:inherit; font-size:12px; padding:4px 9px; border:1px solid var(--line, #888); border-radius:6px; color:var(--ink, CanvasText); background:var(--paper, Canvas); cursor:pointer; }
+.model-focus-guard { display:none; }
+body.model-expanded .page::before { content:''; position:fixed; inset:0; background:#0009; z-index:9998; }
+.is-model-expanded { position:fixed !important; inset:12px !important; z-index:9999 !important; width:auto !important; max-width:none !important; height:calc(100dvh - 24px) !important; min-height:0 !important; max-height:none !important; margin:0 !important; padding:12px !important; display:flex !important; flex-direction:column !important; flex-basis:auto !important; gap:0 !important; border:1px solid var(--line, #888); border-radius:10px; background:var(--paper, Canvas); box-shadow:0 10px 50px #0005; }
+.is-model-expanded > :not(#codex-visualization):not(.model-view-toolbar):not(.model-focus-guard) { display:none !important; }
+.is-model-expanded #codex-visualization { flex:1 1 0 !important; width:100% !important; height:100% !important; min-height:0 !important; max-height:none !important; }
+.is-model-expanded .model-view-toolbar { margin-bottom:8px; }
+.is-model-expanded .model-view-toolbar span { font-size:14px; color:var(--ink, CanvasText); }
+.is-model-expanded .model-focus-guard { display:block; width:0; height:0; overflow:hidden; }
+@media(max-width:680px) { .is-model-expanded { inset:4px !important; height:calc(100dvh - 8px) !important; padding:8px !important; } .model-view-toolbar span { font-size:11px; } }
+
+.digital-panel > .panel-label[hidden] { display:none !important; }
+@media(max-width:680px) {
+  .visualization { overflow-y:auto; overscroll-behavior-y:contain; }
+}
+</style></head><body><main class="page"><section class="visualization" aria-labelledby="comparison-title"><header class="comparison-heading"><nav class="atlas-nav" aria-label="사례 탐색"><a href="geometry-lab.html">← 전체 사례</a><a href="rotation-coordinates.html">회전과 짐벌 잠김</a><a href="temporal-reachability.html">시간 관계망</a></nav><h1 id="comparison-title">선별이 만든 관계 — 전체에서는 독립적인 두 변수</h1><p>전체 표본과 선택된 표본을 동시에 보고, 선별 변수·범위·잡음을 바꾸세요.</p></header><div class="comparison-grid"><section class="paper-panel" aria-labelledby="paper-label"><h2 class="panel-label" id="paper-label">01 · X → C ← Y와 선택 조건</h2><figure><img class="paper-diagrams" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgNjAwIDYwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9IiNmMWY2ZmMiLz48ZyBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzI2M2M1NCI+PHRleHQgeD0iMjUiIHk9IjM4IiBmb250LXNpemU9IjIzIj7qs7XthrUg6rKw6rO866GcIO2RnOuzuOydhCDshKDtg53tlaAg65WMPC90ZXh0PjxwYXRoIGQ9Ik0xMzAgMTgwTDMwMCAyODVMNDcwIDE4MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNGI5Y2RhIiBzdHJva2Utd2lkdGg9IjQiLz48ZyBmb250LXNpemU9IjI4Ij48dGV4dCB4PSIxMTUiIHk9IjE2MCI+WDwvdGV4dD48dGV4dCB4PSI0NjAiIHk9IjE2MCI+WTwvdGV4dD48dGV4dCB4PSIyODUiIHk9IjMyNSI+QzwvdGV4dD48L2c+PHJlY3QgeD0iMjM1IiB5PSIyNTAiIHdpZHRoPSIxMzAiIGhlaWdodD0iOTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U0OWE0MCIgc3Ryb2tlLXdpZHRoPSIzIi8+PHRleHQgeD0iMjA3IiB5PSIzODAiIGZvbnQtc2l6ZT0iMTgiPkPrpbwg7KGw6rG07Jy866GcIO2RnOuzuCDshKDtg508L3RleHQ+PHRleHQgeD0iMjUiIHk9IjQxMCIgZm9udC1zaXplPSIxNyI+WCwgWSwgzrU6IOyEnOuhnCDrj4Xrpr3snbgg7ZGc7KSA7KCV6recIOuzgOyImDwvdGV4dD48dGV4dCB4PSIyNSIgeT0iNDQwIiBmb250LXNpemU9IjE3Ij5DID0gWCArIFkgKyDPg861PC90ZXh0Pjx0ZXh0IHg9IjI1IiB5PSI0NzAiIGZvbnQtc2l6ZT0iMTciPuyghOyytOyXkOyEnCBDb3YoWCxZKSA9IDA8L3RleHQ+PHRleHQgeD0iMjUiIHk9IjUwMCIgZm9udC1zaXplPSIxNyI+Q+ulvCDqs6DsoJXtlZjrqbQgWOyZgCBZ7J2YIOq0gOqzhOqwgCDri6zrnbzsp4Tri6Q8L3RleHQ+PC9nPjwvc3ZnPg==" alt="X → C ← Y와 선택 조건"><figcaption>조건과 관계를 다시 그린 설명용 평면 도식</figcaption></figure><button id="open-source-page" aria-haspopup="dialog" aria-controls="source-page">평면 도식 크게 보기</button></section><section class="digital-panel" aria-labelledby="digital-label"><h2 class="panel-label" id="digital-label">02 · 세 변수의 표본 · 선택 구간</h2><iframe id="codex-visualization" sandbox="allow-scripts" scrolling="no" referrerpolicy="no-referrer" title="선별이 만든 관계 — 전체에서는 독립적인 두 변수의 상호작용 비교" data-srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;ko&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;&lt;style&gt;
+:root{color-scheme:light dark;--bg:light-dark(#f8fbff,#17212f);--ink:light-dark(#263c54,#e7edf6);--quiet:light-dark(#60758b,#aab7c8);--line:light-dark(#d9e3ee,#384a60)}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;color:var(--ink);background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,sans-serif;overflow:hidden}button,select,input{font:inherit}button,select{color:var(--ink);background:light-dark(#edf3fa,#263449);border:1px solid var(--line);border-radius:7px;padding:7px 9px;cursor:pointer;font-size:13px}button:disabled,select:disabled,input:disabled{opacity:.45;cursor:default}button:focus-visible,select:focus-visible,input:focus-visible,canvas:focus-visible{outline:2px solid #4b9cda;outline-offset:2px}.widget{position:relative;height:100%;display:grid;grid-template-columns:minmax(0,1fr) 248px;gap:9px;padding:5px}.stage{min-width:0;min-height:0;display:flex;flex-direction:column;gap:5px}#scene-title{margin:0;font-size:13px;line-height:1.45;min-height:27px;padding:4px 74px 0 8px}.canvas-wrap{position:relative;flex:1 1 0;min-height:90px}#model{width:100%;height:100%;display:block;touch-action:none;cursor:grab}.plots{display:grid;grid-template-rows:minmax(0,1fr);grid-template-columns:1fr 1fr;gap:6px;height:174px;min-height:126px;flex:0 0 35%}.plots canvas{display:block;width:100%;height:100%;min-width:0;min-height:0;border:1px solid var(--line);border-radius:7px;background:light-dark(#fff,#1b293b)}.controls{min-height:0;overflow:auto;border-left:1px solid var(--line);padding:7px 10px 25px;font-size:13px;line-height:1.55;scrollbar-gutter:stable}label{display:block;margin-bottom:10px}label&gt;span{float:right;color:var(--quiet)}input[type=range]{width:100%;display:block;margin:6px 0 0;accent-color:#4b9cda}select{display:block;width:100%;margin-top:4px}.check-label{display:flex;align-items:center;gap:7px}.row{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.hint{font-size:12px;line-height:1.6;color:var(--quiet)}#metrics{margin:10px 0;padding-top:8px;border-top:1px solid var(--line)}.mobile-jump{display:none}.controls-head{font-size:14px;margin:0 0 12px}.legend{font-size:12px;color:var(--quiet);margin:2px 0 6px}
+@media(max-width:680px){.widget{display:block;padding:4px}.stage{height:100%}#scene-title{font-size:12px;padding:37px 8px 0;min-height:56px}.plots{height:148px;min-height:136px;flex-basis:43%}.controls{display:none;position:absolute;inset:0;z-index:8;background:var(--bg);padding:12px 16px 24px;overflow:auto;border:0}.controls.open{display:block}.controls-head{margin-top:12px}.mobile-jump{display:block}#show-controls{position:absolute;left:8px;top:8px;z-index:4;padding:5px 9px}#back-model{position:sticky;top:0;z-index:2;margin-bottom:12px}.canvas-wrap{min-height:85px}}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;div class=&quot;widget&quot;&gt;&lt;div class=&quot;stage&quot;&gt;&lt;p id=&quot;scene-title&quot;&gt;&lt;/p&gt;&lt;div class=&quot;canvas-wrap&quot;&gt;&lt;canvas id=&quot;model&quot; tabindex=&quot;0&quot; aria-label=&quot;선별이 만든 관계 — 전체에서는 독립적인 두 변수의 조작 모형. 드래그와 방향키로 회전, 휠과 + 또는 -로 배율을 바꿀 수 있습니다.&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;div class=&quot;plots&quot;&gt;&lt;canvas id=&quot;plot-a&quot; role=&quot;img&quot; aria-label=&quot;모형과 연결된 첫 번째 평면 기록&quot;&gt;&lt;/canvas&gt;&lt;canvas id=&quot;plot-b&quot; role=&quot;img&quot; aria-label=&quot;모형과 연결된 두 번째 평면 기록&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;/div&gt;&lt;section class=&quot;controls&quot; id=&quot;controls&quot; aria-label=&quot;모형의 조건과 수치&quot;&gt;&lt;button id=&quot;back-model&quot; class=&quot;mobile-jump&quot;&gt;모형으로 돌아가기 ↑&lt;/button&gt;&lt;h2 class=&quot;controls-head&quot;&gt;조건을 바꾸어 비교하기&lt;/h2&gt;&lt;p id=&quot;metrics&quot; class=&quot;hint&quot;&gt;&lt;/p&gt;&lt;label for=&quot;variable&quot;&gt;선별에 사용하는 변수&lt;select id=&quot;variable&quot;&gt;&lt;option value=&quot;C&quot;&gt;공통 결과 C&lt;/option&gt;&lt;option value=&quot;X&quot;&gt;원인 변수 X&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label for=&quot;selection&quot;&gt;선별 규칙&lt;select id=&quot;selection&quot;&gt;&lt;option value=&quot;band&quot;&gt;중심 주위의 구간&lt;/option&gt;&lt;option value=&quot;threshold&quot;&gt;중심 이상 문턱값&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label for=&quot;center&quot;&gt;선별 중심 / 문턱값&lt;span id=&quot;center-value&quot;&gt;&lt;/span&gt;&lt;input id=&quot;center&quot; type=&quot;range&quot; min=&quot;-3&quot; max=&quot;3&quot; step=&quot;0.01&quot; value=&quot;0&quot;&gt;&lt;/label&gt;&lt;label for=&quot;width&quot;&gt;구간 폭 (문턱값에서는 미사용)&lt;span id=&quot;width-value&quot;&gt;&lt;/span&gt;&lt;input id=&quot;width&quot; type=&quot;range&quot; min=&quot;0.1&quot; max=&quot;3&quot; step=&quot;0.05&quot; value=&quot;0.5&quot;&gt;&lt;/label&gt;&lt;label for=&quot;noise&quot;&gt;C에 포함되는 잡음 σ&lt;span id=&quot;noise-value&quot;&gt;&lt;/span&gt;&lt;input id=&quot;noise&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;2&quot; step=&quot;0.05&quot; value=&quot;1&quot;&gt;&lt;/label&gt;&lt;div class=&quot;row&quot;&gt;&lt;button data-preset data-values=&quot;{&amp;quot;variable&amp;quot;: &amp;quot;C&amp;quot;, &amp;quot;selection&amp;quot;: &amp;quot;band&amp;quot;, &amp;quot;center&amp;quot;: 0, &amp;quot;width&amp;quot;: 0.2, &amp;quot;noise&amp;quot;: 1}&quot;&gt;얇은 C 구간&lt;/button&gt;&lt;button data-preset data-values=&quot;{&amp;quot;variable&amp;quot;: &amp;quot;X&amp;quot;, &amp;quot;selection&amp;quot;: &amp;quot;band&amp;quot;, &amp;quot;center&amp;quot;: 0, &amp;quot;width&amp;quot;: 1, &amp;quot;noise&amp;quot;: 1}&quot;&gt;X로 선택&lt;/button&gt;&lt;/div&gt;&lt;div class=&quot;row&quot;&gt;&lt;button id=&quot;front&quot;&gt;정면 보기&lt;/button&gt;&lt;button id=&quot;oblique&quot;&gt;비스듬히 보기&lt;/button&gt;&lt;/div&gt;&lt;p class=&quot;hint&quot;&gt;드래그·방향키로 회전, + / − 또는 휠로 확대. 모형은 창에 맞춰 표시합니다. 크기는 축과 수치로 비교하세요. 배율 &lt;span id=&quot;zoom-info&quot;&gt;&lt;/span&gt;&lt;/p&gt;&lt;button id=&quot;reset&quot;&gt;초기화&lt;/button&gt;&lt;/section&gt;&lt;/div&gt;&lt;button id=&quot;show-controls&quot; class=&quot;mobile-jump&quot;&gt;조건 선택&lt;/button&gt;&lt;script&gt;window.CaseSpec={&quot;kind&quot;: &quot;selection&quot;, &quot;defaults&quot;: {&quot;variable&quot;: &quot;C&quot;, &quot;selection&quot;: &quot;band&quot;, &quot;center&quot;: 0, &quot;width&quot;: 0.5, &quot;noise&quot;: 1}, &quot;target&quot;: &quot;center&quot;};&lt;/script&gt;&lt;script&gt;/* Mathematical models and synthetic data. No external dependencies. */
+(function(root){
+ &#x27;use strict&#x27;;
+ const pi=Math.PI, rad=pi/180;
+ const add=(a,b)=&gt;a.map((v,i)=&gt;v+b[i]), sub=(a,b)=&gt;a.map((v,i)=&gt;v-b[i]);
+ const scale=(a,s)=&gt;a.map(v=&gt;v*s), dot=(a,b)=&gt;a.reduce((s,v,i)=&gt;s+v*b[i],0);
+ const norm=a=&gt;Math.sqrt(dot(a,a)), unit=a=&gt;scale(a,1/(norm(a)||1));
+ const cross=(a,b)=&gt;[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+ const mv=(a,v)=&gt;a.map(row=&gt;dot(row,v)), transpose=a=&gt;a[0].map((_,i)=&gt;a.map(row=&gt;row[i]));
+ const mm=(a,b)=&gt;a.map(row=&gt;transpose(b).map(col=&gt;dot(row,col)));
+ const eye=()=&gt;[[1,0,0],[0,1,0],[0,0,1]];
+ function rotation(axis,a){let c=Math.cos(a),s=Math.sin(a);return axis===&#x27;X&#x27;?[[1,0,0],[0,c,-s],[0,s,c]]:axis===&#x27;Y&#x27;?[[c,0,s],[0,1,0],[-s,0,c]]:[[c,-s,0],[s,c,0],[0,0,1]];}
+ function euler(yaw,pitch,roll,order=&#x27;ZYX&#x27;){
+  const angles={[order[0]]:yaw,[order[1]]:pitch,[order[2]]:roll};
+  return order.split(&#x27;&#x27;).reduce((r,a)=&gt;mm(r,rotation(a,angles[a]*rad)),eye());
+ }
+ function qmul(a,b){return [a[0]*b[0]-dot(a.slice(1),b.slice(1)),...add(add(scale(b.slice(1),a[0]),scale(a.slice(1),b[0])),cross(a.slice(1),b.slice(1)))];}
+ function quaternion(yaw,pitch,roll,order=&#x27;ZYX&#x27;){
+  return order.split(&#x27;&#x27;).reduce((q,a,i)=&gt;{let v=[0,0,0],t=[yaw,pitch,roll][i]*rad/2;v[&#x27;XYZ&#x27;.indexOf(a)]=Math.sin(t);return qmul(q,[Math.cos(t),...v]);},[1,0,0,0]);
+ }
+ function qmatrix(q){q=unit(q);let [w,x,y,z]=q;return [[1-2*(y*y+z*z),2*(x*y-w*z),2*(x*z+w*y)],[2*(x*y+w*z),1-2*(x*x+z*z),2*(y*z-w*x)],[2*(x*z-w*y),2*(y*z+w*x),1-2*(x*x+y*y)]];}
+ function recoverZYX(r){let p=Math.asin(Math.max(-1,Math.min(1,-r[2][0])));return Math.abs(Math.cos(p))&lt;1e-7?null:[Math.atan2(r[1][0],r[0][0])/rad,p/rad,Math.atan2(r[2][1],r[2][2])/rad];}
+ function rng(seed=913){return ()=&gt;{seed=(Math.imul(seed,1664525)+1013904223)&gt;&gt;&gt;0;return (seed+.5)/4294967296;};}
+ function normal(random){return Math.sqrt(-2*Math.log(random()))*Math.cos(2*pi*random());}
+ function correlation(points,x=0,y=1){if(points.length&lt;3)return null;let a=points.reduce((s,p)=&gt;s+p[x],0)/points.length,b=points.reduce((s,p)=&gt;s+p[y],0)/points.length;let xx=0,yy=0,xy=0;for(let p of points){let u=p[x]-a,v=p[y]-b;xx+=u*u;yy+=v*v;xy+=u*v;}return xx*yy&gt;1e-18?xy/Math.sqrt(xx*yy):null;}
+ const selectionBase=(()=&gt;{let r=rng(4407);return Array.from({length:2400},()=&gt;[normal(r),normal(r),normal(r)]);})();
+ function selection(sigma,center,width,mode=&#x27;band&#x27;,variable=&#x27;C&#x27;){
+  let points=selectionBase.map(([x,y,e])=&gt;[x,y,x+y+sigma*e]);
+  let selected=points.filter(p=&gt;{let v=p[variable===&#x27;X&#x27;?0:2];return mode===&#x27;threshold&#x27;?v&gt;=center:Math.abs(v-center)&lt;=width/2;});
+  return {points,selected,all:correlation(points),observed:correlation(selected),thinTheory:-1/(1+sigma*sigma)};
+ }
+ function phantom(which=&#x27;A&#x27;){let separation=which===&#x27;A&#x27;?.48:.22;return [{x:0,y:0,a:.92,b:.92,z:.6,density:.2},{x:0,y:-separation,a:.17,b:.16,z:.3,density:1},{x:0,y:separation,a:.17,b:.16,z:.3,density:1}];}
+ function attenuation(x,y,which=&#x27;A&#x27;){return phantom(which).reduce((s,e)=&gt;s+(((x-e.x)/e.a)**2+((y-e.y)/e.b)**2&lt;=1?e.density:0),0);}
+ function projection(theta,t,which=&#x27;A&#x27;){
+  let c=Math.cos(theta),s=Math.sin(theta);
+  return phantom(which).reduce((sum,e)=&gt;{let h2=(e.a*c)**2+(e.b*s)**2,d=t-e.x*c-e.y*s;return sum+(d*d&lt;h2?2*e.density*e.a*e.b/Math.sqrt(h2)*Math.sqrt(1-d*d/h2):0);},0);
+ }
+ function reconstruct(which=&#x27;A&#x27;,count=36,coverage=180,noise=0,size=64){
+  const detector=129,extent=1.25,d=2*extent/(detector-1),dtheta=coverage*rad/count;
+  const random=rng(6510),angles=[],sino=[],filtered=[];
+  for(let a=0;a&lt;count;a++){
+   let theta=(a+.5)*dtheta,p=Array.from({length:detector},(_,i)=&gt;projection(theta,-extent+i*d,which)+noise*normal(random));angles.push(theta);sino.push(p);
+   let f=p.map((_,i)=&gt;{let sum=p[i]/(4*d*d);for(let j=0;j&lt;detector;j++){let k=i-j;if(k%2!==0)sum-=p[j]/(pi*pi*k*k*d*d);}return sum*d;});filtered.push(f);
+  }
+  let image=[],truth=[],se=0;
+  for(let j=0;j&lt;size;j++)for(let i=0;i&lt;size;i++){
+   let x=-1.05+(i+.5)*2.1/size,y=1.05-(j+.5)*2.1/size,v=0;
+   for(let a=0;a&lt;count;a++){let u=(x*Math.cos(angles[a])+y*Math.sin(angles[a])+extent)/d,k=Math.floor(u);if(k&gt;=0&amp;&amp;k&lt;detector-1)v+=(filtered[a][k]*(1-u+k)+filtered[a][k+1]*(u-k))*dtheta;}
+   let exact=attenuation(x,y,which);image.push(v);truth.push(exact);se+=(v-exact)**2;
+  }
+  return {image,truth,size,sino,detector,angles,error:Math.sqrt(se/(size*size))};
+ }
+ const contacts={forward:[[&#x27;A&#x27;,&#x27;B&#x27;,1],[&#x27;B&#x27;,&#x27;C&#x27;,2],[&#x27;C&#x27;,&#x27;D&#x27;,3],[&#x27;D&#x27;,&#x27;E&#x27;,4],[&#x27;B&#x27;,&#x27;F&#x27;,5]],reverse:[[&#x27;B&#x27;,&#x27;C&#x27;,1],[&#x27;A&#x27;,&#x27;B&#x27;,2],[&#x27;C&#x27;,&#x27;D&#x27;,3],[&#x27;D&#x27;,&#x27;E&#x27;,4],[&#x27;B&#x27;,&#x27;F&#x27;,5]],simultaneous:[[&#x27;A&#x27;,&#x27;B&#x27;,1],[&#x27;B&#x27;,&#x27;C&#x27;,1],[&#x27;C&#x27;,&#x27;D&#x27;,3],[&#x27;D&#x27;,&#x27;E&#x27;,4],[&#x27;B&#x27;,&#x27;F&#x27;,5]]};
+ function reachable(events,source=&#x27;A&#x27;,start=0,end=6,memory=Infinity){
+  if(start&gt;end)return {arrival:{},used:[],retaining:[],history:{}};
+  let arrival={[source]:start},last={[source]:start},used=[],history={[source]:[start]};
+  let times=[...new Set(events.filter(e=&gt;e[2]&gt;=start&amp;&amp;e[2]&lt;=end).map(e=&gt;e[2]))].sort((a,b)=&gt;a-b);
+  for(let t of times){let before={...last},updates={};for(let [a,b,time] of events.filter(e=&gt;e[2]===t)){
+    let has=n=&gt;before[n]!==undefined&amp;&amp;t-before[n]&lt;=memory;
+    if(has(a)&amp;&amp;!has(b)){updates[b]=t;used.push([a,b,t]);}if(has(b)&amp;&amp;!has(a)){updates[a]=t;used.push([b,a,t]);}
+    if(has(a)||has(b)){updates[a]=t;updates[b]=t;}
+   }for(let [n,time] of Object.entries(updates)){last[n]=time;if(arrival[n]===undefined)arrival[n]=time;(history[n]||(history[n]=[])).push(time);}
+  }
+  return {arrival,used,retaining:Object.keys(last).filter(n=&gt;end-last[n]&lt;=memory),history};
+ }
+ function stress(principal,azimuth,polar,frame=0){
+  let a=azimuth*rad,p=polar*rad,n=[Math.sin(p)*Math.cos(a),Math.sin(p)*Math.sin(a),Math.cos(p)];
+  let tensor=principal.map((v,i)=&gt;[0,1,2].map(j=&gt;i===j?v:0));
+  let traction=mv(tensor,n),normalStress=dot(n,traction),shear=sub(traction,scale(n,normalStress));
+  let basis=rotation(&#x27;Z&#x27;,-frame*rad),components=mm(mm(basis,tensor),transpose(basis));
+  return {n,tensor,traction,normalStress,shear,shearMagnitude:norm(shear),basis,components,normalComponents:mv(basis,n),tractionComponents:mv(basis,traction)};
+ }
+ const pressure=(T,v)=&gt;8*T/(3*v-1)-3/(v*v);
+ const dpdv=(T,v)=&gt;-24*T/(3*v-1)**2+6/v**3;
+ function bisect(f,a,b,steps=72){let fa=f(a),fb=f(b);if(fa*fb&gt;0)throw Error(&#x27;Root is not bracketed&#x27;);for(let i=0;i&lt;steps;i++){let c=(a+b)/2,fc=f(c);if(fa*fc&lt;=0){b=c;fb=fc;}else{a=c;fa=fc;}}return(a+b)/2;}
+ function coexist(T){
+  if(T&gt;=1)return null;
+  let s1=bisect(v=&gt;dpdv(T,v),1/3+1e-6,1),s2=bisect(v=&gt;dpdv(T,v),1,100),pmin=pressure(T,s1),pmax=pressure(T,s2);
+  function endpoints(p){return [bisect(v=&gt;pressure(T,v)-p,1/3+1e-7,s1),bisect(v=&gt;pressure(T,v)-p,s2,Math.max(100,20/p))];}
+  function area(p){let [l,g]=endpoints(p),F=v=&gt;8*T/3*Math.log(3*v-1)+3/v-p*v;return F(g)-F(l);}
+  let margin=Math.max(Number.EPSILON,(pmax-pmin)*1e-6);
+  let p=bisect(area,Math.max(1e-8,pmin+margin),pmax-margin),[liquid,gas]=endpoints(p);
+  return {p,liquid,gas,area:area(p),spinodal:[s1,s2]};
+ }
+ const galaxies=(()=&gt;{let r=rng(5126);return Array.from({length:420},()=&gt;({pos:[normal(r)*2.5,normal(r)*2.5,normal(r)*2.5],velocity:[normal(r),normal(r),normal(r)]}));})();
+ function redshift(dispersion,H0,azimuth=0){
+  let n=[Math.cos(azimuth*rad),Math.sin(azimuth*rad),0],observer=scale(n,-150);
+  let points=galaxies.map(g=&gt;{let los=unit(sub(g.pos,observer)),v=dot(g.velocity,los)*dispersion,s=add(g.pos,scale(los,v/H0));return {real:g.pos,observed:s,los,v,shift:v/H0};});
+  let spread=key=&gt;Math.sqrt(points.reduce((s,p)=&gt;s+dot(p[key],n)**2,0)/points.length);
+  return {n,observer,points,trueSpread:spread(&#x27;real&#x27;),redshiftSpread:spread(&#x27;observed&#x27;)};
+ }
+ const phyloNodes={R:{time:0,x:0,y:0},E:{time:4,x:2.1,y:1.2},AB:{time:1,x:-1,y:-.35},CD:{time:1,x:1,y:.35},a:{time:2,x:-1.5,y:-.6},b:{time:2,x:-.5,y:.1},c:{time:2,x:.5,y:-.1},d:{time:2,x:1.5,y:.6},H:{time:3,x:-.5,y:.1},A:{time:4,x:-1.5,y:-.6},B:{time:4,x:-.5,y:.1},C:{time:4,x:.5,y:-.1},D:{time:4,x:1.5,y:.6}};
+ const phyloEdges=[[&#x27;R&#x27;,&#x27;E&#x27;],[&#x27;R&#x27;,&#x27;AB&#x27;],[&#x27;R&#x27;,&#x27;CD&#x27;],[&#x27;AB&#x27;,&#x27;a&#x27;],[&#x27;AB&#x27;,&#x27;b&#x27;],[&#x27;CD&#x27;,&#x27;c&#x27;],[&#x27;CD&#x27;,&#x27;d&#x27;],[&#x27;a&#x27;,&#x27;A&#x27;],[&#x27;b&#x27;,&#x27;H&#x27;],[&#x27;H&#x27;,&#x27;B&#x27;],[&#x27;c&#x27;,&#x27;C&#x27;],[&#x27;d&#x27;,&#x27;D&#x27;]];
+ function phylogeny(gene=&#x27;A&#x27;,transfer=true,time=4){
+  let all=phyloEdges.map(e=&gt;e.slice());if(transfer)all.push([&#x27;c&#x27;,&#x27;H&#x27;]);
+  // Only locus B follows the donor edge into H. Locus A keeps vertical ancestry.
+  let selected=all.filter(([a,b])=&gt;b!==&#x27;H&#x27;||a===((gene===&#x27;B&#x27;&amp;&amp;transfer)?&#x27;c&#x27;:&#x27;b&#x27;));
+  let visible=all.filter(([a,b])=&gt;phyloNodes[a].time&lt;=time&amp;&amp;phyloNodes[b].time&lt;=time);
+  return {nodes:phyloNodes,all,selected,visible,split:gene===&#x27;B&#x27;&amp;&amp;transfer?&#x27;A | B C | D&#x27;:&#x27;A B | C D&#x27;,quartets:transfer?[&#x27;AB|CD&#x27;,&#x27;AD|BC&#x27;]:[&#x27;AB|CD&#x27;]};
+ }
+ const api={pi,rad,add,sub,scale,dot,norm,unit,cross,mv,mm,transpose,eye,rotation,euler,quaternion,qmatrix,recoverZYX,rng,normal,correlation,selection,phantom,attenuation,projection,reconstruct,contacts,reachable,stress,pressure,dpdv,bisect,coexist,redshift,phylogeny};
+ if(typeof module!==&#x27;undefined&#x27;&amp;&amp;module.exports)module.exports=api;else root.Inference=api;
+})(typeof window!==&#x27;undefined&#x27;?window:globalThis);
+&lt;/script&gt;&lt;script&gt;(function(){
+ &#x27;use strict&#x27;;
+ const M=window.Inference,spec=window.CaseSpec,$=id=&gt;document.getElementById(id),cv=$(&#x27;model&#x27;),cx=cv.getContext(&#x27;2d&#x27;);
+ const colors=[&#x27;#4b9cda&#x27;,&#x27;#e49a40&#x27;,&#x27;#65b88a&#x27;,&#x27;#ba83cf&#x27;,&#x27;#dd7687&#x27;,&#x27;#849cbb&#x27;];
+ let yaw=-.55,pitch=.4,zoom=1,pending=false,cache={};
+ const value=id=&gt;Number($(id).value), choice=id=&gt;$(id).value, fmt=(x,n=2)=&gt;x===null?&#x27;—&#x27;:Number(x).toFixed(n);
+ let scene,plotJobs=[];
+ function newScene(bound=2){scene={bound,center:[0,0,0],items:[],labels:[]};plotJobs=[];}
+ function line(points,color=colors[0],width=2,dash=false){scene.items.push({points,color,width,dash,type:&#x27;line&#x27;});}
+ function face(points,color,alpha=.15){scene.items.push({points,color,alpha,type:&#x27;face&#x27;});}
+ function point(pos,color=colors[0],radius=3){scene.items.push({points:[pos],color,radius,type:&#x27;point&#x27;});}
+ function label(pos,text,color){scene.labels.push({pos,text,color});}
+ function arrow(a,b,color=colors[1]){scene.items.push({points:[a,b],color,width:2.5,type:&#x27;arrow&#x27;});}
+ function ring(center,a,b,color,r=1){line(Array.from({length:65},(_,i)=&gt;M.add(center,M.add(M.scale(a,r*Math.cos(i*Math.PI/32)),M.scale(b,r*Math.sin(i*Math.PI/32))))),color,2);}
+ function axes(names,length=1.5){let origin=[-length,-length,-length*.5];for(let i=0;i&lt;3;i++){let end=origin.slice();end[i]+=length*1.5;arrow(origin,end,colors[i]);label(end,names[i],colors[i]);}}
+ function info(head,metrics){$(&#x27;scene-title&#x27;).textContent=head;$(&#x27;metrics&#x27;).textContent=metrics;}
+ function plot(id,title,fn){$(id).setAttribute(&#x27;aria-label&#x27;,title);plotJobs.push(()=&gt;drawPlot(id,title,fn));}
+ function textLines(a,text,x,y,width,lineHeight=16){let line=&#x27;&#x27;;for(let ch of text){if(line&amp;&amp;a.ctx.measureText(line+ch).width&gt;width){a.ctx.fillText(line,x,y);line=ch;y+=lineHeight;}else line+=ch;}a.ctx.fillText(line,x,y);return y;}
+ function prepare(canvas){const r=canvas.getBoundingClientRect(),d=Math.min(2,devicePixelRatio||1);let w=Math.max(2,r.width),h=Math.max(2,r.height);if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d);}let ctx=canvas.getContext(&#x27;2d&#x27;);ctx.setTransform(d,0,0,d,0,0);let dark=matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).matches;ctx.clearRect(0,0,w,h);return {ctx,w,h,ink:dark?&#x27;#e7edf6&#x27;:&#x27;#263c54&#x27;,quiet:dark?&#x27;#aab7c8&#x27;:&#x27;#60758b&#x27;,grid:dark?&#x27;#384a60&#x27;:&#x27;#d9e3ee&#x27;,dark};}
+ function drawPlot(id,title,fn){let a=prepare($(id));a.ctx.font=&#x27;12px sans-serif&#x27;;a.ctx.fillStyle=a.ink;a.ctx.fillText(title,10,17);fn(a);}
+ function chart(a,xlim,ylim,xname,yname){let {ctx,w,h,quiet,grid}=a,left=38,top=31,bottom=h-26,right=w-14;let X=x=&gt;left+(x-xlim[0])/(xlim[1]-xlim[0])*(right-left),Y=y=&gt;bottom-(y-ylim[0])/(ylim[1]-ylim[0])*(bottom-top);ctx.strokeStyle=grid;ctx.lineWidth=1;ctx.strokeRect(left,top,right-left,bottom-top);ctx.font=&#x27;11px sans-serif&#x27;;ctx.fillStyle=quiet;ctx.textAlign=&#x27;center&#x27;;ctx.fillText(xname,(left+right)/2,h-5);ctx.textAlign=&#x27;left&#x27;;ctx.fillText(yname,5,30);for(let t of [0,.5,1]){ctx.fillText(fmt(ylim[0]+t*(ylim[1]-ylim[0]),1),2,Y(ylim[0]+t*(ylim[1]-ylim[0]))+4);ctx.textAlign=&#x27;center&#x27;;ctx.fillText(fmt(xlim[0]+t*(xlim[1]-xlim[0]),1),X(xlim[0]+t*(xlim[1]-xlim[0])),bottom+13);ctx.textAlign=&#x27;left&#x27;;}return {X,Y,left,right,top,bottom};}
+ function curve(a,points,X,Y,color,width=2){a.ctx.strokeStyle=color;a.ctx.lineWidth=width;a.ctx.beginPath();points.forEach(([x,y],i)=&gt;i?a.ctx.lineTo(X(x),Y(y)):a.ctx.moveTo(X(x),Y(y)));a.ctx.stroke();}
+ function image(a,data,n,x,y,w,h,max=1.2){let c=document.createElement(&#x27;canvas&#x27;);c.width=n;c.height=n;let g=c.getContext(&#x27;2d&#x27;),im=g.createImageData(n,n);data.forEach((v,i)=&gt;{let t=Math.max(0,Math.min(1,v/max));im.data[4*i]=Math.round(244*(1-t)+45*t);im.data[4*i+1]=Math.round(248*(1-t)+143*t);im.data[4*i+2]=Math.round(252*(1-t)+185*t);im.data[4*i+3]=255;});g.putImageData(im,0,0);a.ctx.imageSmoothingEnabled=false;a.ctx.drawImage(c,x,y,w,h);}
+ function ct(){
+  let theta=value(&#x27;angle&#x27;)*M.rad,which=choice(&#x27;phantom&#x27;),count=value(&#x27;count&#x27;),coverage=value(&#x27;coverage&#x27;),noise=value(&#x27;noise&#x27;);newScene(1.45);
+  for(let e of M.phantom(which))for(let k=0;k&lt;3;k++){
+   let u=k===0?[e.a,0,0]:k===1?[e.a,0,0]:[0,e.b,0],v=k===0?[0,e.b,0]:[0,0,e.z];
+   ring([e.x,e.y,0],u,v,e.density===1?colors[1]:colors[0]);
+  }
+  let n=[Math.cos(theta),Math.sin(theta),0],beam=[-Math.sin(theta),Math.cos(theta),0];
+  for(let i=-5;i&lt;=5;i++){let c=M.scale(n,i*.17);line([M.add(c,M.scale(beam,-1.2)),M.add(c,M.scale(beam,1.2))],colors[2],1);}
+  line([M.add(M.scale(beam,1.23),M.scale(n,-1.1)),M.add(M.scale(beam,1.23),M.scale(n,1.1))],colors[3],3);
+  face([[-1,-1,0],[1,-1,0],[1,1,0],[-1,1,0]],colors[0],.08);label([.9,.9,0],&#x27;재구성 단면 z=0&#x27;);label(M.scale(beam,1.3),&#x27;검출기&#x27;);
+  let key=[which,count,coverage,noise].join(&#x27;:&#x27;);if(cache.ctkey!==key){cache.ct=M.reconstruct(which,count,coverage,noise);cache.ctkey=key;}let r=cache.ct;
+  let diff=Math.max(...Array.from({length:121},(_,i)=&gt;Math.abs(M.projection(theta,-1.2+i*.02,&#x27;A&#x27;)-M.projection(theta,-1.2+i*.02,&#x27;B&#x27;))));
+  info(`평행 빔 · 내부 ${which} · 관측각 ${fmt(value(&#x27;angle&#x27;),0)}°`,`A/B 투영 최대 차이 ${fmt(diff,3)} · 단면 RMSE ${fmt(r.error,3)}. 선적분은 단면 사진이 아닙니다.`);
+  plot(&#x27;plot-a&#x27;,&#x27;선적분 · 파랑 A / 주황 B&#x27;,a=&gt;{let c=chart(a,[-1.2,1.2],[0,1.1],&#x27;검출기 좌표 t&#x27;,&#x27;감쇠&#x27;);for(let [id,col] of [[&#x27;A&#x27;,colors[0]],[&#x27;B&#x27;,colors[1]]])curve(a,Array.from({length:161},(_,i)=&gt;[-1.2+i*.015,M.projection(theta,-1.2+i*.015,id)]),c.X,c.Y,col);});
+  plot(&#x27;plot-b&#x27;,`원본 / FBP / sinogram (${count}각)`,a=&gt;{let gap=8,s=Math.min((a.w-36)/3,a.h-44),y=31;image(a,r.truth,r.size,8,y,s,s);image(a,r.image,r.size,16+s,y,s,s);let x=24+2*s;a.ctx.fillStyle=a.grid;a.ctx.fillRect(x,y,s,s);for(let j=0;j&lt;count;j++)for(let i=0;i&lt;r.detector;i++){let t=Math.max(0,Math.min(1,r.sino[j][i]));a.ctx.fillStyle=`rgb(${245-200*t},${250-105*t},${252-50*t})`;a.ctx.fillRect(x+i*s/r.detector,y+j*s/count,s/r.detector+.5,s/count+.5);}a.ctx.fillStyle=a.quiet;a.ctx.font=&#x27;11px sans-serif&#x27;;a.ctx.fillText(&#x27;t → / 각도 ↓&#x27;,x,y+s+13);});
+ }
+ function rotation(){
+  let order=choice(&#x27;order&#x27;),a=value(&#x27;yaw&#x27;),b=value(&#x27;pitch&#x27;),c=value(&#x27;roll&#x27;),r=M.euler(a,b,c,order),q=M.quaternion(a,b,c,order);newScene(2);
+  let vertices=[[-.8,-.45,-.3],[.8,-.45,-.3],[.8,.45,-.3],[-.8,.45,-.3],[-.8,-.45,.3],[.8,-.45,.3],[.8,.45,.3],[-.8,.45,.3]].map(p=&gt;M.mv(r,p));
+  for(let f of [[0,1,2,3],[4,5,6,7],[0,1,5,4],[2,3,7,6],[1,2,6,5],[0,3,7,4]]){face(f.map(i=&gt;vertices[i]),colors[0],.15);line(f.map(i=&gt;vertices[i]).concat([vertices[f[0]]]),colors[0]);}
+  let partial=M.eye();for(let i=0;i&lt;3;i++){
+   let axis=order[i],idx=&#x27;XYZ&#x27;.indexOf(axis),aidx=(idx+1)%3,bidx=(idx+2)%3,base=M.eye();ring([0,0,0],M.mv(partial,base[aidx]),M.mv(partial,base[bidx]),colors[i],1.15+i*.18);let axisVector=M.mv(partial,base[idx]);arrow([0,0,0],M.scale(axisVector,1.7),colors[i]);label(M.scale(axisVector,1.8),`${i+1} ${axis}`,colors[i]);partial=M.mm(partial,M.rotation(axis,[a,b,c][i]*M.rad));
+  }
+  for(let i=0;i&lt;3;i++)arrow([0,0,0],M.mv(r,M.scale(M.eye()[i],1)),colors[i]);
+  let recovered=order===&#x27;ZYX&#x27;?M.recoverZYX(r):null;
+  info(`${order} · 두 회전축의 정렬을 비교`,`|cos(둘째 각)| = ${fmt(Math.abs(Math.cos(b*M.rad)),3)} · q = [${q.map(v=&gt;fmt(v,3)).join(&#x27;, &#x27;)}] · |q| = ${fmt(M.norm(q),3)}. 물체의 자세는 계속 정의됩니다.`);
+  plot(&#x27;plot-a&#x27;,&#x27;회전행렬 R · 열 = 물체 축&#x27;,a=&gt;{a.ctx.font=&#x27;13px monospace&#x27;;a.ctx.fillStyle=a.ink;r.forEach((row,i)=&gt;a.ctx.fillText(row.map(v=&gt;fmt(v,3).padStart(7)).join(&#x27; &#x27;),12,44+i*25));a.ctx.font=&#x27;12px sans-serif&#x27;;a.ctx.fillText(order===&#x27;ZYX&#x27;?(recovered?&#x27;주값 각: &#x27;+recovered.map(v=&gt;fmt(v,1)).join(&#x27; / &#x27;)+&#x27;°&#x27;:&#x27;주값 각: 비유일 (±90°)&#x27;):&#x27;다른 순서도 둘째 각 ±90°에서 특이&#x27;,12,125);});
+  plot(&#x27;plot-b&#x27;,&#x27;부호가 반대인 q와 −q: 같은 자세&#x27;,a=&gt;{let y=39;for(let [name,sgn,col] of [[&#x27;q&#x27;,1,colors[0]],[&#x27;−q&#x27;,-1,colors[1]]]){a.ctx.fillStyle=col;a.ctx.fillText(name,12,y);q.forEach((v,i)=&gt;{let x=60+i*(a.w-78)/4,w=(a.w-90)/4;a.ctx.fillRect(x,y-8,w/2*sgn*v,5);a.ctx.fillText(fmt(sgn*v,2),x,y+20);});y+=54;}});
+ }
+ function selection(){
+  let sigma=value(&#x27;noise&#x27;),center=value(&#x27;center&#x27;),width=value(&#x27;width&#x27;),mode=choice(&#x27;selection&#x27;),variable=choice(&#x27;variable&#x27;),s=M.selection(sigma,center,width,mode,variable),set=new Set(s.selected);newScene(5);scene.center=[0,0,0];
+  for(let p of s.points)point(p,set.has(p)?colors[1]:colors[0],set.has(p)?2.7:1.3);
+  if(variable===&#x27;C&#x27;)for(let z of mode===&#x27;band&#x27;?[center-width/2,center+width/2]:[center])face([[-3,-3,z],[3,-3,z],[3,3,z],[-3,3,z]],colors[1],.14);
+  else for(let x of mode===&#x27;band&#x27;?[center-width/2,center+width/2]:[center])face([[x,-3,-5],[x,3,-5],[x,3,5],[x,-3,5]],colors[1],.12);
+  axes([&#x27;X&#x27;,&#x27;Y&#x27;,&#x27;C = X+Y+σε&#x27;],3);
+  info(`합성 표본 2400 · 주황 = 선택된 ${s.selected.length}`,`전체 r=${fmt(s.all,3)} / 선택 r=${fmt(s.observed,3)}. C를 정확히 고정한 이론 r=${fmt(s.thinTheory,3)}; 유한 폭·문턱값과 구별합니다.`);
+  for(let [id,title,points] of [[&#x27;plot-a&#x27;,&#x27;전체 표본 · X와 Y&#x27;,s.points],[&#x27;plot-b&#x27;,&#x27;선택 후 표본 · X와 Y&#x27;,s.selected]])plot(id,title,a=&gt;{let c=chart(a,[-3.5,3.5],[-3.5,3.5],&#x27;X&#x27;,&#x27;Y&#x27;);a.ctx.save();a.ctx.beginPath();a.ctx.rect(c.left,c.top,c.right-c.left,c.bottom-c.top);a.ctx.clip();a.ctx.fillStyle=id===&#x27;plot-a&#x27;?colors[0]+&#x27;90&#x27;:colors[1]+&#x27;a0&#x27;;for(let p of points){a.ctx.beginPath();a.ctx.arc(c.X(p[0]),c.Y(p[1]),1.4,0,2*Math.PI);a.ctx.fill();}a.ctx.restore();});
+ }
+ const nodePositions={A:[-1.4,-.7],B:[-.45,-.7],C:[.5,-.7],D:[1.45,-.7],E:[1.45,.7],F:[-.45,.7]};
+ function temporal(){
+  let events=M.contacts[choice(&#x27;order&#x27;)],time=value(&#x27;time&#x27;),start=value(&#x27;start&#x27;),source=choice(&#x27;source&#x27;),memory=choice(&#x27;memory&#x27;)===&#x27;forever&#x27;?Infinity:1.5,result=M.reachable(events,source,start,time,memory);newScene(3);scene.center=[0,0,2];
+  for(let [n,[x,y]] of Object.entries(nodePositions)){line([[x,y,0],[x,y,4.2]],colors[5],1);label([x,y,4.4],n);for(let t of result.history[n]||[])line([[x,y,t*.7],[x,y,Math.min(time,t+memory)*.7]],colors[2],3);point([x,y,time*.7],result.retaining.includes(n)?colors[2]:colors[5],5);}
+  for(let [a,b,t] of events){let u=[...nodePositions[a],t*.7],v=[...nodePositions[b],t*.7],used=result.used.some(e=&gt;e[2]===t&amp;&amp;((e[0]===a&amp;&amp;e[1]===b)||(e[0]===b&amp;&amp;e[1]===a)));line([u,v],t&gt;time?colors[5]:used?colors[1]:colors[0],used?4:2,t&gt;time);}
+  label([-1.6,.9,4.2],&#x27;높이 = 모형 시간 (0–6)&#x27;);
+  info(`시간 ${fmt(time,1)} · ${source}에서 시작 (${fmt(start,1)})`,`누적 도달: ${Object.keys(result.arrival).sort().join(&#x27;, &#x27;)}. ${memory===Infinity?&#x27;정보를 계속 보유&#x27;:&#x27;1.5시간 뒤 정보 소멸 · 접촉 때 갱신&#x27;}. 동시 접촉은 한 묶음에서 한 번만 전달합니다.`);
+  plot(&#x27;plot-a&#x27;,&#x27;시간을 합친 그래프 · 같은 연결선&#x27;,a=&gt;{let X=x=&gt;a.w/2+x*(a.w-60)/3.4,Y=y=&gt;a.h/2-y*(a.h-60)/2;for(let [n,p] of Object.entries(nodePositions)){a.ctx.fillStyle=colors[0];a.ctx.beginPath();a.ctx.arc(X(p[0]),Y(p[1]),5,0,2*Math.PI);a.ctx.fill();a.ctx.fillStyle=a.ink;a.ctx.fillText(n,X(p[0])+8,Y(p[1])+5);}for(let [u,v] of events)curve(a,[nodePositions[u],nodePositions[v]],X,Y,colors[5],1.5);});
+  plot(&#x27;plot-b&#x27;,&#x27;접촉 원장 · 순서가 경로를 결정&#x27;,a=&gt;{a.ctx.fillStyle=a.ink;a.ctx.font=&#x27;12px sans-serif&#x27;;let step=Math.min(22,(a.h-46)/5);events.forEach(([u,v,t],i)=&gt;{a.ctx.fillStyle=t&lt;=time?colors[0]:a.quiet;a.ctx.fillText(`t=${t}    ${u} ↔ ${v}`,14,36+i*step);});});
+ }
+ function stress(){
+  let principal=[value(&#x27;s1&#x27;),value(&#x27;s2&#x27;),value(&#x27;s3&#x27;)],s=M.stress(principal,value(&#x27;azimuth&#x27;),value(&#x27;polar&#x27;),value(&#x27;frame&#x27;));newScene(1.7);
+  for(let z of [-.8,.8]){let ps=[[-.8,-.8,z],[.8,-.8,z],[.8,.8,z],[-.8,.8,z],[-.8,-.8,z]];line(ps,colors[5],1);}for(let x of [-.8,.8])for(let y of [-.8,.8])line([[x,y,-.8],[x,y,.8]],colors[5],1);
+  let u=M.unit(M.cross(s.n,Math.abs(s.n[2])&lt;.9?[0,0,1]:[0,1,0])),v=M.cross(s.n,u),plane=[[-1,-1],[1,-1],[1,1],[-1,1]].map(([a,b])=&gt;M.add(M.scale(u,.8*a),M.scale(v,.8*b)));face(plane,colors[0],.25);line([...plane,plane[0]],colors[0]);
+  arrow([0,0,0],s.n,colors[2]);label(s.n,&#x27;법선 n&#x27;,colors[2]);arrow([0,0,0],M.scale(s.traction,.09),colors[1]);label(M.scale(s.traction,.09),&#x27;면의 힘 t&#x27;,colors[1]);arrow([0,0,0],M.scale(s.n,s.normalStress*.09),colors[0]);arrow(M.scale(s.n,s.normalStress*.09),M.scale(s.traction,.09),colors[3]);
+  info(&#x27;같은 응력 · 자르는 면의 방향만 변화&#x27;,`σn=${fmt(s.normalStress)} MPa · |τ|=${fmt(s.shearMagnitude)} MPa. 좌표축을 돌려도 이 두 값과 주응력은 유지됩니다. 화살표는 0.09 화면단위/MPa입니다.`);
+  plot(&#x27;plot-a&#x27;,&#x27;모어의 원 · 3D 면의 (σn, |τ|)&#x27;,a=&gt;{let lo=Math.min(...principal)-1,hi=Math.max(...principal)+1,c=chart(a,[lo,hi],[0,(hi-lo)/2],&#x27;σn (MPa)&#x27;,&#x27;|τ|&#x27;);for(let [i,j] of [[0,1],[0,2],[1,2]]){let mid=(principal[i]+principal[j])/2,r=Math.abs(principal[i]-principal[j])/2;curve(a,Array.from({length:81},(_,k)=&gt;[mid+r*Math.cos(k*Math.PI/80),r*Math.sin(k*Math.PI/80)]),c.X,c.Y,colors[5],1);}a.ctx.fillStyle=colors[1];a.ctx.beginPath();a.ctx.arc(c.X(s.normalStress),c.Y(s.shearMagnitude),4,0,2*Math.PI);a.ctx.fill();});
+  plot(&#x27;plot-b&#x27;,`회전한 좌표의 σ′ · ${fmt(value(&#x27;frame&#x27;),0)}°`,a=&gt;{a.ctx.font=&#x27;13px monospace&#x27;;a.ctx.fillStyle=a.ink;s.components.forEach((row,i)=&gt;a.ctx.fillText(row.map(v=&gt;fmt(v,2).padStart(6)).join(&#x27; &#x27;),12,45+i*23));a.ctx.font=&#x27;12px sans-serif&#x27;;a.ctx.fillText(`주응력: ${principal.join(&#x27;, &#x27;)} MPa`,12,125);});
+ }
+ function phase(){
+  let T=value(&#x27;temperature&#x27;),v=value(&#x27;volume&#x27;),raw=$(&#x27;raw&#x27;).checked,c=M.coexist(T);newScene(2.7);scene.center=[2.5,0,1];
+  const pos=(t,x,p)=&gt;[x,(t-1)*8,p];
+  for(let ti=0;ti&lt;=16;ti++){let t=.85+ti*.35/16,ps=[];for(let vi=0;vi&lt;=90;vi++){let x=.5+vi*4.5/90,p=M.pressure(t,x);if(p&gt;-.15&amp;&amp;p&lt;3)ps.push(pos(t,x,p));}line(ps,colors[5],1);}
+  for(let vi=0;vi&lt;=18;vi++){let x=.55+vi*4.45/18,ps=[];for(let ti=0;ti&lt;=30;ti++){let t=.85+ti*.35/30,p=M.pressure(t,x);if(p&gt;-.15&amp;&amp;p&lt;3)ps.push(pos(t,x,p));}line(ps,colors[5],.7);}
+  point([1,0,1],colors[3],4);label([1,0,1],&#x27;임계점&#x27;,colors[3]);
+  let iso=[];for(let i=0;i&lt;=240;i++){let x=.5+i*4.5/240,p=M.pressure(T,x);if(p&gt;-.15&amp;&amp;p&lt;3)iso.push(pos(T,x,p));}if(raw||!c)line(iso,colors[0],2);
+  let equi=iso.map(p=&gt;c&amp;&amp;p[0]&gt;c.liquid&amp;&amp;p[0]&lt;c.gas?[p[0],p[1],c.p]:p);line(equi,colors[2],3);
+  let p=c&amp;&amp;v&gt;c.liquid&amp;&amp;v&lt;c.gas?c.p:M.pressure(T,v);point(pos(T,v,p),colors[1],6);if(c){point(pos(T,c.liquid,c.p),colors[3],5);point(pos(T,c.gas,c.p),colors[3],5);label(pos(T,c.liquid,c.p),&#x27;액체&#x27;);label(pos(T,c.gas,c.p),&#x27;기체&#x27;);}
+  label([4.9,-1.3,0],&#x27;v = V/Vc&#x27;);label([.5,1.7,0],&#x27;T/Tc&#x27;);label([.5,-1.3,2.9],&#x27;p/pc&#x27;);
+  let fraction=c&amp;&amp;v&gt;=c.liquid&amp;&amp;v&lt;=c.gas?(v-c.liquid)/(c.gas-c.liquid):null;
+  info(`환산 온도 ${fmt(T,3)} · ${T&lt;1?&#x27;임계점 아래&#x27;:T===1?&#x27;임계점&#x27;:&#x27;임계점 위&#x27;}`,c?`공존 p=${fmt(c.p,3)}, v액=${fmt(c.liquid,3)}, v기=${fmt(c.gas,3)} · ${fraction===null?&#x27;단일상 가지&#x27;:`기체 몰분율 ${fmt(fraction,2)}`}. 녹색 = 평형 등온선; 파랑 = 균질 vdW 가지.`:`공존 구간 없음 · p=${fmt(p,3)}. 반데르발스 근사이며 실제 물의 정량 모형은 아닙니다.`);
+  scene.bound=Math.max(2.7,Math.abs(p-1)+.4);
+  plot(&#x27;plot-a&#x27;,&#x27;등온선&#x27;+&#x27; · 균질 / 평형 공존선&#x27;,a=&gt;{let hi=Math.max(2.3,p*1.08),ch=chart(a,[.5,5],[-.1,hi],&#x27;v/Vc&#x27;,&#x27;p/pc&#x27;),pts=Array.from({length:251},(_,i)=&gt;[.5+i*4.5/250,M.pressure(T,.5+i*4.5/250)]).filter(p=&gt;p[1]&lt;hi);if(raw||!c)curve(a,pts,ch.X,ch.Y,colors[0]);curve(a,pts.map(([x,y])=&gt;[x,c&amp;&amp;x&gt;c.liquid&amp;&amp;x&lt;c.gas?c.p:y]),ch.X,ch.Y,colors[2]);a.ctx.fillStyle=colors[1];a.ctx.beginPath();a.ctx.arc(ch.X(v),ch.Y(p),4,0,2*Math.PI);a.ctx.fill();});
+  plot(&#x27;plot-b&#x27;,&#x27;두 상의 몰분율 · 같은 T,p&#x27;,a=&gt;{let f=fraction===null?(c?(v&lt;c.liquid?0:1):null):fraction;a.ctx.font=&#x27;12px sans-serif&#x27;;a.ctx.fillStyle=a.ink;let y=textLines(a,c?`평균 v=${fmt(v,2)} · 면적 오차 ${c.area.toExponential(1)}`:&#x27;임계점 이상: 액체–기체 공존 구간 없음&#x27;,12,40,a.w-24);if(f!==null){y+=13;let w=a.w-32;a.ctx.fillStyle=colors[0];a.ctx.fillRect(16,y,w*(1-f),16);a.ctx.fillStyle=colors[1];a.ctx.fillRect(16+w*(1-f),y,w*f,16);a.ctx.fillStyle=a.ink;textLines(a,`액체 ${fmt(1-f,2)} / 기체 ${fmt(f,2)}`,16,y+32,a.w-32);}a.ctx.fillStyle=a.quiet;a.ctx.font=&#x27;11px sans-serif&#x27;;a.ctx.fillText(&#x27;좌표: 부피 · 온도 · 압력&#x27;,12,a.h-8);});
+ }
+ function redshift(){
+  let dispersion=value(&#x27;velocity&#x27;),H0=value(&#x27;hubble&#x27;),direction=value(&#x27;direction&#x27;),mode=choice(&#x27;space&#x27;),s=M.redshift(dispersion,H0,direction);newScene(22);scene.center=[0,0,0];
+  for(let [i,p] of s.points.entries()){if(mode!==&#x27;observed&#x27;)point(p.real,colors[0],2.3);if(mode!==&#x27;real&#x27;)point(p.observed,colors[1],2.1);if($(&#x27;connect&#x27;).checked&amp;&amp;mode===&#x27;both&#x27;&amp;&amp;i%7===0)line([p.real,p.observed],colors[5],.8);}
+  arrow(M.scale(s.n,-19),M.scale(s.n,18),colors[2]);label(M.scale(s.n,-20),&#x27;관측자 방향 (150 Mpc 떨어짐)&#x27;,colors[2]);label([0,0,19],&#x27;좌표: Mpc&#x27;);
+  info(&#x27;파랑: 합성 실제 위치 / 주황: 적색편이 거리&#x27;,`시선 속도 표준편차 ${fmt(dispersion,0)} km/s · H₀=${fmt(H0,0)} km/s/Mpc · 시선 방향 퍼짐 ${fmt(s.trueSpread)} → ${fmt(s.redshiftSpread)} Mpc. 카메라 회전은 이 관측 방향을 바꾸지 않습니다.`);
+  let extent=Math.max(20,...s.points.map(p=&gt;Math.abs(M.dot(p.observed,s.n))))*1.05;scene.bound=Math.max(22,extent*.8);
+  let perp=[-s.n[1],s.n[0],0];for(let [id,key,title,col] of [[&#x27;plot-a&#x27;,&#x27;real&#x27;,&#x27;모형 실제 위치 · 시선/수직 단면&#x27;,colors[0]],[&#x27;plot-b&#x27;,&#x27;observed&#x27;,&#x27;적색편이 공간 · 같은 단면&#x27;,colors[1]]])plot(id,title,a=&gt;{let c=chart(a,[-extent,extent],[-10,10],&#x27;시선 방향 (Mpc)&#x27;,&#x27;수직&#x27;);a.ctx.save();a.ctx.beginPath();a.ctx.rect(c.left,c.top,c.right-c.left,c.bottom-c.top);a.ctx.clip();a.ctx.fillStyle=col+&#x27;b0&#x27;;for(let p of s.points){let x=M.dot(p[key],s.n),y=M.dot(p[key],perp);a.ctx.beginPath();a.ctx.arc(c.X(x),c.Y(y),1.6,0,2*Math.PI);a.ctx.fill();}a.ctx.restore();});
+ }
+ function phylo(){
+  let gene=choice(&#x27;gene&#x27;),transfer=$(&#x27;transfer&#x27;).checked,time=value(&#x27;history&#x27;),mode=choice(&#x27;network&#x27;),m=M.phylogeny(gene,transfer,time);newScene(2.7);scene.center=[0,0,2];
+  $(&#x27;history&#x27;).disabled=mode===&#x27;split&#x27;;
+  for(let id of [&#x27;player-toggle&#x27;,&#x27;player-start&#x27;,&#x27;player-seek&#x27;,&#x27;player-speed&#x27;])if($(id))$(id).disabled=mode===&#x27;split&#x27;;
+  if($(&#x27;player-description&#x27;))$(&#x27;player-description&#x27;).textContent=mode===&#x27;split&#x27;?&#x27;분할 비교 · 시간축과 사건 재생 없음&#x27;:&#x27;합성 역사의 단계 전개 · 실제 계통의 발견 기록은 아님&#x27;;
+  if(mode===&#x27;split&#x27;){
+   let p={A:[-1,-1,0],B:[1,-1,0],C:[1,1,0],D:[-1,1,0]};
+   if(transfer){line([p.A,p.B,p.C,p.D,p.A],colors[5],3);line([[-1.5,0,0],[1.5,0,0]],colors[0],2,true);line([[0,-1.5,0],[0,1.5,0]],colors[1],2,true);}
+   else{line([p.A,[0,-.6,0],p.B],colors[5],3);line([p.C,[0,.6,0],p.D],colors[5],3);line([[0,-.6,0],[0,.6,0]],colors[0],3);}
+   for(let [n,q] of Object.entries(p)){point(q,colors[0],5);label(M.scale(q,1.2),n);}label([0,0,1.4],&#x27;분할 비교: 시간·전달 사건을 뜻하지 않음&#x27;);
+   info(&#x27;분할 비교 · AB|CD와 AD|BC&#x27;,`두 유전자 나무의 사분류군 분할 ${transfer?&#x27;2개 (서로 충돌)&#x27;:&#x27;1개&#x27;}. 사각형은 충돌하는 분할의 비교 도식이며 전달 사건의 관측 증거가 아닙니다.`);
+  }else{
+   let pos=n=&gt;{let v=m.nodes[n];return [v.x,v.y,v.time];};
+   for(let [a,b] of m.visible){let selected=m.selected.some(e=&gt;e[0]===a&amp;&amp;e[1]===b),donor=a===&#x27;c&#x27;&amp;&amp;b===&#x27;H&#x27;;line([pos(a),pos(b)],donor?colors[1]:selected?colors[0]:colors[5],selected?3:1.5,!selected);}
+   for(let [n,v] of Object.entries(m.nodes))if(v.time&lt;=time){point(pos(n),n===&#x27;H&#x27;?colors[1]:colors[2],4);label(M.add(pos(n),[.1,0,.08]),n===&#x27;H&#x27;?&#x27;전달 접점&#x27;:n);}
+   label([-2,0,4.5],&#x27;높이 = 합성 역사 (0→4)&#x27;);info(`유전자 ${gene}의 계보 · 시간 ${fmt(time,1)}`,`합성 나무 ${(gene===&#x27;B&#x27;&amp;&amp;transfer)?&#x27;(A,(B,C),D)&#x27;:&#x27;((A,B),(C,D))&#x27;} · E는 바깥군. ${transfer?&#x27;C 계통→B 계통의 한 유전자 전달&#x27;:&#x27;전달 없음&#x27;}. 가지 위치는 실제 생물의 공간 위치가 아닙니다.`);
+  }
+  for(let [id,g] of [[&#x27;plot-a&#x27;,&#x27;A&#x27;],[&#x27;plot-b&#x27;,&#x27;B&#x27;]])plot(id,`유전자 ${g} · ${g===&#x27;B&#x27;&amp;&amp;transfer?&#x27;다른 계보&#x27;:&#x27;수직 계보&#x27;}`,a=&gt;{
+   let mt=M.phylogeny(g,transfer,4),x=n=&gt;a.w/2+mt.nodes[n].x*(a.w-45)/4.8,y=n=&gt;33+mt.nodes[n].time*(a.h-65)/4;
+   for(let [u,v] of mt.selected)curve(a,[[mt.nodes[u].x,mt.nodes[u].time],[mt.nodes[v].x,mt.nodes[v].time]],q=&gt;a.w/2+q*(a.w-45)/4.8,q=&gt;33+q*(a.h-65)/4,u===&#x27;c&#x27;&amp;&amp;v===&#x27;H&#x27;?colors[1]:colors[0],1.7);
+   a.ctx.fillStyle=a.ink;for(let n of [&#x27;A&#x27;,&#x27;B&#x27;,&#x27;C&#x27;,&#x27;D&#x27;,&#x27;E&#x27;])a.ctx.fillText(n,x(n)-3,y(n)+15);a.ctx.fillStyle=a.quiet;a.ctx.fillText(&#x27;공간 x: 가지 배치 / 세로: 모형 시간&#x27;,10,a.h-6);
+  });
+ }
+ const builders={ct,rotation,selection,temporal,stress,phase,redshift,phylo};
+ function render(){pending=false;for(let id of Object.keys(spec.defaults)){let e=$(id),out=$(id+&#x27;-value&#x27;);if(out)out.textContent=e.type===&#x27;range&#x27;?fmt(Number(e.value),Number(e.step)&gt;=1?0:2):&#x27;&#x27;;}builders[spec.kind]();let a=prepare(cv),{ctx,w,h,ink}=a;
+  function rawProject(p){let [x,y,z]=M.sub(p,scene.center),u=x*Math.cos(yaw)-y*Math.sin(yaw),v=x*Math.sin(yaw)+y*Math.cos(yaw);return [u,v*Math.sin(pitch)-z*Math.cos(pitch),v*Math.cos(pitch)+z*Math.sin(pitch)];}
+  let vertices=scene.items.flatMap(it=&gt;it.points.map(rawProject)),xs=vertices.map(p=&gt;p[0]),ys=vertices.map(p=&gt;p[1]);
+  let xmin=Math.min(...xs),xmax=Math.max(...xs),ymin=Math.min(...ys),ymax=Math.max(...ys),padding=w&lt;440?16:24;
+  let scale=Math.min((w-2*padding)/Math.max(.3,xmax-xmin),(h-2*padding)/Math.max(.3,ymax-ymin))*zoom,midX=(xmin+xmax)/2,midY=(ymin+ymax)/2;
+  function project(p){let [u,v,d]=rawProject(p);return [w/2+(u-midX)*scale,h/2+(v-midY)*scale,d];}
+  let items=scene.items.map(it=&gt;({...it,p:it.points.map(project)}));items.sort((a,b)=&gt;b.p.reduce((s,v)=&gt;s+v[2],0)/b.p.length-a.p.reduce((s,v)=&gt;s+v[2],0)/a.p.length);
+  for(let it of items){ctx.save();ctx.strokeStyle=it.color;ctx.fillStyle=it.color;ctx.lineWidth=it.width||1;if(it.dash)ctx.setLineDash([5,5]);if(it.type===&#x27;point&#x27;){let p=it.p[0];ctx.beginPath();ctx.arc(p[0],p[1],it.radius,0,2*Math.PI);ctx.fill();}else{ctx.beginPath();it.p.forEach((p,i)=&gt;i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]));if(it.type===&#x27;face&#x27;){ctx.closePath();ctx.globalAlpha=it.alpha;ctx.fill();}else{ctx.stroke();if(it.type===&#x27;arrow&#x27;){let [u,v]=it.p,t=Math.atan2(v[1]-u[1],v[0]-u[0]);ctx.setLineDash([]);ctx.beginPath();ctx.moveTo(v[0],v[1]);ctx.lineTo(v[0]-9*Math.cos(t-.4),v[1]-9*Math.sin(t-.4));ctx.lineTo(v[0]-9*Math.cos(t+.4),v[1]-9*Math.sin(t+.4));ctx.closePath();ctx.fill();}}}ctx.restore();}
+  ctx.font=&#x27;12px sans-serif&#x27;;let occupied=[[w-80,0,80,36]];for(let l of scene.labels){let p=project(l.pos),tw=ctx.measureText(l.text).width;if(p[0]&gt;2&amp;&amp;p[0]&lt;w-8&amp;&amp;p[1]&gt;10&amp;&amp;p[1]&lt;h-8){
+   let candidate=null;for(let [dx,dy] of [[5,-5],[5,17],[-tw-5,-5],[-tw-5,17],[5,32],[-tw-5,32],[5,-22]]){let x=Math.max(6,Math.min(p[0]+dx,w-tw-6)),y=Math.max(14,Math.min(p[1]+dy,h-6)),r=[x-2,y-12,tw+4,16];if(!occupied.some(b=&gt;r[0]&lt;b[0]+b[2]&amp;&amp;r[0]+r[2]&gt;b[0]&amp;&amp;r[1]&lt;b[1]+b[3]&amp;&amp;r[1]+r[3]&gt;b[1])){candidate=[x,y,r];break;}}
+   if(candidate){let [x,y,r]=candidate;occupied.push(r);ctx.fillStyle=l.color||ink;ctx.fillText(l.text,x,y);if(Math.abs(x-p[0])&gt;12||Math.abs(y-p[1])&gt;12){ctx.strokeStyle=(l.color||a.quiet);ctx.lineWidth=.6;ctx.beginPath();ctx.moveTo(p[0],p[1]);ctx.lineTo(x,y-6);ctx.stroke();}}
+  }}
+  plotJobs.forEach(fn=&gt;fn());$(&#x27;zoom-info&#x27;).textContent=fmt(zoom,2)+&#x27;×&#x27;;cv.dataset.zoom=String(zoom);cv.dataset.yaw=String(yaw);cv.dataset.pitch=String(pitch);window.SceneState={kind:spec.kind,zoom,yaw,pitch};
+ }
+ function schedule(){if(!pending){pending=true;requestAnimationFrame(render);}}
+ function pause(){let event=new Event(&#x27;input&#x27;,{bubbles:true});$(spec.target).dispatchEvent(event);}
+ for(let el of document.querySelectorAll(&#x27;input,select&#x27;)){el.addEventListener(&#x27;input&#x27;,schedule);el.addEventListener(&#x27;change&#x27;,schedule);}
+ for(let button of document.querySelectorAll(&#x27;[data-preset]&#x27;))button.addEventListener(&#x27;click&#x27;,()=&gt;{for(let [id,v] of Object.entries(JSON.parse(button.dataset.values))){let e=$(id);if(e.type===&#x27;checkbox&#x27;)e.checked=v;else e.value=v;}pause();schedule();});
+ $(&#x27;reset&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{for(let [id,v] of Object.entries(spec.defaults)){let e=$(id);if(e.type===&#x27;checkbox&#x27;)e.checked=v;else e.value=v;}yaw=-.55;pitch=.4;zoom=1;pause();schedule();});
+ $(&#x27;front&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{yaw=0;pitch=0;pause();schedule();});$(&#x27;oblique&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{yaw=-.55;pitch=.4;pause();schedule();});
+ let dragging=null;cv.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{dragging=[e.clientX,e.clientY];cv.setPointerCapture(e.pointerId);pause();});cv.addEventListener(&#x27;pointermove&#x27;,e=&gt;{if(!dragging)return;yaw+=(e.clientX-dragging[0])*.01;pitch=Math.max(-1.4,Math.min(1.4,pitch+(e.clientY-dragging[1])*.01));dragging=[e.clientX,e.clientY];schedule();});for(let event of [&#x27;pointerup&#x27;,&#x27;pointercancel&#x27;])cv.addEventListener(event,()=&gt;dragging=null);
+ cv.addEventListener(&#x27;wheel&#x27;,e=&gt;{e.preventDefault();zoom=Math.max(.35,Math.min(5,zoom*Math.exp(-e.deltaY*.002)));pause();schedule();},{passive:false});
+ cv.addEventListener(&#x27;keydown&#x27;,e=&gt;{if(![&#x27;ArrowLeft&#x27;,&#x27;ArrowRight&#x27;,&#x27;ArrowUp&#x27;,&#x27;ArrowDown&#x27;,&#x27;+&#x27;,&#x27;=&#x27;,&#x27;-&#x27;].includes(e.key))return;e.preventDefault();if(e.key===&#x27;ArrowLeft&#x27;)yaw-=.1;if(e.key===&#x27;ArrowRight&#x27;)yaw+=.1;if(e.key===&#x27;ArrowUp&#x27;)pitch+=.1;if(e.key===&#x27;ArrowDown&#x27;)pitch-=.1;if(e.key===&#x27;+&#x27;||e.key===&#x27;=&#x27;)zoom=Math.min(5,zoom*1.12);if(e.key===&#x27;-&#x27;)zoom=Math.max(.35,zoom/1.12);pause();schedule();});
+ $(&#x27;show-controls&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{$(&#x27;controls&#x27;).classList.add(&#x27;open&#x27;);$(&#x27;back-model&#x27;).focus();});$(&#x27;back-model&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{$(&#x27;controls&#x27;).classList.remove(&#x27;open&#x27;);$(&#x27;show-controls&#x27;).focus();});
+ new ResizeObserver(schedule).observe(document.body);matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).addEventListener(&#x27;change&#x27;,schedule);schedule();
+})();
+&lt;/script&gt;&lt;script id=&quot;model-frame-tools-v1&quot;&gt;/* Added after the original model. Only invokes existing canvas zoom handlers. */
+(() =&gt; {
+  if (document.querySelector(&#x27;[data-model-zoom-tools]&#x27;)) return;
+  const canvas=document.querySelector(&#x27;canvas&#x27;);
+  if (!canvas) return;
+  const style=document.createElement(&#x27;style&#x27;);
+  style.textContent=&#x27;[data-model-zoom-tools]{position:fixed;right:8px;top:8px;z-index:10000;display:flex;gap:4px}[data-model-zoom-tools] button{font:600 13px system-ui;padding:5px 8px;border:1px solid #8b949e;border-radius:6px;background:Canvas;color:CanvasText;cursor:pointer;min-width:30px}[data-model-zoom-tools] button:focus-visible{outline:2px solid #368ce0;outline-offset:2px}&#x27;;
+  document.head.append(style);
+  const box=document.createElement(&#x27;div&#x27;); box.dataset.modelZoomTools=&#x27;v1&#x27;; box.setAttribute(&#x27;role&#x27;,&#x27;group&#x27;); box.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 배율&#x27;);
+  for(const [text,label,delta] of [[&#x27;−&#x27;,&#x27;모형 축소&#x27;,180],[&#x27;+&#x27;,&#x27;모형 확대&#x27;,-180]]) {
+    const b=document.createElement(&#x27;button&#x27;); b.type=&#x27;button&#x27;; b.textContent=text; b.setAttribute(&#x27;aria-label&#x27;,label);
+    b.addEventListener(&#x27;click&#x27;,()=&gt;canvas.dispatchEvent(new WheelEvent(&#x27;wheel&#x27;,{deltaY:delta,bubbles:true,cancelable:true})));
+    box.append(b);
+  }
+  document.body.append(box);
+  const place=()=&gt;{const r=canvas.getBoundingClientRect();box.style.right=Math.max(8,innerWidth-r.right+8)+&#x27;px&#x27;;box.style.top=Math.max(8,r.top+8)+&#x27;px&#x27;;};
+  new ResizeObserver(place).observe(canvas);window.addEventListener(&#x27;resize&#x27;,place);requestAnimationFrame(place);
+  window.addEventListener(&#x27;keydown&#x27;,e=&gt; { if(e.key===&#x27;Escape&#x27;) parent.postMessage({type:&#x27;geometry-model-close&#x27;},&#x27;*&#x27;); });
+})();
+&lt;/script&gt;&lt;script id=&quot;model-playback-config&quot; type=&quot;application/json&quot;&gt;{&quot;target&quot;: &quot;center&quot;, &quot;label&quot;: &quot;선별 조건의 순회 · 개체의 변화나 인과 개입은 아님&quot;, &quot;duration&quot;: 18}&lt;/script&gt;&lt;script id=&quot;model-playback-v1&quot;&gt;(() =&gt; {
+  &#x27;use strict&#x27;;
+  const config = JSON.parse(document.getElementById(&#x27;model-playback-config&#x27;).textContent);
+  const style = document.createElement(&#x27;style&#x27;);
+  style.textContent = `html{overflow:hidden!important}body{height:calc(100% - 104px)!important;overflow:auto!important}.model-player{position:fixed;inset:auto 0 0;z-index:90;height:100px;padding:7px 10px;background:light-dark(#f5f8fc,#20242a);border-top:1px solid light-dark(#ccd5e0,#46505b);color:light-dark(#253044,#edf2f7);font:12px/1.4 system-ui;box-sizing:border-box}.player-heading{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px}.player-actions{display:flex;gap:6px;align-items:center}.model-player button,.model-player select{width:auto;min-height:30px;margin:0;font:inherit;padding:4px 8px;border:1px solid light-dark(#bcc9d8,#5a6878);border-radius:5px;background:light-dark(#fff,#303841);color:inherit}.model-player button{cursor:pointer}.model-player button[aria-pressed=true]{background:light-dark(#dbeaff,#314b66)}.model-player label{display:flex;align-items:center;gap:4px;font:inherit}.model-player input{width:100%;height:18px;margin:5px 0 0;accent-color:#72baff}.model-player :focus-visible{outline:2px solid #72baff;outline-offset:2px}#play{display:none!important}@media(max-width:350px){.model-player{padding:6px}.model-player button{padding:4px 6px}.player-heading{font-size:11px}}`;
+  document.head.append(style);
+  const player = document.createElement(&#x27;section&#x27;);
+  player.className = &#x27;model-player&#x27;;player.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 재생&#x27;);
+  player.innerHTML = `&lt;div class=&quot;player-heading&quot;&gt;&lt;span id=&quot;player-description&quot;&gt;&lt;/span&gt;&lt;output id=&quot;player-position&quot;&gt;&lt;/output&gt;&lt;/div&gt;&lt;div class=&quot;player-actions&quot;&gt;&lt;button id=&quot;player-toggle&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;▶ 재생&lt;/button&gt;&lt;button id=&quot;player-start&quot; type=&quot;button&quot;&gt;처음으로&lt;/button&gt;&lt;label&gt;속도&lt;select id=&quot;player-speed&quot; aria-label=&quot;재생 속도&quot;&gt;&lt;option value=&quot;0.5&quot;&gt;0.5×&lt;/option&gt;&lt;option value=&quot;1&quot; selected&gt;1×&lt;/option&gt;&lt;option value=&quot;2&quot;&gt;2×&lt;/option&gt;&lt;option value=&quot;4&quot;&gt;4×&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;/div&gt;&lt;input id=&quot;player-seek&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;1000&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;재생 위치&quot;&gt;`;
+  document.body.append(player);
+  const get = id =&gt; document.getElementById(id);
+  const target = config.target ? get(config.target) : null;
+  let progress = target &amp;&amp; target.type===&#x27;range&#x27; ? (Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min)) : 0;
+  let running = false, last=0, request=0, applying=false, previousStage=-1;
+  get(&#x27;player-description&#x27;).textContent=config.label;
+  function notify(el) {el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));}
+  function write(id,value) {const el=get(id);if(!el)return;const before=el.type===&#x27;checkbox&#x27;?el.checked:el.value;if(el.type===&#x27;checkbox&#x27;)el.checked=Boolean(value);else el.value=String(value);if(before!==(el.type===&#x27;checkbox&#x27;?el.checked:el.value))notify(el);}
+  function display() {
+    get(&#x27;player-seek&#x27;).value=String(Math.round(progress*1000));
+    get(&#x27;player-position&#x27;).textContent=Math.round(progress*100)+&#x27;%&#x27;;
+    player.dataset.progress=progress.toFixed(4);player.dataset.playing=String(running);
+    get(&#x27;player-toggle&#x27;).textContent=running?&#x27;Ⅱ 일시정지&#x27;:&#x27;▶ 재생&#x27;;get(&#x27;player-toggle&#x27;).setAttribute(&#x27;aria-pressed&#x27;,String(running));
+  }
+  function apply() {
+    applying=true;
+    if(config.stages) {
+      const n=config.stages.length;const stage=Math.max(0,Math.min(n-1,Math.floor(progress*n)));
+      if(stage!==previousStage) {for(const [id,value]of Object.entries(config.stages[stage]))write(id,value);previousStage=stage;}
+      if(config.stageTarget) {
+        const el=get(config.stageTarget),local=progress&gt;=1?1:(progress*n-stage);
+        write(config.stageTarget,Number(el.min)+(Number(el.max)-Number(el.min))*local);
+      }
+    } else if(target) {
+      if(target.type===&#x27;range&#x27;) {
+        const low=config.min??Number(target.min),high=config.max??Number(target.max),step=Number(target.step)||.001;
+        const value=low+(high-low)*progress;write(target.id,Math.max(low,Math.min(high,Math.round(value/step)*step)));
+      } else if(target.tagName===&#x27;SELECT&#x27;) {
+        const options=[...target.options].filter(o=&gt;!o.disabled);write(target.id,options[Math.min(options.length-1,Math.floor(progress*options.length))].value);
+      }
+    }
+    applying=false;display();
+  }
+  function pause() {running=false;cancelAnimationFrame(request);display();}
+  function tick(now) {
+    if(!running)return;const dt=Math.max(0,Math.min((now-last)/1000,.1));last=now;
+    progress=Math.min(1,progress+dt*Number(get(&#x27;player-speed&#x27;).value)/(config.duration||18));apply();
+    if(progress&gt;=1)pause();else request=requestAnimationFrame(tick);
+  }
+  get(&#x27;player-toggle&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{if(running){pause();return;}if(progress&gt;=.999){progress=0;previousStage=-1;}apply();running=true;last=performance.now();display();request=requestAnimationFrame(tick);});
+  get(&#x27;player-start&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{pause();progress=0;previousStage=-1;apply();});
+  get(&#x27;player-seek&#x27;).addEventListener(&#x27;input&#x27;,()=&gt;{const value=Number(get(&#x27;player-seek&#x27;).value)/1000;pause();progress=value;previousStage=-1;apply();});
+  for(const kind of [&#x27;input&#x27;,&#x27;change&#x27;,&#x27;click&#x27;])document.addEventListener(kind,event=&gt;{
+    if(applying||player.contains(event.target))return;
+    if(event.target.matches(&#x27;input,select,button&#x27;)){
+      pause();previousStage=-1;const sync=event.target===target||event.target.id===&#x27;reset&#x27;||event.target.hasAttribute(&#x27;data-preset&#x27;);if(config.stages&amp;&amp;event.target.id!==&#x27;model-zoom-in&#x27;&amp;&amp;event.target.id!==&#x27;model-zoom-out&#x27;&amp;&amp;(event.target.matches(&#x27;input,select&#x27;)||event.target.id===&#x27;reset&#x27;))progress=0;
+      if(sync &amp;&amp; target &amp;&amp; target.type===&#x27;range&#x27;)progress=(Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min));display();
+    }
+  });
+  document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;{if(document.hidden)pause();});
+  window.addEventListener(&#x27;pagehide&#x27;,pause);display();
+})();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe></section></div></section><section class="reading" aria-labelledby="reading-title"><header class="reading-heading"><p class="reading-kicker">읽을 자료</p><h2 id="reading-title">관계의 그림에서 빠진 선별 조건</h2></header><div class="reading-scroll" tabindex="0" role="region" aria-label="독립적으로 스크롤하는 읽을 자료"><article class="article"><h3>독립적인 두 변수에도 관계가 나타날 수 있다</h3><p>전체에서 서로 독립인 X와 Y를 같은 표본의 선별 조건으로 묶으면, 선택된 표본에서는 관계가 나타날 수 있다. 공통 결과에 조건을 거는 collider bias의 합성 예다. 전체 분포에 없던 관계가 선택 뒤에 생겼다고 해서 한 변수가 다른 변수를 원인으로 변화시켰다고 결론낼 수는 없다. Pearl은 이 문제를 공통 결과에 대한 조건화와 표본 선택 편향으로 설명한다. <a href="#s1">[1]</a></p><p>X,Y,ε를 서로 독립인 표준정규 변수로 두고 C=X+Y+σε로 만든다. 2400개의 고정된 합성 표본을 사용하므로 선택 전 상관계수도 표본 오차 때문에 정확히 0은 아니다. 실제 입시·교육·의료 자료를 재현한 것이 아니라 선택 규칙의 효과를 분리한 설명용 모형이다. 평면 산점도는 X,Y의 −3.5부터 3.5까지만 표시하지만 표본 수와 상관계수는 표시 밖의 표본도 포함한다.</p><h3>얇은 구간에서 생기는 보상 관계</h3><p>C가 같은 작은 구간에 들어가야 한다면 큰 X는 더 작은 Y와 함께 선택되기 쉽다. σ가 작을수록 C에 포함된 X+Y의 제약이 강하다. 가우스 모형에서 C를 정확히 고정한 조건부 상관은 −1/(1+σ²)이고 σ=1일 때 −0.5다. 이 값은 정확한 조건화의 이론값이며 유한 폭 구간이나 C 이상 문턱값의 표본 상관과 동일하지 않다.</p><p>주황색은 선택된 표본이고 반투명 면은 선택 경계다. 한 장의 X–Y 산점도만 보면 어떤 표본이 제외되었는지 읽기 어렵다. C축과 경계를 추가하면 전체에서 어떤 구간을 잘라 관계를 만든 것인지 비교할 수 있다. 선택 변수 X로 바꾸면 공통 결과를 조건화하는 경우와 효과가 어떻게 다른지 확인할 수 있다.</p><h3>관찰 조건과 개입을 구별하기</h3><p>C의 값을 관찰하여 표본을 선택하는 것과 C를 외부에서 특정 값으로 설정하는 인과 개입은 다르다. 여기서 조작하는 것은 선별 기준이며 개체들의 X,Y를 바꾸는 개입이 아니다. 화살표 X→C←Y는 가정한 자료 생성 관계다. 산점도의 기울기 자체가 화살표 방향을 검증하지는 않는다. <a href="#s1">[1]</a></p><p>집단을 합쳐 구성 비율 때문에 경향이 뒤집히는 심프슨 역설과도 구별한다. 이 예의 핵심은 처음부터 독립인 두 원인을 공통 결과로 선별하는 일이다. 두 현상 모두 생략된 조건을 확인해야 하지만 같은 통계 기제로 설명하지는 않는다.</p><h3>세 축도 선별 기록을 대신하지 못한다</h3><p>3차원 산점도에서 점이 겹치면 선택 효과를 놓칠 수 있다. 두 평면 산점도, 선택된 표본 수와 상관계수를 함께 읽어야 한다. 재생은 선별 중심을 순회하고, 잡음과 폭은 고정한다. 추가한 축의 의미와 선택 규칙이 기록되지 않으면 입체 그림 역시 편향된 독해를 막지 못한다.</p><section class="sources"><h3>문헌과 자료</h3><ol><li id="s1"><a href="https://doi.org/10.1515/jci-2013-0003" target="_blank" rel="noopener noreferrer">Judea Pearl (2013), Linear Models: A Useful “Microscope” for Causal Analysis</a>. Journal of Causal Inference 1(1), 155–170. §3.4 Sample Selection Bias, Figure 6.</li><li id="s2"><a href="https://ftp.cs.ucla.edu/pub/stat_ser/r409_submitted_corrected.pdf" target="_blank" rel="noopener noreferrer">저자 제공 수정 원고 R-409</a>. §3.4: 공통 결과 조건화로 유도되는 관계. 위 가우스 수치 예는 식을 단순화한 합성 예.</li></ol></section></article></div></section></main><dialog class="source-page-dialog" id="source-page" aria-labelledby="source-title"><header class="dialog-heading"><h2 id="source-title">X → C ← Y와 선택 조건</h2><button id="close-source-page">닫기</button></header><img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIiB2aWV3Qm94PSIwIDAgNjAwIDYwMCI+PHJlY3Qgd2lkdGg9IjYwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9IiNmMWY2ZmMiLz48ZyBmb250LWZhbWlseT0ic2Fucy1zZXJpZiIgZmlsbD0iIzI2M2M1NCI+PHRleHQgeD0iMjUiIHk9IjM4IiBmb250LXNpemU9IjIzIj7qs7XthrUg6rKw6rO866GcIO2RnOuzuOydhCDshKDtg53tlaAg65WMPC90ZXh0PjxwYXRoIGQ9Ik0xMzAgMTgwTDMwMCAyODVMNDcwIDE4MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNGI5Y2RhIiBzdHJva2Utd2lkdGg9IjQiLz48ZyBmb250LXNpemU9IjI4Ij48dGV4dCB4PSIxMTUiIHk9IjE2MCI+WDwvdGV4dD48dGV4dCB4PSI0NjAiIHk9IjE2MCI+WTwvdGV4dD48dGV4dCB4PSIyODUiIHk9IjMyNSI+QzwvdGV4dD48L2c+PHJlY3QgeD0iMjM1IiB5PSIyNTAiIHdpZHRoPSIxMzAiIGhlaWdodD0iOTAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2U0OWE0MCIgc3Ryb2tlLXdpZHRoPSIzIi8+PHRleHQgeD0iMjA3IiB5PSIzODAiIGZvbnQtc2l6ZT0iMTgiPkPrpbwg7KGw6rG07Jy866GcIO2RnOuzuCDshKDtg508L3RleHQ+PHRleHQgeD0iMjUiIHk9IjQxMCIgZm9udC1zaXplPSIxNyI+WCwgWSwgzrU6IOyEnOuhnCDrj4Xrpr3snbgg7ZGc7KSA7KCV6recIOuzgOyImDwvdGV4dD48dGV4dCB4PSIyNSIgeT0iNDQwIiBmb250LXNpemU9IjE3Ij5DID0gWCArIFkgKyDPg861PC90ZXh0Pjx0ZXh0IHg9IjI1IiB5PSI0NzAiIGZvbnQtc2l6ZT0iMTciPuyghOyytOyXkOyEnCBDb3YoWCxZKSA9IDA8L3RleHQ+PHRleHQgeD0iMjUiIHk9IjUwMCIgZm9udC1zaXplPSIxNyI+Q+ulvCDqs6DsoJXtlZjrqbQgWOyZgCBZ7J2YIOq0gOqzhOqwgCDri6zrnbzsp4Tri6Q8L3RleHQ+PC9nPjwvc3ZnPg==" alt="X → C ← Y와 선택 조건"><p class="source-caption">관계와 조건을 다시 그린 설명용 도식</p></dialog><script>(()=>{let f=document.getElementById("codex-visualization");f.srcdoc=f.dataset.srcdoc;delete f.dataset.srcdoc;let d=document.getElementById("source-page");document.getElementById("open-source-page").addEventListener("click",()=>d.showModal());document.getElementById("close-source-page").addEventListener("click",()=>d.close());})();</script><script id="model-expansion-v1">/* Public case contract v1. Works with allow-scripts-only sandboxed frames. */
+(() => {
+  const frame = document.getElementById('codex-visualization');
+  if (!frame || document.querySelector('.model-view-toolbar')) return;
+  const panel = frame.closest('.digital-panel') || frame.parentElement;
+  const label = panel.querySelector('.panel-label');
+  const bar = document.createElement('div');
+  bar.className = 'model-view-toolbar';
+  const title = document.createElement('span');
+  title.id = 'expanded-model-title';
+  title.textContent = label?.textContent || '조작 가능한 시각화';
+  if (label) label.hidden = true;
+  const toggle = document.createElement('button');
+  toggle.type = 'button'; toggle.className = 'model-expand-toggle';
+  toggle.textContent = '시각화 확대';
+  toggle.setAttribute('aria-expanded', 'false');
+  toggle.setAttribute('aria-controls', frame.id);
+  bar.append(title, toggle); panel.insertBefore(bar, frame);
+  const guards = [document.createElement('span'), document.createElement('span')];
+  guards.forEach(g => { g.className = 'model-focus-guard'; g.tabIndex = 0; });
+  panel.insertBefore(guards[0], bar); panel.append(guards[1]);
+  let expanded = false, inertRecords = [], savedAttributes = [];
+  function close() {
+    if (!expanded) return;
+    expanded = false;
+    panel.classList.remove('is-model-expanded');
+    document.body.classList.remove('model-expanded');
+    inertRecords.forEach(([el, value]) => { el.inert = value; });
+    savedAttributes.forEach(([key, value]) => { if(value===null) panel.removeAttribute(key); else panel.setAttribute(key,value); });
+    inertRecords = []; savedAttributes = [];
+    toggle.textContent = '시각화 확대'; toggle.setAttribute('aria-expanded', 'false');
+    toggle.focus();
+  }
+  toggle.addEventListener('click', () => {
+    if (expanded) { close(); return; }
+    expanded = true;
+    ['role','aria-modal','aria-labelledby'].forEach(key => savedAttributes.push([key,panel.getAttribute(key)]));
+    panel.setAttribute('role','dialog'); panel.setAttribute('aria-modal','true'); panel.setAttribute('aria-labelledby',title.id);
+    let branch = panel;
+    while (branch.parentElement) {
+      for (const sibling of branch.parentElement.children) if(sibling!==branch) { inertRecords.push([sibling,sibling.inert]); sibling.inert=true; }
+      branch=branch.parentElement;
+      if(branch===document.body) break;
+    }
+    document.body.classList.add('model-expanded'); panel.classList.add('is-model-expanded');
+    toggle.textContent='확대 닫기'; toggle.setAttribute('aria-expanded','true'); toggle.focus();
+  });
+  guards[0].addEventListener('focus',()=> { if(expanded) frame.focus(); });
+  guards[1].addEventListener('focus',()=> { if(expanded) toggle.focus(); });
+  document.addEventListener('keydown',e=> { if(e.key==='Escape' && expanded) { e.preventDefault(); close(); } });
+  window.addEventListener('message',e=> {
+    if(e.source===frame.contentWindow && e.data?.type==='geometry-model-close' && Object.keys(e.data).length===1) close();
+  });
+})();
+</script></body></html>

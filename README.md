@@ -2,7 +2,7 @@
 
 그림과 도식, 수학 공식은 무엇을 압축하고, 조작할 수 있는 표현은 무엇을 펼쳐 보여 주는가. 평면 기록과 디지털 모형을 나란히 놓고 시점, 관계와 조건을 바꾸어 비교한다.
 
-[62개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[70개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 임완철의 **차원증감법**을 바탕으로 원근법과 회화, 곡면과 매듭, 수학 공식과 물리 법칙, 상태와 데이터의 표현을 살핀다. 물리 공간의 차원, 표면 자체의 차원, 데이터의 변수 수와 관찰의 자유도는 서로 구별한다. 디지털 화면도 평면이지만, 좌표와 변환 규칙을 조작하면 한 장에서 생략한 조건을 비교할 수 있다.
 
@@ -10,6 +10,14 @@
 
 **재생**, **일시정지**, **처음으로**, **속도**를 사용해 변화를 따라갈 수 있다. 재생 설명에는 시간 전개, 경로 추적, 조건 비교 또는 단계 전환 중 무엇을 보여 주는지 표시한다. 눈의 위치나 기준계 속도를 순서대로 바꾸는 것은 실제 시간의 흐름과 구별한다. 재생 위치를 직접 고르거나 다른 조건을 수동 조작하면 멈춘다.
 
+- [단층촬영 — 같은 투영 뒤의 다른 내부](https://climtc.github.io/teaching-learning-perspectives/tomographic-projections.html): 한 방향에서 같은 투영을 만드는 두 내부를 비교하고 투영 수·각도 범위·잡음에 따른 단면 재구성을 살핀다.
+- [회전과 짐벌 잠김 — 좌표가 막히는 순간](https://climtc.github.io/teaching-learning-perspectives/rotation-coordinates.html): 오일러 각의 축 정렬과 비유일성을 물체의 자세와 구별한다. 회전행렬과 단위 사원수의 기록을 함께 비교한다.
+- [선별이 만든 관계 — 전체에서는 독립적인 두 변수](https://climtc.github.io/teaching-learning-perspectives/selection-collider.html): 공통 결과를 기준으로 표본을 선택할 때 독립적인 두 변수에 관계가 나타나는 조건을 비교한다.
+- [시간 관계망 — 연결되어 있어도 전달되지 않는 경로](https://climtc.github.io/teaching-learning-perspectives/temporal-reachability.html): 동일한 연결선에서도 접촉 순서·출발 시간·기억 기간에 따라 전달 가능한 경로가 달라지는지 확인한다.
+- [응력과 절단면 — 같은 물체, 다른 방향의 힘](https://climtc.github.io/teaching-learning-perspectives/stress-plane.html): 같은 응력을 서로 다른 면으로 읽고, 면 방향의 변화와 좌표축 표기의 변화를 비교한다.
+- [액체와 기체 — 한 상태선 뒤의 온도와 공존](https://climtc.github.io/teaching-learning-perspectives/thermodynamic-surface.html): 온도를 추가한 상태 곡면에서 균질 상태식의 고리와 평형 공존선, 두 상의 몰분율을 구별한다.
+- [은하 지도 — 거리처럼 보이는 속도](https://climtc.github.io/teaching-learning-perspectives/redshift-space.html): 합성 실제 위치와 적색편이 공간을 나란히 비교하며 특이 속도가 거리와 형태로 읽히는 과정을 확인한다.
+- [계통수와 유전 관계망 — 갈라지기만 하는 역사인가](https://climtc.github.io/teaching-learning-perspectives/phylogenetic-reticulation.html): 합성 전달 역사에서 유전자별 나무가 달라지는 모습을 비교하고, 충돌하는 분할과 전달 증거를 구별한다.
 - [이차함수 — 계수에 따라 달라지는 근](https://climtc.github.io/teaching-learning-perspectives/quadratic-family.html): 한 포물선에서 생략되는 계수 조건을 펼치고, 두 실근·중근·실근 없음의 경계를 비교한다.
 - [함수의 합성 — 입력, 중간값, 출력](https://climtc.github.io/teaching-learning-perspectives/function-composition.html): 합성의 순서를 바꾸며 입력·중간값·출력이 달라지는 과정을 관계 곡선으로 비교한다.
 - [회전체 — 단면의 넓이에서 부피로](https://climtc.github.io/teaching-learning-perspectives/integral-slices.html): 평면의 반지름 함수와 공간의 회전체를 비교하고, 원판 분할의 근사 오차를 확인한다.
