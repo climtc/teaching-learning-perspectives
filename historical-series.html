@@ -106,8 +106,10 @@ button:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-
 @media(max-width:680px){.visualization{flex-basis:clamp(480px,70dvh,640px)}.article{font-size:16px}.atlas-nav a:nth-child(3){display:none}.paper-panel figcaption{display:none}.paper-panel{grid-template-columns:68px minmax(0,1fr)}.paper-diagrams{height:42px}.paper-panel .panel-label{font-size:12px}.paper-panel button{font-size:12px;padding:3px 8px}.reading-heading{padding-left:16px}.sky-assets{grid-template-columns:68px minmax(0,1fr) auto;grid-template-rows:auto auto}.sky-assets .image-selector{grid-column:2;grid-row:1;margin:0;font-size:11px;padding:3px}.sky-assets .panel-label{display:none}.sky-assets button{grid-column:3;grid-row:1}.sky-assets .asset-credit{grid-column:2/4;grid-row:2;font-size:10px;margin:0}.sky-assets .paper-diagrams{grid-row:1/3}}
 @media(max-height:540px) and (min-width:681px){.visualization{flex-basis:340px}.article{font-size:16px}}
 </style><style id="model-expansion-v1">/* In-place expansion: the iframe is never moved or reloaded. */
-.model-view-toolbar { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
-.model-view-toolbar span { font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-view-toolbar { display:flex; flex:0 0 auto; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
+.model-view-toolbar span { flex:1 1 160px; font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-only-link { flex-shrink:0; font-size:12px; line-height:1.4; color:var(--link, #368ce0); text-underline-offset:3px; white-space:nowrap; }
+.model-only-link:focus-visible { outline:2px solid #368ce0; outline-offset:3px; }
 .model-view-toolbar button { flex-shrink:0; font:inherit; font-size:12px; padding:4px 9px; border:1px solid var(--line, #888); border-radius:6px; color:var(--ink, CanvasText); background:var(--paper, Canvas); cursor:pointer; }
 .model-focus-guard { display:none; }
 body.model-expanded .page::before { content:''; position:fixed; inset:0; background:#0009; z-index:9998; }
@@ -364,7 +366,12 @@ body.model-expanded .page::before { content:''; position:fixed; inset:0; backgro
   toggle.textContent = '시각화 확대';
   toggle.setAttribute('aria-expanded', 'false');
   toggle.setAttribute('aria-controls', frame.id);
-  bar.append(title, toggle); panel.insertBefore(bar, frame);
+  const modelLink = document.createElement('a');
+  modelLink.className = 'model-only-link';
+  modelLink.textContent = '모형만 크게 보기 ↗';
+  modelLink.href = 'models/' + (location.pathname.split('/').pop() || 'index.html');
+  modelLink.target = '_blank'; modelLink.rel = 'noopener noreferrer';
+  bar.append(title, modelLink, toggle); panel.insertBefore(bar, frame);
   const guards = [document.createElement('span'), document.createElement('span')];
   guards.forEach(g => { g.className = 'model-focus-guard'; g.tabIndex = 0; });
   panel.insertBefore(guards[0], bar); panel.append(guards[1]);

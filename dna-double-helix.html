@@ -102,8 +102,10 @@ button:focus-visible { outline: 2px solid light-dark(#2771b5, #7bbcff); outline-
 @media(max-height:500px) and (min-width:681px){.atlas-nav a:not(:first-child){display:none}.atlas-nav{margin:0;font-size:11px}.visualization{flex-basis:310px}.comparison-heading p{display:none}}
 
 .formula-table{width:100%;border-collapse:collapse;font-size:14px;line-height:1.7;margin:16px 0 22px}.formula-table th,.formula-table td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}.formula-table code{white-space:normal}.formula-table th:first-child{width:17%}.math-block{padding:12px 16px;border-left:3px solid #83baff;background:light-dark(#f2f6fb,#242b35);font-size:16px;line-height:1.8}.article code{font-size:.92em}@media(max-width:680px){.formula-table{font-size:12px}.formula-table th,.formula-table td{padding:7px 5px}}</style><style id="model-expansion-v1">/* In-place expansion: the iframe is never moved or reloaded. */
-.model-view-toolbar { display:flex; flex:0 0 auto; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
-.model-view-toolbar span { font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-view-toolbar { display:flex; flex:0 0 auto; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px; min-height:30px; margin:0 0 5px; }
+.model-view-toolbar span { flex:1 1 160px; font-size:12px; line-height:1.4; color:var(--quiet, #777); }
+.model-only-link { flex-shrink:0; font-size:12px; line-height:1.4; color:var(--link, #368ce0); text-underline-offset:3px; white-space:nowrap; }
+.model-only-link:focus-visible { outline:2px solid #368ce0; outline-offset:3px; }
 .model-view-toolbar button { flex-shrink:0; font:inherit; font-size:12px; padding:4px 9px; border:1px solid var(--line, #888); border-radius:6px; color:var(--ink, CanvasText); background:var(--paper, Canvas); cursor:pointer; }
 .model-focus-guard { display:none; }
 body.model-expanded .page::before { content:''; position:fixed; inset:0; background:#0009; z-index:9998; }
@@ -345,7 +347,12 @@ body.model-expanded .page::before { content:''; position:fixed; inset:0; backgro
   toggle.textContent = '시각화 확대';
   toggle.setAttribute('aria-expanded', 'false');
   toggle.setAttribute('aria-controls', frame.id);
-  bar.append(title, toggle); panel.insertBefore(bar, frame);
+  const modelLink = document.createElement('a');
+  modelLink.className = 'model-only-link';
+  modelLink.textContent = '모형만 크게 보기 ↗';
+  modelLink.href = 'models/' + (location.pathname.split('/').pop() || 'index.html');
+  modelLink.target = '_blank'; modelLink.rel = 'noopener noreferrer';
+  bar.append(title, modelLink, toggle); panel.insertBefore(bar, frame);
   const guards = [document.createElement('span'), document.createElement('span')];
   guards.forEach(g => { g.className = 'model-focus-guard'; g.tabIndex = 0; });
   panel.insertBefore(guards[0], bar); panel.append(guards[1]);

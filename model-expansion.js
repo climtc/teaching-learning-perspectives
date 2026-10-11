@@ -15,7 +15,12 @@
   toggle.textContent = '시각화 확대';
   toggle.setAttribute('aria-expanded', 'false');
   toggle.setAttribute('aria-controls', frame.id);
-  bar.append(title, toggle); panel.insertBefore(bar, frame);
+  const modelLink = document.createElement('a');
+  modelLink.className = 'model-only-link';
+  modelLink.textContent = '모형만 크게 보기 ↗';
+  modelLink.href = 'models/' + (location.pathname.split('/').pop() || 'index.html');
+  modelLink.target = '_blank'; modelLink.rel = 'noopener noreferrer';
+  bar.append(title, modelLink, toggle); panel.insertBefore(bar, frame);
   const guards = [document.createElement('span'), document.createElement('span')];
   guards.forEach(g => { g.className = 'model-focus-guard'; g.tabIndex = 0; });
   panel.insertBefore(guards[0], bar); panel.append(guards[1]);
