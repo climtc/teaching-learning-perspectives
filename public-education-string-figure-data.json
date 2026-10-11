@@ -1,0 +1,748 @@
+{
+  "schema": "silttugi-record/2",
+  "edition": "illustrative",
+  "layers": [
+    "inner",
+    "outline",
+    "environment",
+    "viewpoint"
+  ],
+  "basis_codes": {
+    "record": "그 단계의 설명에서 정한 자리",
+    "record_and_rule": "설명과 도형 규칙으로 정한 자리",
+    "rule": "도형을 읽기 위한 배치 규칙",
+    "carried": "앞 단계의 자리를 유지함"
+  },
+  "steps": [
+    {
+      "n": 1,
+      "added": [
+        "Common",
+        "Logos"
+      ],
+      "applied_only": false,
+      "in_model": true,
+      "title": {
+        "phrase": "두 낱말"
+      }
+    },
+    {
+      "n": 2,
+      "added": [],
+      "applied_only": true,
+      "in_model": true,
+      "title": {
+        "phrase": "공교육을 중심에"
+      }
+    },
+    {
+      "n": 3,
+      "added": [
+        "Apparatus"
+      ],
+      "applied_only": false,
+      "in_model": true,
+      "title": {
+        "phrase": "장치 추가"
+      }
+    },
+    {
+      "n": 4,
+      "added": [
+        "Subject"
+      ],
+      "applied_only": false,
+      "in_model": true,
+      "title": {
+        "phrase": "행위자 추가"
+      }
+    },
+    {
+      "n": 5,
+      "added": [
+        "Public"
+      ],
+      "applied_only": false,
+      "in_model": true,
+      "title": {
+        "phrase": "공적 영역 추가"
+      }
+    },
+    {
+      "n": 6,
+      "added": [
+        "Time"
+      ],
+      "applied_only": false,
+      "in_model": false,
+      "title": {
+        "phrase": "시간을 생각하기"
+      }
+    },
+    {
+      "n": 7,
+      "added": [
+        "System"
+      ],
+      "applied_only": false,
+      "in_model": true,
+      "title": {
+        "phrase": "체계의 경계"
+      }
+    },
+    {
+      "n": 8,
+      "added": [
+        "System b"
+      ],
+      "applied_only": false,
+      "in_model": false,
+      "title": {
+        "phrase": "다른 체계"
+      }
+    },
+    {
+      "n": 9,
+      "added": [
+        "Interface"
+      ],
+      "applied_only": false,
+      "in_model": false,
+      "title": {
+        "phrase": "접점"
+      }
+    },
+    {
+      "n": 10,
+      "added": [
+        "Spectator"
+      ],
+      "applied_only": false,
+      "in_model": true,
+      "title": {
+        "phrase": "관찰자 추가"
+      }
+    },
+    {
+      "n": 11,
+      "added": [
+        "동료 구경꾼"
+      ],
+      "applied_only": false,
+      "in_model": false,
+      "title": {
+        "phrase": "다른 관찰자"
+      }
+    },
+    {
+      "n": 12,
+      "added": [
+        "Telescope"
+      ],
+      "applied_only": false,
+      "in_model": false,
+      "title": {
+        "phrase": "보는 도구"
+      }
+    },
+    {
+      "n": 13,
+      "added": [
+        "Curvature"
+      ],
+      "applied_only": false,
+      "in_model": false,
+      "title": {
+        "phrase": "관계의 굴곡"
+      }
+    },
+    {
+      "n": 14,
+      "added": [
+        "Survivor"
+      ],
+      "applied_only": false,
+      "in_model": true,
+      "title": {
+        "phrase": "설명의 빈자리"
+      }
+    }
+  ],
+  "model_steps": [
+    {
+      "step": 1,
+      "center": null,
+      "placement": {
+        "common": {
+          "layer": "inner",
+          "basis": "rule"
+        },
+        "logos": {
+          "layer": "inner",
+          "basis": "rule"
+        }
+      },
+      "center_note": "두 관점을 먼저 놓고, 다음 단계에서 공교육을 가운데 놓는다."
+    },
+    {
+      "step": 2,
+      "center": {
+        "label": "공교육"
+      },
+      "placement": {
+        "common": {
+          "layer": "inner",
+          "basis": "rule"
+        },
+        "logos": {
+          "layer": "inner",
+          "basis": "rule"
+        }
+      }
+    },
+    {
+      "step": 3,
+      "center": {
+        "label": "공교육"
+      },
+      "placement": {
+        "common": {
+          "layer": "inner",
+          "basis": "rule"
+        },
+        "logos": {
+          "layer": "inner",
+          "basis": "rule"
+        },
+        "apparatus": {
+          "layer": "inner",
+          "basis": "rule"
+        }
+      }
+    },
+    {
+      "step": 4,
+      "center": {
+        "label": "공교육"
+      },
+      "placement": {
+        "common": {
+          "layer": "inner",
+          "basis": "rule"
+        },
+        "logos": {
+          "layer": "inner",
+          "basis": "rule"
+        },
+        "apparatus": {
+          "layer": "inner",
+          "basis": "rule"
+        },
+        "subject": {
+          "layer": "inner",
+          "basis": "rule"
+        }
+      },
+      "shift": [
+        {
+          "id": "*",
+          "code": "aligned_toward_subject",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        },
+        {
+          "id": "common",
+          "code": "reframed_as_content",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        },
+        {
+          "id": "logos",
+          "code": "reframed_as_content",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        },
+        {
+          "id": "apparatus",
+          "code": "inscribing_device",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "center": {
+        "label": "공교육"
+      },
+      "placement": {
+        "common": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "logos": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "apparatus": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "subject": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "public": {
+          "layer": "outline",
+          "basis": "record"
+        }
+      },
+      "shift": [
+        {
+          "id": "common",
+          "code": "contrasted_with_public",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        },
+        {
+          "id": "public",
+          "code": "citizen_making_moved",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "center": {
+        "label": "공교육"
+      },
+      "placement": {
+        "common": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "logos": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "apparatus": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "subject": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "system": {
+          "layer": "outline",
+          "basis": "record_and_rule",
+          "shown_as": "boundary_ring"
+        },
+        "public": {
+          "layer": "environment",
+          "basis": "record"
+        }
+      },
+      "shift": [
+        {
+          "id": "public",
+          "code": "moved_to_environment",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        }
+      ]
+    },
+    {
+      "step": 10,
+      "center": {
+        "label": "공교육"
+      },
+      "camera": "hill",
+      "placement": {
+        "common": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "logos": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "apparatus": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "subject": {
+          "layer": "inner",
+          "basis": "record"
+        },
+        "system": {
+          "layer": "outline",
+          "basis": "record_and_rule",
+          "shown_as": "boundary_ring"
+        },
+        "public": {
+          "layer": "environment",
+          "basis": "carried"
+        },
+        "spectator": {
+          "layer": "viewpoint",
+          "basis": "record_and_rule"
+        }
+      },
+      "shift": [
+        {
+          "id": "common",
+          "code": "reframed_as_spectator_tool",
+          "what": "교육의 구성 요소로 보던 말을 관찰자의 분석 도구로도 읽어 본다."
+        },
+        {
+          "id": "logos",
+          "code": "reframed_as_spectator_tool",
+          "what": "교육의 구성 요소로 보던 말을 관찰자의 분석 도구로도 읽어 본다."
+        },
+        {
+          "id": "system",
+          "code": "reframed_as_spectator_tool",
+          "what": "교육의 구성 요소로 보던 말을 관찰자의 분석 도구로도 읽어 본다."
+        },
+        {
+          "id": "*",
+          "code": "reframed_as_theoria",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        },
+        {
+          "id": "listed",
+          "code": "framework_is_historical",
+          "ids": [
+            "common",
+            "logos",
+            "system"
+          ],
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        },
+        {
+          "id": "spectator",
+          "code": "spectator_inside_apparatus",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        }
+      ],
+      "reading_note": "같은 자리를 유지하면서 Common·Logos·System을 \"관찰자가 사용하는 도구\"로 다시 읽는다. 카메라 이동은 관찰자의 실제 의식이나 경험을 측정하는 일이 아니다."
+    },
+    {
+      "step": 14,
+      "center": {
+        "label": "공교육"
+      },
+      "camera": "hill_dissolving",
+      "state": "dissolving",
+      "placement": {
+        "common": {
+          "layer": "inner",
+          "basis": "carried"
+        },
+        "logos": {
+          "layer": "inner",
+          "basis": "carried"
+        },
+        "apparatus": {
+          "layer": "inner",
+          "basis": "carried"
+        },
+        "subject": {
+          "layer": "inner",
+          "basis": "carried"
+        },
+        "system": {
+          "layer": "outline",
+          "basis": "carried",
+          "shown_as": "boundary_ring"
+        },
+        "public": {
+          "layer": "environment",
+          "basis": "carried"
+        },
+        "spectator": {
+          "layer": "viewpoint",
+          "basis": "carried"
+        }
+      },
+      "shift": [
+        {
+          "id": "*",
+          "code": "dissolution",
+          "what": "하나의 도식이 설명 전체를 대신하지 못하는 상황을 생각한다."
+        },
+        {
+          "id": "spectator",
+          "code": "redefined_as_survivor",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        },
+        {
+          "id": "spectator",
+          "code": "asked_to_leave_hill",
+          "what": "새 관점과 앞 관점의 관계를 다시 읽는 표지다."
+        }
+      ],
+      "reading_note": "기존 모형을 흐리게 하고 설명이 포착하지 못한 경험의 자리를 바깥에 남긴다. 빈 원은 새 수치 축이 아니다."
+    }
+  ],
+  "perspectives": [
+    {
+      "id": "common",
+      "label": "Common",
+      "added_at_step": 1,
+      "construct_chosen_by": "author",
+      "word_first_appeared": {
+        "by": "author"
+      },
+      "note": "함께 쓰거나 함께 경험하는 것을 묻는 관점"
+    },
+    {
+      "id": "logos",
+      "label": "Logos",
+      "added_at_step": 1,
+      "construct_chosen_by": "author",
+      "word_first_appeared": {
+        "by": "author"
+      },
+      "note": "설명과 판단이 어떤 이유를 갖는지 묻는 관점"
+    },
+    {
+      "id": "apparatus",
+      "label": "Apparatus",
+      "added_at_step": 3,
+      "construct_chosen_by": "author",
+      "word_first_appeared": {
+        "by": "generated"
+      },
+      "color_caveat": {
+        "code": "word_preceded_input",
+        "note": "색은 단어의 가치나 중요도를 뜻하지 않는다. 입력과 응답의 역할을 구분하는 설명용 표지다."
+      },
+      "note": "교육을 가능하게 하는 도구와 제도를 묻는 관점"
+    },
+    {
+      "id": "subject",
+      "label": "Subject",
+      "added_at_step": 4,
+      "construct_chosen_by": "author",
+      "word_first_appeared": {
+        "by": "author"
+      },
+      "note": "누가 배우고 가르치며 행위하는지 묻는 관점"
+    },
+    {
+      "id": "public",
+      "label": "Public",
+      "added_at_step": 5,
+      "construct_chosen_by": "author",
+      "word_first_appeared": {
+        "by": "generated"
+      },
+      "color_caveat": {
+        "code": "gloss_of_center",
+        "sense": "gloss_of_center",
+        "note": "색은 단어의 가치나 중요도를 뜻하지 않는다. 입력과 응답의 역할을 구분하는 설명용 표지다."
+      },
+      "note": "개방된 논의와 제도의 감독이라는 두 읽기를 비교하는 관점"
+    },
+    {
+      "id": "system",
+      "label": "System",
+      "added_at_step": 7,
+      "construct_chosen_by": "author",
+      "word_first_appeared": {
+        "by": "author"
+      },
+      "note": "교육이 하나의 체계로 유지되는 경계를 묻는 관점"
+    },
+    {
+      "id": "spectator",
+      "label": "Spectator",
+      "added_at_step": 10,
+      "construct_chosen_by": "author",
+      "word_first_appeared": {
+        "by": "author"
+      },
+      "note": "교육을 설명하는 사람이 어디서 보는지 묻는 관점"
+    }
+  ],
+  "outside": {
+    "perspective": "survivor",
+    "perspective_label": "Survivor",
+    "appears_at_step": 14,
+    "shown_as": "empty_circle",
+    "is_axis": false,
+    "circle_label": "표현의 빈자리",
+    "label_note": "분석자가 설명한 관계와 당사자가 겪은 경험이 모두 일치한다고 가정하지 않는다.",
+    "axis_note": "빈 원은 설명에서 남긴 자리이며 독립적인 공간 차원이나 확률을 뜻하지 않는다."
+  },
+  "drift": {
+    "common": [
+      {
+        "by": "author",
+        "step": 1,
+        "kind": "requested",
+        "phrase": "함께 가진 것을 물어 보자."
+      },
+      {
+        "by": "generated",
+        "step": 1,
+        "kind": "generated",
+        "phrase": "함께 쓰는 교실과 시간표"
+      },
+      {
+        "by": "generated",
+        "step": 2,
+        "kind": "generated",
+        "phrase": "학습자가 공동으로 해결하는 과제"
+      },
+      {
+        "by": "generated",
+        "step": 2,
+        "kind": "generated",
+        "phrase": "수업을 함께 운영하는 규칙"
+      },
+      {
+        "by": "generated",
+        "step": 4,
+        "kind": "generated",
+        "phrase": "공동체가 선택한 교육 목표"
+      },
+      {
+        "by": "generated",
+        "step": 5,
+        "kind": "generated",
+        "phrase": "누가 그 공동체에 포함되는가"
+      },
+      {
+        "by": "generated",
+        "step": 6,
+        "kind": "generated",
+        "phrase": "시대에 따라 달라지는 공유 규범"
+      },
+      {
+        "by": "generated",
+        "step": 6,
+        "kind": "example",
+        "phrase": "토론에서 함께 지킬 약속"
+      },
+      {
+        "by": "generated",
+        "step": 8,
+        "kind": "example",
+        "phrase": "여럿이 나누는 학습 도구"
+      },
+      {
+        "by": "generated",
+        "step": 9,
+        "kind": "example",
+        "phrase": "학교와 지역이 함께 만드는 활동"
+      }
+    ],
+    "logos": [
+      {
+        "by": "author",
+        "step": 1,
+        "kind": "requested",
+        "phrase": "설명의 근거를 물어 보자."
+      },
+      {
+        "by": "generated",
+        "step": 1,
+        "kind": "generated",
+        "phrase": "학습 내용을 설명하는 이유"
+      },
+      {
+        "by": "generated",
+        "step": 2,
+        "kind": "generated",
+        "phrase": "교육 목표를 정당화하는 논리"
+      },
+      {
+        "by": "generated",
+        "step": 3,
+        "kind": "generated",
+        "phrase": "평가 기준과 도구가 만드는 설명"
+      },
+      {
+        "by": "generated",
+        "step": 4,
+        "kind": "generated",
+        "phrase": "행위자가 자신의 선택에 붙이는 이유"
+      },
+      {
+        "by": "generated",
+        "step": 6,
+        "kind": "generated",
+        "phrase": "시대에 따라 달라지는 교육의 정당화"
+      },
+      {
+        "by": "generated",
+        "step": 6,
+        "kind": "example",
+        "phrase": "토론에서 주장과 근거를 연결하기"
+      },
+      {
+        "by": "generated",
+        "step": 8,
+        "kind": "example",
+        "phrase": "학습 도구의 선택을 설명하기"
+      },
+      {
+        "by": "generated",
+        "step": 9,
+        "kind": "example",
+        "phrase": "학교의 운영 결정을 정당화하기"
+      }
+    ]
+  },
+  "public_split": {
+    "requested": {
+      "by": "author",
+      "phrase": "Public을 누구나 참여할 수 있는 공개적 논의의 영역으로 읽어 보자."
+    },
+    "returned": {
+      "distinction": [
+        {
+          "by": "generated",
+          "phrase": "누가 참여할 수 있고 무엇이 공개되어 있는지를 기준으로 읽는다."
+        }
+      ],
+      "operative": [
+        {
+          "by": "generated",
+          "phrase": "교육 제도의 운영과 성과를 감독하는 사람들로 읽는다."
+        },
+        {
+          "by": "generated",
+          "phrase": "교육에 자원을 배분하고 책임을 묻는 제도로 읽는다."
+        }
+      ]
+    },
+    "absent": {},
+    "returned_note": "개방된 논의의 영역과 제도를 감독하는 주체는 서로 관련되지만 같은 정의는 아니다. 어떤 읽기를 선택하는지 확인할 수 있다.",
+    "active_reading": "operative"
+  },
+  "gong_split": {
+    "basis": "illustrative",
+    "note": "公과 共을 서로 다른 질문으로 놓는 설명용 구별이다. 완전한 어원 풀이가 아니다.",
+    "nodes": [
+      {
+        "label": "公",
+        "gloss": "제도의 개방과 책임"
+      },
+      {
+        "label": "共",
+        "gloss": "함께하는 경험과 활동"
+      }
+    ]
+  },
+  "not_shown": [
+    "실제 언어모델의 내부 계산",
+    "학교와 관점 사이의 실측 거리",
+    "다른 질문 순서의 실제 응답",
+    "당사자의 경험 전체",
+    "독자의 이해도나 편향 개선 효과"
+  ],
+  "public_note": "sample: structure and codes only; captions and wording are decided by the author at publication",
+  "description": "공교육을 읽는 관점과 낱말의 뜻을 비교하기 위해 만든 설명용 배치와 뜻 카드. 실제 대화의 인용이나 학교의 측정 자료가 아니다.",
+  "layer_note": "안쪽·경계·환경·관찰 위치를 층으로 구별한다. 반지름과 높이는 측정된 거리나 영향력의 크기가 아니다.",
+  "word_color_note": "파란색은 입력쪽 역할, 주황색은 응답쪽 역할로 둔 표지다. 실제 대화의 발화 이력을 나타내는 자료가 아니다. Public은 서로 다른 읽기를 비교하기 위해 중립색으로 둔다.",
+  "reorder_note": "순서를 바꾸면 실이 지나는 경로만 바뀐다. 점의 배치와 뜻 카드는 그대로 유지된다. 다른 순서로 질문했을 때의 실제 응답을 예측하지 않는다.",
+  "drift_note": "뜻 카드는 설명을 위한 예문이다. requested는 요청하는 읽기, generated는 응답쪽 읽기, example은 구체적 상황에 넣어 보는 값이다."
+}

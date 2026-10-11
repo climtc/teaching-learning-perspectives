@@ -2,7 +2,7 @@
 
 그림과 도식, 수학 공식은 무엇을 압축하고, 조작할 수 있는 표현은 무엇을 펼쳐 보여 주는가. 평면 기록과 디지털 모형을 나란히 놓고 시점, 관계와 조건을 바꾸어 비교한다.
 
-[65개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[66개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 임완철의 **차원증감법**을 바탕으로 원근법과 회화, 곡면과 매듭, 수학 공식과 물리 법칙, 상태와 데이터의 표현을 살핀다. 물리 공간의 차원, 표면 자체의 차원, 데이터의 변수 수와 관찰의 자유도는 서로 구별한다. 디지털 화면도 평면이지만, 좌표와 변환 규칙을 조작하면 한 장에서 생략한 조건을 비교할 수 있다.
 
@@ -75,6 +75,8 @@
 - [액체와 기체 — 한 상태선 뒤의 온도와 공존](https://climtc.github.io/teaching-learning-perspectives/thermodynamic-surface.html): 온도를 추가한 상태 곡면에서 균질 상태식의 고리와 평형 공존선, 두 상의 몰분율을 구별한다.
 - [은하 지도 — 거리처럼 보이는 속도](https://climtc.github.io/teaching-learning-perspectives/redshift-space.html): 합성 실제 위치와 적색편이 공간을 나란히 비교하며 특이 속도가 거리와 형태로 읽히는 과정을 확인한다.
 - [은하수 — 우리가 안에서 보는 은하](https://climtc.github.io/teaching-learning-perspectives/milky-way-inside.html): 하늘 사진·Gaia 방향 지도·외부 모습의 재구성을 구별하고 은하 안에서 시선·관측점·가림의 조건을 비교한다.
+
+- [공교육 실뜨기 — 관점과 뜻을 함께 펼치기](https://climtc.github.io/teaching-learning-perspectives/public-education-string-figure.html): 관점을 차례로 더하며 앞 관점의 배치와 같은 낱말의 뜻이 달라지는 모습을 비교한다. Public의 두 읽기와 公/共 구별을 펼친다.
 
 [경계·반복·결속의 세 질문](https://climtc.github.io/teaching-learning-perspectives/lacan-problems.html)과 [라캉 원전 읽기 안내](https://climtc.github.io/teaching-learning-perspectives/lacan-atlas.html)에서 도식의 수학적 성질과 해석의 조건을 살필 수 있다. 전사본의 편집 도식은 자필 원고와 구별하며, 설명용 재구성에는 그 범위를 표시한다.
 
