@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;self&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;">
+<title>오일러의 다리 — 조작 모형</title>
+<style>
+:root{color-scheme:light dark;font:13px/1.4 system-ui;background:Canvas;color:CanvasText}
+*{box-sizing:border-box}html,body{width:100%;height:100%;margin:0;overflow:hidden}
+body{display:flex;flex-direction:column;height:100dvh}
+.model-header{flex:0 0 auto;display:flex;align-items:center;gap:12px;min-height:38px;padding:7px 12px;border-bottom:1px solid light-dark(#d4dae3,#454b54)}
+.model-header h1{flex:1;min-width:0;margin:0;font:600 13px/1.4 system-ui;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.model-header a{flex:0 0 auto;color:light-dark(#185cab,#87bcff);text-underline-offset:3px;white-space:nowrap}
+.model-header a:focus-visible{outline:2px solid #368ce0;outline-offset:3px}
+#codex-visualization{display:block;flex:1 1 0;width:100%;height:100%;min-height:0;border:0}
+@media(max-width:480px){.model-header{gap:8px;padding:6px 8px}.model-header h1,.model-header a{font-size:12px}}
+</style></head><body>
+<header class="model-header"><h1 title="오일러의 다리">오일러의 다리</h1><a href="../euler-bridges.html" target="_blank" rel="noopener noreferrer" aria-label="전체 페이지 보기 — 해설과 보여 주지 않는 것" title="해설과 ‘보여 주지 않는 것’은 전체 페이지에서 읽을 수 있습니다.">전체 페이지 보기 ↗</a></header>
+<iframe id="codex-visualization" title="오일러의 다리 · 조작 모형" sandbox="allow-scripts" scrolling="no" referrerpolicy="no-referrer" data-srcdoc="&lt;!doctype html&gt;&lt;html lang=&quot;ko&quot;&gt;&lt;head&gt;&lt;meta charset=&quot;utf-8&quot;&gt;&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width,initial-scale=1&quot;&gt;&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &amp;#x27;none&amp;#x27;; script-src &amp;#x27;unsafe-inline&amp;#x27; &amp;#x27;unsafe-eval&amp;#x27; &amp;#x27;wasm-unsafe-eval&amp;#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &amp;#x27;unsafe-inline&amp;#x27; blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://persistent.oaistatic.com/plugins/visualize/charts/ https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &amp;#x27;none&amp;#x27;; object-src &amp;#x27;none&amp;#x27;; base-uri &amp;#x27;none&amp;#x27;; form-action &amp;#x27;none&amp;#x27;&quot;&gt;&lt;style&gt;
+:root{color-scheme:light dark;--bg:light-dark(#fff,#181818);--ink:light-dark(#253044,#f1f1f1);--quiet:light-dark(#5c6b80,#aeb4be);--line:light-dark(#dce1e7,#3a3e45)}
+*{box-sizing:border-box}html,body{margin:0;height:100%;overflow:hidden;background:var(--bg);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,&#x27;Segoe UI&#x27;,sans-serif}
+.widget{height:100%;display:grid;grid-template-columns:minmax(0,1fr) 198px;grid-template-rows:minmax(0,1fr) auto;gap:8px 12px}
+.stage{min-width:0;min-height:0;position:relative}canvas{display:block;width:100%;height:100%;touch-action:none;border-radius:6px;cursor:grab}canvas:active{cursor:grabbing}canvas:focus-visible{outline:2px solid #72baff;outline-offset:-2px}
+.controls{display:flex;flex-direction:column;gap:9px;min-width:0;min-height:0;padding-top:4px}label{display:block;font-size:12px;line-height:1.5;font-weight:600}label span{float:right;color:var(--quiet);font-weight:400}
+select,button{width:100%;font:inherit;font-size:12px;line-height:1.5;min-height:32px;color:var(--ink);background:light-dark(#f3f6f9,#30343a);border:1px solid var(--line);border-radius:6px;padding:4px 6px}select{margin-top:3px}input[type=range]{width:100%;margin:4px 0;accent-color:#69a8ed;height:20px}input[type=checkbox]{accent-color:#69a8ed;width:16px;height:16px;vertical-align:middle;margin:0 7px 0 0}input:disabled,select:disabled{opacity:.45}.check{padding:3px 0}button{cursor:pointer}button:focus-visible,select:focus-visible,input:focus-visible{outline:2px solid #72baff;outline-offset:1px}.hint{font-size:11px;line-height:1.5;color:var(--quiet);margin:0}
+#status{grid-column:1/-1;margin:0;min-height:36px;font-size:12px;line-height:1.6;color:var(--quiet);border-top:1px solid var(--line);padding-top:6px}
+@media(max-width:400px){.widget{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(100px,1fr) auto auto;gap:5px}.controls{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;padding:0}.controls .hint{display:none}.controls button{min-height:28px}.controls label{font-size:11px}.controls select{font-size:11px;min-height:30px}#status{font-size:11px;min-height:34px}}
+@media(pointer:coarse){select,button{min-height:40px}input[type=range]{height:28px}.check{min-height:30px}.controls{gap:6px}}
+@media(max-height:255px) and (min-width:401px){.widget{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(70px,1fr) auto auto;gap:5px}.controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px 8px;padding:0}.hint{display:none}select,button{min-height:28px}#status{font-size:11px;min-height:30px}}
+@media(pointer:coarse) and (max-height:350px) and (min-width:401px){.widget{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(80px,1fr) auto auto;gap:5px}.controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px 8px;padding:0}.hint{display:none}#status{font-size:11px;min-height:30px}}
+
+.controls label span{float:none;display:block;font-size:11px}.hint{display:none}select{min-width:0}#status{overflow-wrap:anywhere}
+&lt;/style&gt;&lt;/head&gt;&lt;body&gt;&lt;main class=&quot;widget&quot;&gt;&lt;div class=&quot;stage&quot;&gt;&lt;canvas id=&quot;model&quot; tabindex=&quot;0&quot; role=&quot;img&quot; aria-label=&quot;오일러의 다리 — 연결과 경로&quot;&gt;&lt;/canvas&gt;&lt;/div&gt;&lt;div class=&quot;controls&quot;&gt;&lt;label for=&quot;view&quot;&gt;시점&lt;select id=&quot;view&quot;&gt;&lt;option value=&quot;space&quot;&gt;입체 · 자유 회전&lt;/option&gt;&lt;option value=&quot;plane&quot;&gt;평면 위에서 보기&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label for=&quot;condition&quot;&gt;다리 조건&lt;select id=&quot;condition&quot;&gt;&lt;option value=&quot;original&quot;&gt;원래 일곱 다리&lt;/option&gt;&lt;option value=&quot;remove&quot;&gt;e 다리 제거 · 6개&lt;/option&gt;&lt;option value=&quot;add&quot;&gt;h 다리 추가 · 8개&lt;/option&gt;&lt;option value=&quot;circuit&quot;&gt;h와 i 추가 · 9개&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;label for=&quot;depth&quot;&gt;간선의 공간 배치&lt;span id=&quot;depth-value&quot;&gt;&lt;/span&gt;&lt;input id=&quot;depth&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;50&quot; step=&quot;1&quot;&gt;&lt;/label&gt;&lt;label for=&quot;progress&quot;&gt;경로 추적&lt;span id=&quot;progress-value&quot;&gt;&lt;/span&gt;&lt;input id=&quot;progress&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;100&quot; value=&quot;0&quot; step=&quot;1&quot;&gt;&lt;/label&gt;&lt;button id=&quot;reset&quot; type=&quot;button&quot;&gt;시점과 확대 초기화&lt;/button&gt;&lt;/div&gt;&lt;p id=&quot;status&quot; role=&quot;status&quot; aria-live=&quot;polite&quot;&gt;&lt;/p&gt;&lt;/main&gt;&lt;script id=&quot;configuration&quot; type=&quot;application/json&quot;&gt;{&quot;kind&quot;: &quot;euler&quot;, &quot;title&quot;: &quot;오일러의 다리 — 연결과 경로&quot;}&lt;/script&gt;&lt;script&gt;(() =&gt; {
+ &#x27;use strict&#x27;;
+ const cfg=JSON.parse(document.getElementById(&#x27;configuration&#x27;).textContent),$=id=&gt;document.getElementById(id),canvas=$(&#x27;model&#x27;),ctx=canvas.getContext(&#x27;2d&#x27;),TAU=2*Math.PI;
+ const C={blue:&#x27;#72baff&#x27;,gold:&#x27;#f8c461&#x27;,green:&#x27;#82d5a1&#x27;,gray:&#x27;#9aacc0&#x27;,red:&#x27;#f5919a&#x27;};
+ let ax=-.5,ay=.4,zoom=1,drag=null,frame=0,lines=[],dots=[],faces=[],tracks=null,cacheKey=&#x27;&#x27;;
+ const add=(a,b)=&gt;a.map((v,i)=&gt;v+b[i]),mul=(a,s)=&gt;a.map(v=&gt;v*s),lerp=(a,b,t)=&gt;a.map((v,i)=&gt;v*(1-t)+b[i]*t),sample=(f,n=80)=&gt;Array.from({length:n+1},(_,i)=&gt;f(i/n));
+ const line=(p,color,width=2)=&gt;lines.push({p,color,width}),dot=(p,color,label=&#x27;&#x27;)=&gt;dots.push({p,color,label});
+ function status(s){$(&#x27;status&#x27;).textContent=s;canvas.setAttribute(&#x27;aria-label&#x27;,cfg.title+&#x27;。&#x27;+s+&#x27; 드래그 또는 방향키로 회전합니다.&#x27;);}
+ const N={A:[0,0,0],B:[-2,1.7,0],C:[-2,-1.7,0],D:[2.2,0,0]};
+ const original=[[&#x27;a&#x27;,&#x27;A&#x27;,&#x27;B&#x27;,.35],[&#x27;b&#x27;,&#x27;A&#x27;,&#x27;B&#x27;,-.35],[&#x27;c&#x27;,&#x27;A&#x27;,&#x27;C&#x27;,.35],[&#x27;d&#x27;,&#x27;A&#x27;,&#x27;C&#x27;,-.35],[&#x27;e&#x27;,&#x27;A&#x27;,&#x27;D&#x27;,0],[&#x27;f&#x27;,&#x27;B&#x27;,&#x27;D&#x27;,.65],[&#x27;g&#x27;,&#x27;C&#x27;,&#x27;D&#x27;,-.65]];
+ function graph(mode){let e=original.map(x=&gt;x.slice());if(mode===&#x27;remove&#x27;)e=e.filter(x=&gt;x[0]!==&#x27;e&#x27;);if(mode===&#x27;add&#x27;||mode===&#x27;circuit&#x27;)e.push([&#x27;h&#x27;,&#x27;B&#x27;,&#x27;C&#x27;,-.85]);if(mode===&#x27;circuit&#x27;)e.push([&#x27;i&#x27;,&#x27;A&#x27;,&#x27;D&#x27;,.45]);return e;}
+ function route(edges){const deg={A:0,B:0,C:0,D:0};for(const[,a,b]of edges){deg[a]++;deg[b]++;}const odd=Object.keys(deg).filter(n=&gt;deg[n]%2),start=odd[0]||&#x27;A&#x27;;if(odd.length!==0&amp;&amp;odd.length!==2)return {deg,odd,path:null};
+  const walk=(v,used,path)=&gt;{if(used.size===edges.length)return path;for(const e of edges){if(!used.has(e[0])&amp;&amp;(e[1]===v||e[2]===v)){const next=e[1]===v?e[2]:e[1],u=new Set(used);u.add(e[0]);const found=walk(next,u,[...path,{edge:e,from:v,to:next}]);if(found)return found;}}return null;};return{deg,odd,path:walk(start,new Set(),[])};
+ }
+ function edgepoint(e,t,depth){const a=N[e[1]],b=N[e[2]],dx=b[0]-a[0],dy=b[1]-a[1],norm=Math.hypot(dx,dy),bend=e[3]*Math.sin(Math.PI*t);return[a[0]+dx*t-dy/norm*bend,a[1]+dy*t+dx/norm*bend,depth*Math.sin(Math.PI*t)*(e[0].charCodeAt(0)%4-1.5)*.8];}
+ function deriv([x,y,z],rho){return[10*(y-x),x*(rho-z)-y,x*y-8/3*z];}
+ function rk(p,h,rho){const a=deriv(p,rho),b=deriv(add(p,mul(a,h/2)),rho),c=deriv(add(p,mul(b,h/2)),rho),d=deriv(add(p,mul(c,h)),rho);return p.map((v,i)=&gt;v+h*(a[i]+2*b[i]+2*c[i]+d[i])/6);}
+ function integrate(rho,eps){let a=[0,1,0],b=[0,1+eps,0],outA=[a],outB=[b];for(let i=1;i&lt;=8000;i++){a=rk(a,.005,rho);b=rk(b,.005,rho);if(i%10===0){outA.push(a);outB.push(b);}}return[outA,outB];}
+ const normal=p=&gt;[p[0]/10,(p[2]-25)/10,p[1]/10];
+ function build(){lines=[];dots=[];faces=[];
+  if(cfg.kind===&#x27;flatland&#x27;){
+   const h=+$(&#x27;height&#x27;).value,r=Math.abs(h)&lt;=1?Math.sqrt(Math.max(0,1-h*h)):null;$(&#x27;height-value&#x27;).textContent=h.toFixed(2)+&#x27; R&#x27;;
+   const z=h*1.6,R=1.6;
+   faces.push({p:[[-2.5,-2.5,0],[2.5,-2.5,0],[2.5,2.5,0],[-2.5,2.5,0]],color:C.blue,alpha:.1});
+   for(let i=-2;i&lt;=2;i++){line([[i,-2.5,0],[i,2.5,0]],C.gray,1);line([[-2.5,i,0],[2.5,i,0]],C.gray,1);}
+   if($(&#x27;whole&#x27;).checked){for(let j=1;j&lt;12;j++){const phi=-Math.PI/2+j*Math.PI/12;line(sample(t=&gt;[R*Math.cos(phi)*Math.cos(TAU*t),R*Math.cos(phi)*Math.sin(TAU*t),z+R*Math.sin(phi)]),C.blue,1.2);}for(let j=0;j&lt;12;j++)line(sample(t=&gt;[R*Math.cos(TAU*t)*Math.cos(TAU*j/12),R*Math.cos(TAU*t)*Math.sin(TAU*j/12),z+R*Math.sin(TAU*t)]),C.blue,1.2);}
+   if(r===0)dot([0,0,0],C.gold);else if(r!==null)line(sample(t=&gt;[r*R*Math.cos(TAU*t),r*R*Math.sin(TAU*t),0],100),C.gold,4);
+   dot([2.4,-2.4,0],C.gray,&#x27;평면&#x27;);
+   status(r===null?&#x27;평면과 만나지 않습니다. 관찰되지 않는다는 사실만으로 구의 소멸을 말할 수 없습니다.&#x27;:r===0?&#x27;접점 하나 · 단면 반지름 0. 구의 반지름 R은 그대로입니다.&#x27;:`단면 반지름 ${r.toFixed(3)} R · 구의 반지름 1 R. 노란 선은 단면이며 그림자가 아닙니다.`);
+  }else if(cfg.kind===&#x27;euler&#x27;){
+   const e=graph($(&#x27;condition&#x27;).value),info=route(e),depth=+$(&#x27;depth&#x27;).value/100,p=+$(&#x27;progress&#x27;).value/100;$(&#x27;depth-value&#x27;).textContent=Math.round(depth*100)+&#x27;%&#x27;;$(&#x27;progress&#x27;).disabled=!info.path;
+   e.forEach(x=&gt;{line(sample(t=&gt;edgepoint(x,t,depth),50),C.blue,2.5);dot(edgepoint(x,.5,depth),C.blue,x[0]);});
+   Object.entries(N).forEach(([n,p])=&gt;dot(p,info.deg[n]%2?C.red:C.green,n+&#x27; · &#x27;+info.deg[n]));
+   if(info.path){const distance=p*info.path.length,complete=Math.floor(distance),fraction=distance-complete;for(let i=0;i&lt;Math.min(complete,info.path.length);i++)line(sample(t=&gt;edgepoint(info.path[i].edge,t,depth)),C.gold,4);const current=info.path[Math.min(complete,info.path.length-1)],f=complete===info.path.length?1:fraction;line(sample(t=&gt;edgepoint(current.edge,current.from===current.edge[1]?t*f:1-t*f,depth)),C.gold,4);dot(edgepoint(current.edge,current.from===current.edge[1]?f:1-f,depth),C.gold);$(&#x27;progress-value&#x27;).textContent=Math.round(p*100)+&#x27;%&#x27;;status(`다리 ${e.length}개 · 홀수 차수 ${info.odd.length}곳 · ${info.odd.length?&#x27;열린 경로&#x27;:&#x27;닫힌 경로&#x27;} 가능. 경로: ${info.path.map(x=&gt;x.edge[0]).join(&#x27; → &#x27;)}.`);}
+   else{$(&#x27;progress-value&#x27;).textContent=&#x27;성립 안 함&#x27;;status(&#x27;다리 7개 · 홀수 차수 A=5, B=3, C=3, D=3. 모든 다리를 한 번씩 건너는 경로는 없습니다.&#x27;);}
+  }else if(cfg.kind===&#x27;lorenz&#x27;){
+   const rho=+$(&#x27;rho&#x27;).value,eps=+$(&#x27;epsilon&#x27;).value,t=+$(&#x27;time&#x27;).value,key=rho+&#x27;:&#x27;+eps;if(key!==cacheKey){tracks=integrate(rho,eps);cacheKey=key;}
+   const index=Math.round(t/.05),a=tracks[0][index],b=tracks[1][index],distance=Math.hypot(...a.map((v,i)=&gt;v-b[i]));
+   for(const [j,color]of[[0,C.blue],[1,C.gold]]){line(tracks[j].slice(0,index+1).map(normal),color,1.7);dot(normal(tracks[j][index]),color);}
+   line([[-2.3,-2.5,0],[2.3,-2.5,0]],C.gray,1);dot([2.3,-2.5,0],C.gray,&#x27;X&#x27;);line([[0,-2.5,-2.3],[0,-2.5,2.3]],C.gray,1);dot([0,-2.5,2.3],C.gray,&#x27;Y&#x27;);line([[0,-2.5,0],[0,2.5,0]],C.gray,1);dot([0,2.5,0],C.gray,&#x27;Z&#x27;);
+   $(&#x27;time-value&#x27;).textContent=t.toFixed(2);status(`ρ=${rho} · t=${t.toFixed(2)} · 두 상태 거리 ${distance.toExponential(2)}. 무차원 시간, RK4 수치 근사입니다.`);
+  }
+  draw();
+ }
+ function rotate(p){const c=Math.cos(ay),s=Math.sin(ay),x=p[0]*c+p[2]*s,z=-p[0]*s+p[2]*c;return[x,p[1]*Math.cos(ax)-z*Math.sin(ax),p[1]*Math.sin(ax)+z*Math.cos(ax)];}
+ function draw(){const box=canvas.getBoundingClientRect(),w=box.width,h=box.height;if(w&lt;1||h&lt;1)return;const dpr=Math.min(2,devicePixelRatio||1);canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);ctx.setTransform(dpr,0,0,dpr,0,0);const dark=matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).matches;ctx.fillStyle=dark?&#x27;#181818&#x27;:&#x27;#fff&#x27;;ctx.fillRect(0,0,w,h);
+  const scale=Math.min(w/6.6,Math.max(20,h-26)/6.5)*zoom,project=p=&gt;{const v=rotate(p);return[w/2+v[0]*scale,(h-23)/2-v[1]*scale,v[2]];};
+  for(const f of faces){ctx.beginPath();f.p.forEach((p,i)=&gt;{const q=project(p);if(i)ctx.lineTo(q[0],q[1]);else ctx.moveTo(q[0],q[1]);});ctx.closePath();ctx.globalAlpha=f.alpha;ctx.fillStyle=f.color;ctx.fill();ctx.globalAlpha=1;}
+  const segments=[];for(const l of lines)for(let i=1;i&lt;l.p.length;i++){const a=project(l.p[i-1]),b=project(l.p[i]);segments.push({a,b,z:(a[2]+b[2])/2,color:l.color,width:l.width});}segments.sort((a,b)=&gt;a.z-b.z);
+  for(const s of segments){ctx.beginPath();ctx.moveTo(s.a[0],s.a[1]);ctx.lineTo(s.b[0],s.b[1]);ctx.strokeStyle=s.color;ctx.lineWidth=s.width;ctx.lineCap=&#x27;round&#x27;;ctx.stroke();}
+  for(const d of dots){const p=project(d.p);ctx.beginPath();ctx.arc(p[0],p[1],d.label?3.5:5,0,TAU);ctx.fillStyle=d.color;ctx.fill();if(d.label){ctx.font=&#x27;11px -apple-system, sans-serif&#x27;;ctx.textAlign=&#x27;left&#x27;;ctx.fillStyle=dark?&#x27;#eff3f8&#x27;:&#x27;#293c53&#x27;;ctx.fillText(d.label,p[0]+7,p[1]-6);}}
+  ctx.textAlign=&#x27;center&#x27;;ctx.fillStyle=dark?&#x27;#aeb4be&#x27;:&#x27;#627183&#x27;;ctx.font=&#x27;11px -apple-system, sans-serif&#x27;;ctx.fillText(&#x27;드래그 · 방향키로 회전 / 휠로 확대&#x27;,w/2,h-7);
+ }
+ function schedule(){if(!frame)frame=requestAnimationFrame(()=&gt;{frame=0;draw();});}
+ function setView(){const v=$(&#x27;view&#x27;).value;if(v===&#x27;space&#x27;){ax=-.5;ay=.4;}else if(v===&#x27;yz&#x27;){ax=0;ay=Math.PI/2;}else if(v===&#x27;xy&#x27;){ax=Math.PI/2;ay=0;}else{ax=0;ay=0;}draw();}
+ for(const i of document.querySelectorAll(&#x27;select,input&#x27;))i.addEventListener(&#x27;input&#x27;,()=&gt;{if(i.id===&#x27;view&#x27;)setView();else{if(cfg.kind===&#x27;euler&#x27;&amp;&amp;i.id===&#x27;condition&#x27;)$(&#x27;progress&#x27;).value=0;build();}});
+ $(&#x27;reset&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{zoom=1;$(&#x27;view&#x27;).value=&#x27;space&#x27;;setView();});
+ canvas.addEventListener(&#x27;pointerdown&#x27;,e=&gt;{drag={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);});canvas.addEventListener(&#x27;pointermove&#x27;,e=&gt;{if(!drag)return;ay+=(e.clientX-drag.x)*.011;ax+=(e.clientY-drag.y)*.011;drag={x:e.clientX,y:e.clientY};$(&#x27;view&#x27;).value=&#x27;space&#x27;;schedule();});for(const e of [&#x27;pointerup&#x27;,&#x27;pointercancel&#x27;])canvas.addEventListener(e,()=&gt;drag=null);
+ canvas.addEventListener(&#x27;wheel&#x27;,e=&gt;{e.preventDefault();zoom=Math.max(.65,Math.min(1.55,zoom*Math.exp(-e.deltaY*.001)));schedule();},{passive:false});canvas.addEventListener(&#x27;keydown&#x27;,e=&gt;{const k={ArrowLeft:[0,-.12],ArrowRight:[0,.12],ArrowUp:[-.12,0],ArrowDown:[.12,0]};if(k[e.key]){e.preventDefault();ax+=k[e.key][0];ay+=k[e.key][1];$(&#x27;view&#x27;).value=&#x27;space&#x27;;draw();}});
+ new ResizeObserver(schedule).observe(canvas);matchMedia(&#x27;(prefers-color-scheme: dark)&#x27;).addEventListener(&#x27;change&#x27;,schedule);build();
+})();
+&lt;/script&gt;&lt;script id=&quot;model-frame-tools-v1&quot;&gt;/* Added after the original model. Only invokes existing canvas zoom handlers. */
+(() =&gt; {
+  if (document.querySelector(&#x27;[data-model-zoom-tools]&#x27;)) return;
+  const canvas=document.querySelector(&#x27;canvas&#x27;);
+  if (!canvas) return;
+  const style=document.createElement(&#x27;style&#x27;);
+  style.textContent=&#x27;[data-model-zoom-tools]{position:fixed;right:8px;top:8px;z-index:10000;display:flex;gap:4px}[data-model-zoom-tools] button{font:600 13px system-ui;padding:5px 8px;border:1px solid #8b949e;border-radius:6px;background:Canvas;color:CanvasText;cursor:pointer;min-width:30px}[data-model-zoom-tools] button:focus-visible{outline:2px solid #368ce0;outline-offset:2px}&#x27;;
+  document.head.append(style);
+  const box=document.createElement(&#x27;div&#x27;); box.dataset.modelZoomTools=&#x27;v1&#x27;; box.setAttribute(&#x27;role&#x27;,&#x27;group&#x27;); box.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 배율&#x27;);
+  for(const [text,label,delta] of [[&#x27;−&#x27;,&#x27;모형 축소&#x27;,180],[&#x27;+&#x27;,&#x27;모형 확대&#x27;,-180]]) {
+    const b=document.createElement(&#x27;button&#x27;); b.type=&#x27;button&#x27;; b.textContent=text; b.setAttribute(&#x27;aria-label&#x27;,label);
+    b.addEventListener(&#x27;click&#x27;,()=&gt;canvas.dispatchEvent(new WheelEvent(&#x27;wheel&#x27;,{deltaY:delta,bubbles:true,cancelable:true})));
+    box.append(b);
+  }
+  document.body.append(box);
+  const place=()=&gt;{const r=canvas.getBoundingClientRect();box.style.right=Math.max(8,innerWidth-r.right+8)+&#x27;px&#x27;;box.style.top=Math.max(8,r.top+8)+&#x27;px&#x27;;};
+  new ResizeObserver(place).observe(canvas);window.addEventListener(&#x27;resize&#x27;,place);requestAnimationFrame(place);
+  window.addEventListener(&#x27;keydown&#x27;,e=&gt; { if(e.key===&#x27;Escape&#x27;) parent.postMessage({type:&#x27;geometry-model-close&#x27;},&#x27;*&#x27;); });
+})();
+&lt;/script&gt;&lt;script id=&quot;model-playback-config&quot; type=&quot;application/json&quot;&gt;{&quot;target&quot;: &quot;progress&quot;, &quot;label&quot;: &quot;경로 추적 · 다리 건너기&quot;, &quot;duration&quot;: 18}&lt;/script&gt;&lt;script id=&quot;model-playback-v1&quot;&gt;(() =&gt; {
+  &#x27;use strict&#x27;;
+  const config = JSON.parse(document.getElementById(&#x27;model-playback-config&#x27;).textContent);
+  const style = document.createElement(&#x27;style&#x27;);
+  style.textContent = `html{overflow:hidden!important}body{height:calc(100% - 104px)!important;overflow:auto!important}.model-player{position:fixed;inset:auto 0 0;z-index:90;height:100px;padding:7px 10px;background:light-dark(#f5f8fc,#20242a);border-top:1px solid light-dark(#ccd5e0,#46505b);color:light-dark(#253044,#edf2f7);font:12px/1.4 system-ui;box-sizing:border-box}.player-heading{display:flex;justify-content:space-between;gap:8px;margin-bottom:5px}.player-actions{display:flex;gap:6px;align-items:center}.model-player button,.model-player select{width:auto;min-height:30px;margin:0;font:inherit;padding:4px 8px;border:1px solid light-dark(#bcc9d8,#5a6878);border-radius:5px;background:light-dark(#fff,#303841);color:inherit}.model-player button{cursor:pointer}.model-player button[aria-pressed=true]{background:light-dark(#dbeaff,#314b66)}.model-player label{display:flex;align-items:center;gap:4px;font:inherit}.model-player input{width:100%;height:18px;margin:5px 0 0;accent-color:#72baff}.model-player :focus-visible{outline:2px solid #72baff;outline-offset:2px}#play{display:none!important}@media(max-width:350px){.model-player{padding:6px}.model-player button{padding:4px 6px}.player-heading{font-size:11px}}`;
+  document.head.append(style);
+  const player = document.createElement(&#x27;section&#x27;);
+  player.className = &#x27;model-player&#x27;;player.setAttribute(&#x27;aria-label&#x27;,&#x27;모형 재생&#x27;);
+  player.innerHTML = `&lt;div class=&quot;player-heading&quot;&gt;&lt;span id=&quot;player-description&quot;&gt;&lt;/span&gt;&lt;output id=&quot;player-position&quot;&gt;&lt;/output&gt;&lt;/div&gt;&lt;div class=&quot;player-actions&quot;&gt;&lt;button id=&quot;player-toggle&quot; type=&quot;button&quot; aria-pressed=&quot;false&quot;&gt;▶ 재생&lt;/button&gt;&lt;button id=&quot;player-start&quot; type=&quot;button&quot;&gt;처음으로&lt;/button&gt;&lt;label&gt;속도&lt;select id=&quot;player-speed&quot; aria-label=&quot;재생 속도&quot;&gt;&lt;option value=&quot;0.5&quot;&gt;0.5×&lt;/option&gt;&lt;option value=&quot;1&quot; selected&gt;1×&lt;/option&gt;&lt;option value=&quot;2&quot;&gt;2×&lt;/option&gt;&lt;option value=&quot;4&quot;&gt;4×&lt;/option&gt;&lt;/select&gt;&lt;/label&gt;&lt;/div&gt;&lt;input id=&quot;player-seek&quot; type=&quot;range&quot; min=&quot;0&quot; max=&quot;1000&quot; step=&quot;1&quot; value=&quot;0&quot; aria-label=&quot;재생 위치&quot;&gt;`;
+  document.body.append(player);
+  const get = id =&gt; document.getElementById(id);
+  const target = config.target ? get(config.target) : null;
+  let progress = target &amp;&amp; target.type===&#x27;range&#x27; ? (Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min)) : 0;
+  let running = false, last=0, request=0, applying=false, previousStage=-1;
+  get(&#x27;player-description&#x27;).textContent=config.label;
+  function notify(el) {el.dispatchEvent(new Event(&#x27;input&#x27;,{bubbles:true}));el.dispatchEvent(new Event(&#x27;change&#x27;,{bubbles:true}));}
+  function write(id,value) {const el=get(id);if(!el)return;const before=el.type===&#x27;checkbox&#x27;?el.checked:el.value;if(el.type===&#x27;checkbox&#x27;)el.checked=Boolean(value);else el.value=String(value);if(before!==(el.type===&#x27;checkbox&#x27;?el.checked:el.value))notify(el);}
+  function display() {
+    get(&#x27;player-seek&#x27;).value=String(Math.round(progress*1000));
+    get(&#x27;player-position&#x27;).textContent=Math.round(progress*100)+&#x27;%&#x27;;
+    player.dataset.progress=progress.toFixed(4);player.dataset.playing=String(running);
+    get(&#x27;player-toggle&#x27;).textContent=running?&#x27;Ⅱ 일시정지&#x27;:&#x27;▶ 재생&#x27;;get(&#x27;player-toggle&#x27;).setAttribute(&#x27;aria-pressed&#x27;,String(running));
+  }
+  function apply() {
+    applying=true;
+    if(config.stages) {
+      const n=config.stages.length;const stage=Math.max(0,Math.min(n-1,Math.floor(progress*n)));
+      if(stage!==previousStage) {for(const [id,value]of Object.entries(config.stages[stage]))write(id,value);previousStage=stage;}
+      if(config.stageTarget) {
+        const el=get(config.stageTarget),local=progress&gt;=1?1:(progress*n-stage);
+        write(config.stageTarget,Number(el.min)+(Number(el.max)-Number(el.min))*local);
+      }
+    } else if(target) {
+      if(target.type===&#x27;range&#x27;) {
+        const low=config.min??Number(target.min),high=config.max??Number(target.max),step=Number(target.step)||.001;
+        const value=low+(high-low)*progress;write(target.id,Math.max(low,Math.min(high,Math.round(value/step)*step)));
+      } else if(target.tagName===&#x27;SELECT&#x27;) {
+        const options=[...target.options].filter(o=&gt;!o.disabled);write(target.id,options[Math.min(options.length-1,Math.floor(progress*options.length))].value);
+      }
+    }
+    applying=false;display();
+  }
+  function pause() {running=false;cancelAnimationFrame(request);display();}
+  function tick(now) {
+    if(!running)return;const dt=Math.max(0,Math.min((now-last)/1000,.1));last=now;
+    progress=Math.min(1,progress+dt*Number(get(&#x27;player-speed&#x27;).value)/(config.duration||18));apply();
+    if(progress&gt;=1)pause();else request=requestAnimationFrame(tick);
+  }
+  get(&#x27;player-toggle&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{if(running){pause();return;}if(progress&gt;=.999){progress=0;previousStage=-1;}apply();running=true;last=performance.now();display();request=requestAnimationFrame(tick);});
+  get(&#x27;player-start&#x27;).addEventListener(&#x27;click&#x27;,()=&gt;{pause();progress=0;previousStage=-1;apply();});
+  get(&#x27;player-seek&#x27;).addEventListener(&#x27;input&#x27;,()=&gt;{const value=Number(get(&#x27;player-seek&#x27;).value)/1000;pause();progress=value;previousStage=-1;apply();});
+  for(const kind of [&#x27;input&#x27;,&#x27;change&#x27;,&#x27;click&#x27;])document.addEventListener(kind,event=&gt;{
+    if(applying||player.contains(event.target))return;
+    if(event.target.matches(&#x27;input,select,button&#x27;)){
+      pause();previousStage=-1;const sync=event.target===target||event.target.id===&#x27;reset&#x27;||event.target.hasAttribute(&#x27;data-preset&#x27;);if(config.stages&amp;&amp;event.target.id!==&#x27;model-zoom-in&#x27;&amp;&amp;event.target.id!==&#x27;model-zoom-out&#x27;&amp;&amp;(event.target.matches(&#x27;input,select&#x27;)||event.target.id===&#x27;reset&#x27;))progress=0;
+      if(sync &amp;&amp; target &amp;&amp; target.type===&#x27;range&#x27;)progress=(Number(target.value)-Number(target.min))/(Number(target.max)-Number(target.min));display();
+    }
+  });
+  document.addEventListener(&#x27;visibilitychange&#x27;,()=&gt;{if(document.hidden)pause();});
+  window.addEventListener(&#x27;pagehide&#x27;,pause);display();
+})();
+&lt;/script&gt;&lt;/body&gt;&lt;/html&gt;"></iframe>
+<script>(()=>{const frame=document.getElementById('codex-visualization');frame.srcdoc=frame.dataset.srcdoc;delete frame.dataset.srcdoc;})();</script>
+</body></html>
