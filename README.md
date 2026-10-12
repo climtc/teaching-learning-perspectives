@@ -1,8 +1,8 @@
-# 차원 압축과 펼침 실험
+# 기호의 차원 : 다차원 상호작용 기호편
 
 그림과 도식, 수학 공식은 무엇을 압축하고, 조작할 수 있는 표현은 무엇을 펼쳐 보여 주는가. 평면 기록과 디지털 모형을 나란히 놓고 시점, 관계와 조건을 바꾸어 비교한다.
 
-[66개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
+[76개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/geometry-lab.html)
 
 임완철의 **차원증감법**을 바탕으로 원근법과 회화, 곡면과 매듭, 수학 공식과 물리 법칙, 상태와 데이터의 표현을 살핀다. 물리 공간의 차원, 표면 자체의 차원, 데이터의 변수 수와 관찰의 자유도는 서로 구별한다. 디지털 화면도 평면이지만, 좌표와 변환 규칙을 조작하면 한 장에서 생략한 조건을 비교할 수 있다.
 
@@ -81,3 +81,13 @@
 [경계·반복·결속의 세 질문](https://climtc.github.io/teaching-learning-perspectives/lacan-problems.html)과 [라캉 원전 읽기 안내](https://climtc.github.io/teaching-learning-perspectives/lacan-atlas.html)에서 도식의 수학적 성질과 해석의 조건을 살필 수 있다. 전사본의 편집 도식은 자필 원고와 구별하며, 설명용 재구성에는 그 범위를 표시한다.
 
 책 출처는 임완철, 『읽는다는 것의 미래: 책이 생각하게 되면 우리는 무엇을 읽어야 할까?』(지식노마드, 2019), 제2장 54–65쪽, ISBN 979-11-87481-52-2와 『가르치는 인공지능은 가능한가?: 장치의 교육학을 위한 시론』(새물결, 2020), 제7장 ‘차원을 높여 생각하는 방법’과 ‘차원증감법’, 특히 시선을 구별하는 195쪽, ISBN 978-89-5559-427-0이다. 가르침과 배움의 관계를 묻는 문제와 원을 구로 바꾸는 구체적인 기하학 제안을 각 책의 해당 논의에 따라 구별해 읽는다.
+- [서재를 보는 자리 — 뒤러와 안토넬로](https://climtc.github.io/teaching-learning-perspectives/study-viewpoints.html): 뒤러와 안토넬로의 서재를 비교하고 설명용 방에서 눈의 거리·높이·좌우 위치에 따른 투영을 확인한다.
+- [대사들의 해골 — 형태를 알아보는 시선](https://climtc.github.io/teaching-learning-perspectives/anamorphic-skull.html): 홀바인의 왜상 해골과 합성 두개골의 비스듬한 투영을 비교한다.
+- [그려진 돔 — 평면과 높이의 환영](https://climtc.github.io/teaching-learning-perspectives/painted-dome.html): 포초의 가짜 돔을 참고해 평면 그림과 가상 돔의 투영 일치가 관찰자 위치에 의존함을 확인한다.
+- [두 눈의 영상 — 차이가 깊이를 만드는 조건](https://climtc.github.io/teaching-learning-perspectives/stereoscopic-vision.html): 양안 시차의 공간 배치와 두 영상의 차이를 눈 간격·대상 깊이로 조작한다.
+- [그림 뒤쪽을 보는 거울 — 아르놀피니 초상](https://climtc.github.io/teaching-learning-perspectives/arnolfini-mirror.html): 아르놀피니 초상 속 거울을 참고해 직접 시야와 볼록거울의 반사 범위를 분리한다.
+- [시녀들 — 그리는 사람과 보는 사람](https://climtc.github.io/teaching-learning-perspectives/meninas-gazes.html): 시녀들의 회화 요소를 참고해 두 가지 가정한 반사 배치의 광학 조건을 비교한다.
+- [두루마리 — 한 번에 보이는 폭과 읽는 순서](https://climtc.github.io/teaching-learning-perspectives/handscroll-viewing.html): 왕휘의 긴 두루마리 전체와 부분 열람을 비교하며 노출 폭과 오른쪽에서 왼쪽으로 읽는 순서를 조작한다.
+- [극장의 깊이 — 실제 거리와 보이는 거리](https://climtc.github.io/teaching-learning-perspectives/theatre-perspective.html): 테아트로 올림피코의 무대 원근법을 참고해 실제 형상 압축과 관람 좌석에 따른 투영을 비교한다.
+- [파노라마 — 모든 방향과 모든 위치](https://climtc.github.io/teaching-learning-perspectives/panorama-viewpoint.html): 부르바키 파노라마의 원통형 전시를 참고해 360도 방향과 관찰 위치의 차이를 조작한다.
+- [조이너 — 여러 위치와 순간을 한 장에](https://climtc.github.io/teaching-learning-perspectives/joiner-photographs.html): 호크니의 조이너를 참고해 12개의 합성 사진과 카메라 위치·촬영 순서를 연결한다.
