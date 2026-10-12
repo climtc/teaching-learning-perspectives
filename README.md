@@ -75,13 +75,13 @@
 
 ## 시선의 주인 : 관점
 
-그림과 도식이 전제하는 눈의 자리와 관계 선택을 조작 가능한 모형으로 펼친다. 누가 어떤 조건에서 대상을 보고 표현하는지, 무엇이 보이고 무엇이 생략되는지 비교한다.
+종이책에 인쇄된 기호는 누구의 관점인가를 묻는다. 도식이 선택한 관계를 독자가 다시 구성하고, 눈의 위치와 분석의 질문이 바뀔 때 무엇이 보이고 생략되는지 비교한다.
 
 [14개 사례 탐색하기](https://climtc.github.io/teaching-learning-perspectives/viewpoint-lab.html)
 
 - [원근법 — 눈과 그림 평면](https://climtc.github.io/teaching-learning-perspectives/perspective.html): 한 그림이 고정한 눈의 위치를 바꿉니다. 물체의 실제 크기를 유지하며 평면에 보이는 크기와 겹침의 변화를 확인합니다.
 - [교실 창문 — 시선의 높이와 방향](https://climtc.github.io/teaching-learning-perspectives/classroom-window.html): 평면도에서 빠진 눈과 창문의 높이를 복원합니다. 볼 수 있는 경로와 실제로 바라보는 방향이 어떻게 다른지 살핍니다.
-- [시선의 주인 — 도식이 고른 관점](https://climtc.github.io/teaching-learning-perspectives/viewpoint-owner.html): 삼각형이 고른 관계와 관찰의 방향을 드러냅니다. 평면의 방향을 바꾸며 투영과 단면, 도식이 선택한 관점을 비교합니다.
+- [시선의 주인 — 도식이 고른 관점](https://climtc.github.io/teaching-learning-perspectives/viewpoint-owner.html): 비고츠키의 S–R–X 도식과 후대의 재구성을 구별하고, 같은 수업을 다른 질문으로 도식화해 비교합니다.
 - [파놉티콘 — 중심의 시선과 보이지 않는 층](https://climtc.github.io/teaching-learning-perspectives/panopticon-visibility.html): 원형 배치의 중앙 시선이 모든 층을 동시에 보장하는지, 칸막이와 회랑·층 바닥의 가림을 비교한다.
 - [서재를 보는 자리 — 뒤러와 안토넬로](https://climtc.github.io/teaching-learning-perspectives/study-viewpoints.html): 뒤러와 안토넬로의 서재를 비교하고 설명용 방에서 눈의 거리·높이·좌우 위치에 따른 투영을 확인한다.
 - [대사들의 해골 — 형태를 알아보는 시선](https://climtc.github.io/teaching-learning-perspectives/anamorphic-skull.html): 홀바인의 왜상 해골과 합성 두개골의 비스듬한 투영을 비교한다.
